@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33815.320
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gui", "gui\gui.vcxproj", "{8BE34B34-6A98-4641-996B-5C89C61E30E0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8BE34B34-6A98-4641-996B-5C89C61E30E0}.Debug|x64.ActiveCfg = Debug|x64
+		{8BE34B34-6A98-4641-996B-5C89C61E30E0}.Debug|x64.Build.0 = Debug|x64
+		{8BE34B34-6A98-4641-996B-5C89C61E30E0}.Debug|x86.ActiveCfg = Debug|Win32
+		{8BE34B34-6A98-4641-996B-5C89C61E30E0}.Debug|x86.Build.0 = Debug|Win32
+		{8BE34B34-6A98-4641-996B-5C89C61E30E0}.Release|x64.ActiveCfg = Release|x64
+		{8BE34B34-6A98-4641-996B-5C89C61E30E0}.Release|x64.Build.0 = Release|x64
+		{8BE34B34-6A98-4641-996B-5C89C61E30E0}.Release|x86.ActiveCfg = Release|Win32
+		{8BE34B34-6A98-4641-996B-5C89C61E30E0}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D887916E-2444-47C0-9C0F-B7DAC754AD50}
+	EndGlobalSection
+EndGlobal
