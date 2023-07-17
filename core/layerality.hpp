@@ -8,6 +8,11 @@ namespace innate {
 		int height = -1;
 		int spillovers_count = 1;
 	};
+
+	struct region {
+		int width = -1;
+		int height = -1;
+	};
 }
 
 namespace data {
@@ -16,4 +21,10 @@ namespace data {
 		std::vector<celular*> celulars;
 		std::vector<__mem__ float*> spillover;
 	};
+
+	struct region {
+		innate::region innate;
+		std::vector<layer> layers;
+	};
+
 }
