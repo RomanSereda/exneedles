@@ -10,6 +10,13 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="assert.hpp" />
+    <ClInclude Include="celularity.hpp" />
+    <ClInclude Include="layerality.hpp" />
+    <ClInclude Include="terminality.hpp" />
+    <ClInclude Include="types.hpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{E097F069-744A-4C23-A188-AFD2DB0CC62B}</ProjectGuid>
     <RootNamespace>core</RootNamespace>
@@ -77,9 +84,6 @@
       <TargetMachinePlatform>64</TargetMachinePlatform>
     </CudaCompile>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <CudaCompile Include="kernel.cu" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
     <Import Project="$(VCTargetsPath)\BuildCustomizations\CUDA 12.2.targets" />
