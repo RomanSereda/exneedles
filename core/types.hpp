@@ -30,3 +30,4 @@ typedef uint32_t rgstr32_t;
 #define __align_1b__ ALIGN(8)
 
 #define __mem__
+#define __const_mem__
