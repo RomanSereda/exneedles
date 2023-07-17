@@ -1,6 +1,7 @@
 #pragma once
 #include <stdint.h>
 #include <vector>
+#include <memory>
 
 typedef int8_t state8_t;
 typedef int16_t state16_t;

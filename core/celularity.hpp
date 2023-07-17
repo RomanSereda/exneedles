@@ -9,9 +9,12 @@ namespace innate {
 	};
 
 	struct cell {
+		using ptr = std::shared_ptr<cell>;
+
 		cell_type type;
 		int width = -1;
 		int height = -1;
+		int spillover = 0;
 	};
 ;
 	struct cell_simple : public cell {
@@ -48,7 +51,7 @@ namespace data {
 	};
 
 	struct celular {
-		innate::cell* innate = nullptr;        // cast for innate::cell_type, constant memory
+		innate::cell::ptr innate = nullptr;    // cast for innate::cell_type, constant memory
 		__mem__ cell* cells = nullptr;         // cast for innate::cell_type, memory alocate array
 		std::vector<cluster*> clusters;        // clusters with different cluster_type/terminal_type
 	};

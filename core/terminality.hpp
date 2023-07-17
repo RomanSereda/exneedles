@@ -19,6 +19,8 @@ namespace innate {
 	};
 
 	struct cluster {
+		using ptr = std::shared_ptr<cluster>;
+
 		cluster_type type;
 		int width = -1;
 		int height = -1;
@@ -56,7 +58,7 @@ namespace data {
 	};
 
 	struct cluster {
-		innate::cluster* innate = nullptr;      // cast for cluster_type, const memory
+		innate::cluster::ptr innate = nullptr;  // cast for cluster_type, const memory
 		__mem__ terminal* terminals = nullptr;  // cast for terminal_type, memory alocate array
 		__mem__ float* results = nullptr;
 	};
