@@ -49,6 +49,9 @@ namespace data {
 	};
 
 	struct celular {
-		__mem__ cell* cells = nullptr;                // cast for innate::cell_type, memory alocate array
+		__const__ innate::cell* innate = nullptr; // cast for innate::cell_type
+
+		__mem__ cell* cells = nullptr;            // cast for innate::cell_type, memory alocate array
+		__mem__ float* results = nullptr;         // size = cluster_count * cell::width * cell::height * 4
 	};
 }

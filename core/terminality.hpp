@@ -55,6 +55,8 @@ namespace data {
 	};
 
 	struct cluster {
+		__const__ innate::cluster* innate = nullptr;      // cast for innate::cluster_type
+
 		__mem__ float* results = nullptr;                 // bytes = layer::celulars_count * cell::width * cell::height * 4 --> shift celular number
 		__mem__ terminal* terminals = nullptr;            // cast for terminal_type, memory alocate array.  
 														  // bytes = cell::width * cell::height * cluster::width * cluster::height * sizeof(terminal_type) --> shift cluster number
