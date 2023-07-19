@@ -31,3 +31,8 @@ typedef uint32_t rgstr32_t;
 
 #define __mem__
 #define __const__
+
+enum allocate_place {
+	memory_host,
+	memory_device
+};
