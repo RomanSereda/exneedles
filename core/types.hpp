@@ -2,6 +2,7 @@
 #include <stdint.h>
 #include <vector>
 #include <memory>
+#include <iostream>
 
 typedef int8_t state8_t;
 typedef int16_t state16_t;
@@ -31,3 +32,7 @@ typedef uint32_t rgstr32_t;
 
 #define __mem__
 #define __const__
+
+static void console(std::string str) {
+	std::cout << str << std::endl;
+}

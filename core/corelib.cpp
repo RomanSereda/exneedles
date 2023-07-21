@@ -1,0 +1,21 @@
+#include "corelib.hpp"
+#include <cuda_runtime.h>
+#include "assert.hpp"
+#include "types.hpp"
+
+namespace core
+{
+	device::device()
+	{
+		cudaDeviceProp prop;
+		assert_err(cudaGetDeviceProperties(&prop, 0));
+		assert_err(cudaSetDevice(0));
+		console("init device " + std::string(prop.name));
+
+	}
+
+	device::~device() {
+		cudaDeviceReset();
+		console("reset device");
+	}
+}

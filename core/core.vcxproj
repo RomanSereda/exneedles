@@ -13,9 +13,16 @@
   <ItemGroup>
     <ClInclude Include="assert.hpp" />
     <ClInclude Include="celularity.hpp" />
+    <ClInclude Include="corelib.hpp" />
     <ClInclude Include="layerality.hpp" />
     <ClInclude Include="terminality.hpp" />
     <ClInclude Include="types.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="corelib.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\deflib.inc" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{E097F069-744A-4C23-A188-AFD2DB0CC62B}</ProjectGuid>

@@ -12,5 +12,13 @@
     <ClInclude Include="terminality.hpp" />
     <ClInclude Include="celularity.hpp" />
     <ClInclude Include="layerality.hpp" />
+    <ClInclude Include="types.hpp" />
+    <ClInclude Include="corelib.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="corelib.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\deflib.inc" />
   </ItemGroup>
 </Project>
