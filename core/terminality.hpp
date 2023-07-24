@@ -3,35 +3,42 @@
 #include "celularity.hpp"
 
 namespace innate {
-	enum terminal_type {
-		axon_simple,
-		synapse_simple
-	};
 
 	enum terminal_sign {
 		positive = 0,
 		negative
 	};
 
+	enum terminal_type {
+		axon_simple,
+		synapse_simple
+	};
 	struct terminal {
 		terminal_type type;
-		terminal_sign sign;
+	};
+
+	struct terminal_axon_simple: public terminal {
 		int basic_value = 1;
 	};
 
+	struct terminal_synapse_simple: public terminal {
+		terminal_sign sign;
+	};
+
+
+	enum cluster_type {
+		cluster_targeted
+	};
 	struct cluster {
 		cluster_type type;
 		int width = -1;
 		int height = -1;
+	};
+
+	struct cluster_targeted: public cluster {
 		int target_layer = -1;
 		int target_region = -1;
 	};
-
-	enum cluster_type {
-		cluster_simple
-	};
-
-	struct cluster_simple : public cluster, public terminal {};
 }
 
 namespace data {
@@ -56,7 +63,8 @@ namespace data {
 	};
 
 	struct cluster {
-		__const__ innate::cluster* innate = nullptr;      // cast for innate::cluster_type
+		__const__ innate::cluster* innate_cluster = nullptr;      // cast for innate::cluster_type
+		__const__ innate::terminal* innate_terminal = nullptr;
 
 		__mem__ float* results = nullptr;                 // bytes = layer::celulars_count * cell::width * cell::height * 4 --> shift celular number
 		__mem__ terminal* terminals = nullptr;            // cast for terminal_type, memory alocate array.  
