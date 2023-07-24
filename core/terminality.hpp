@@ -1,5 +1,6 @@
 #pragma once
 #include "types.hpp"
+#include "celularity.hpp"
 
 namespace innate {
 	enum terminal_type {
@@ -61,4 +62,8 @@ namespace data {
 		__mem__ terminal* terminals = nullptr;            // cast for terminal_type, memory alocate array.  
 														  // bytes = cell::width * cell::height * cluster::width * cluster::height * sizeof(terminal_type) --> shift cluster number
 	};
+}
+
+namespace instance {
+
 }
