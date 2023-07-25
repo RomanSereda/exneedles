@@ -4,63 +4,68 @@
 #include "boost.hpp"
 
 namespace innate {
-
-	enum terminal_sign {
-		positive = 0,
-		negative
-	};
-
-	enum terminal_type {
-		axon_simple,
-		synapse_simple
-	};
 	struct terminal {
-		terminal_type type;
+		enum terminal_type {
+			axon_simple = 0,
+			synapse_simple
+		} type;
+		terminal(terminal_type t) : type{ t } {};
 	};
 
-	struct terminal_axon_simple: public terminal {
+	struct axon_simple: public terminal {
+		axon_simple() : terminal(terminal_type::axon_simple ){};
 		int basic_value = 1;
 	};
 
-	struct terminal_synapse_simple: public terminal {
-		terminal_sign sign;
+	struct synapse_simple: public terminal {
+		enum terminal_sign {
+			positive = 0,
+			negative
+		} sign;
+		synapse_simple() : terminal(terminal_type::synapse_simple) {};
 	};
 
-
-	enum cluster_type {
-		cluster_targeted
-	};
 	struct cluster {
-		cluster_type type;
+		enum cluster_type {
+			cluster_targeted
+		} type;
+
+		cluster(cluster_type t) : type{ t } {};
+
 		int width = -1;
 		int height = -1;
 	};
 
 	struct cluster_targeted: public cluster {
+		cluster_targeted() : cluster(cluster_type::cluster_targeted) {};
+
 		int target_layer = -1;
 		int target_region = -1;
 	};
 }
 
 namespace data {
+	struct axon_simple;
+	struct synapse_simple;
+
 	enum terminal_expression {
 		alive = 0x00000001
 	};
-	struct __align_4b__ terminal {
+	struct __align_4b__ terminal: public boost::spec_tuple<axon_simple, synapse_simple> {
 		state8_t expression;
 		rgstr8_t spikes;
 	};
 
-	enum terminal_axon_simple_expression {
+	enum axon_simple_expression {
 		depression = 0x00000010
 	};
-	struct __align_4b__ terminal_axon_simple : terminal {
+	struct __align_4b__ axon_simple : terminal {
 	};
 
-	enum terminal_synapse_simple_expression {
+	enum synapse_simple_expression {
 		augumentation = 0x00000010
 	};
-	struct __align_4b__ terminal_synapse_simple : terminal {
+	struct __align_4b__ synapse_simple : terminal {
 	};
 
 	struct cluster {
@@ -75,10 +80,25 @@ namespace data {
 }
 
 namespace instance {
-	class cluster {
+	class cluster: protected data::cluster {
 	public:
-		cluster& operator=(const ptree& root)
-		{
+		int terminal_bytes_size() {
+			int size = -1;
+			data::terminal::foreach(std::get<__const__ innate::terminal*>(innate), [&size](auto* p) {
+				size = sizeof(*p);
+				return true;
+			});
+			return size;
+		}
+
+		ptree operator=(instance::cluster&) {
+			ptree root;
+			auto cl = std::get<0>(innate);
+
+			return root;
+		}
+
+		cluster& operator=(const ptree& root) {
 
 			return *this;
 		}
