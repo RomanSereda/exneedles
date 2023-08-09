@@ -24,9 +24,7 @@
 namespace hana = boost::hana;
 using ptree = boost::property_tree::ptree;
 
-
 namespace boost {
-	using namespace boost::property_tree;
 
 	template<typename... args> class spec_tuple {
 	protected:
@@ -34,8 +32,8 @@ namespace boost {
 		template <int d> using arg = typename std::tuple_element<d, std::tuple<args...>>::type;
 
 	public:
-		template<std::size_t i = 0, typename P, typename F> static std::enable_if<(i == sz_args), void>::type foreach(P* p, F f) { }
-		template<std::size_t i = 0, typename P, typename F> static std::enable_if<(i < sz_args), void>::type foreach(P* p, F f) {
+		template<std::size_t i = 0, typename P, typename F> static typename std::enable_if<(i == sz_args), void>::type foreach(P* p, F f) { }
+		template<std::size_t i = 0, typename P, typename F> static typename std::enable_if<(i < sz_args), void>::type foreach(P* p, F f) {
 			if (!p) return;
 
 			arg<i> m;
@@ -49,19 +47,19 @@ namespace boost {
 
 	template<typename T> auto to_ptree(T var) {
 		ptree root;
-		hana::for_each(var, hana::fuse([&](auto member, auto value) {
+		/*hana::for_each(var, hana::fuse([&](auto member, auto value) {
 			root.put(hana::to<char const*>(member), std::to_string(value));
-			}));
+			}));*/
 		return root;
 	}
 
 	template <typename T> std::enable_if_t<hana::Struct<T>::value, T> to(T& var, ptree root) {
-		hana::for_each(hana::keys(var), [&](auto key) {
+		/*hana::for_each(hana::keys(var), [&](auto key) {
 			auto& value = hana::at_key(var, key);
 			using member = std::remove_reference_t<decltype(value)>;
 			auto it = root.find(hana::to<char const*>(key));
 			value = static_cast<member>(std::stoi(it->second.data()));
-			});
+			});*/
 		return var;
 	}
 }

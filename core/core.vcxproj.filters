@@ -18,6 +18,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="corelib.cpp" />
+    <ClCompile Include="terminality.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\deflib.inc" />

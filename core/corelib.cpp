@@ -1,7 +1,9 @@
 #include "corelib.hpp"
 #include <cuda_runtime.h>
 #include "private/assert.hpp"
+
 #include "types.hpp"
+//#include "terminality.hpp"
 
 namespace core
 {
@@ -17,16 +19,7 @@ namespace core
 	device::~device() {
 		cudaDeviceReset();
 		console("reset device");
-	}
-}
 
-namespace instance {
-	int cluster::terminal_bytes_size() const {
-		int size = -1;
-		data::terminal::foreach(std::get<__const__ innate::terminal*>(innate), [&size](auto* p) {
-			size = sizeof(*p);
-			return true;
-			});
-		return size;
+		//instance::cluster cluster;
 	}
 }

@@ -1,6 +1,5 @@
 #pragma once
 #include "types.hpp"
-#include "celularity.hpp"
 #include "boost.hpp"
 
 namespace innate {
@@ -45,14 +44,6 @@ namespace innate {
 	};
 }
 
-BOOST_HANA_ADAPT_STRUCT(innate::terminal, type);
-BOOST_HANA_ADAPT_STRUCT(innate::axon_simple, basic_value);
-BOOST_HANA_ADAPT_STRUCT(innate::synapse_simple, sign);
-
-BOOST_HANA_ADAPT_STRUCT(innate::cluster, type, width, height);
-BOOST_HANA_ADAPT_STRUCT(innate::cluster_targeted, target_layer, target_region);
-
-
 namespace data {
 	struct axon_simple;
 	struct synapse_simple;
@@ -87,3 +78,29 @@ namespace data {
 														        // bytes = cell::width * cell::height * cluster::width * cluster::height * sizeof(terminal_type) --> shift cluster number
 	};
 }
+
+namespace instance {
+	class cluster : protected data::cluster {
+	public:
+		int terminal_bytes_size() const;
+		ptree operator=(instance::cluster&);
+
+		/*cluster& operator=(const ptree& root) {
+
+
+
+			return *this;
+		}*/
+
+	private:
+		const std::string cNameJsonKey = "cluster";
+	};
+}
+
+
+BOOST_HANA_ADAPT_STRUCT(innate::terminal, type);
+BOOST_HANA_ADAPT_STRUCT(innate::axon_simple, basic_value);
+BOOST_HANA_ADAPT_STRUCT(innate::synapse_simple, sign);
+
+BOOST_HANA_ADAPT_STRUCT(innate::cluster, type, width, height);
+BOOST_HANA_ADAPT_STRUCT(innate::cluster_targeted, target_layer, target_region);
