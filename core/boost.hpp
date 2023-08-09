@@ -14,6 +14,9 @@
 #include <boost/hana/at.hpp>
 #include <boost/json.hpp>
 
+#include <boost/archive/text_oarchive.hpp>
+#include <boost/archive/text_iarchive.hpp>
+
 #include "types.hpp"
 
 #pragma comment(lib, "libboost_json-vc143-mt-gd-x64-1_82.lib")
@@ -43,4 +46,22 @@ namespace boost {
 			foreach<i + 1, P, F>(p, f);
 		}
 	};
+
+	template<typename T> auto to_ptree(T var) {
+		ptree root;
+		hana::for_each(var, hana::fuse([&](auto member, auto value) {
+			root.put(hana::to<char const*>(member), std::to_string(value));
+			}));
+		return root;
+	}
+
+	template <typename T> std::enable_if_t<hana::Struct<T>::value, T> to(T& var, ptree root) {
+		hana::for_each(hana::keys(var), [&](auto key) {
+			auto& value = hana::at_key(var, key);
+			using member = std::remove_reference_t<decltype(value)>;
+			auto it = root.find(hana::to<char const*>(key));
+			value = static_cast<member>(std::stoi(it->second.data()));
+			});
+		return var;
+	}
 }

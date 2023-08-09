@@ -12,6 +12,7 @@ namespace innate {
 		terminal(terminal_type t) : type{ t } {};
 	};
 
+
 	struct axon_simple: public terminal {
 		axon_simple() : terminal(terminal_type::axon_simple ){};
 		int basic_value = 1;
@@ -43,6 +44,14 @@ namespace innate {
 		int target_region = -1;
 	};
 }
+
+BOOST_HANA_ADAPT_STRUCT(innate::terminal, type);
+BOOST_HANA_ADAPT_STRUCT(innate::axon_simple, basic_value);
+BOOST_HANA_ADAPT_STRUCT(innate::synapse_simple, sign);
+
+BOOST_HANA_ADAPT_STRUCT(innate::cluster, type, width, height);
+BOOST_HANA_ADAPT_STRUCT(innate::cluster_targeted, target_layer, target_region);
+
 
 namespace data {
 	struct axon_simple;
@@ -76,31 +85,5 @@ namespace data {
 		__mem__ float* results = nullptr;                       // bytes = layer::celulars_count * cell::width * cell::height * 4 --> shift celular number
 		__mem__ terminal* terminals = nullptr;                  // cast for terminal_type, memory alocate array.  
 														        // bytes = cell::width * cell::height * cluster::width * cluster::height * sizeof(terminal_type) --> shift cluster number
-	};
-}
-
-namespace instance {
-	class cluster: protected data::cluster {
-	public:
-		int terminal_bytes_size() {
-			int size = -1;
-			data::terminal::foreach(std::get<__const__ innate::terminal*>(innate), [&size](auto* p) {
-				size = sizeof(*p);
-				return true;
-			});
-			return size;
-		}
-
-		ptree operator=(instance::cluster&) {
-			ptree root;
-			auto cl = std::get<0>(innate);
-
-			return root;
-		}
-
-		cluster& operator=(const ptree& root) {
-
-			return *this;
-		}
 	};
 }

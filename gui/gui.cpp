@@ -1,9 +1,9 @@
 #include <iostream>
 #include "../core/corelib.hpp"
+#include "../core/terminality.hpp"
 
 int main()
 {
-    std::cout << "Hello World!\n";
 
-    core::device device;
+    instance::cluster cluster;
 }
