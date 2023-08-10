@@ -41,6 +41,25 @@ namespace boost {
 
 			foreach<i + 1, T0, F>(t0, f);
 		}
+	
+		template<std::size_t i = 0, typename T, typename F> static typename std::enable_if<(i == sz_args), void>::type create(T type, F f) {}
+		template<std::size_t i = 0, typename T, typename F> static typename std::enable_if<(i < sz_args), void>::type create(T type, F f) {
+			arg<i> sample;
+			if (sample.type == type) 
+				f(new arg<i>());
+			
+			return create<i + 1, T, F>(type, f);
+		}
+
+		template<std::size_t i = 0, typename T0> static typename std::enable_if<(i == sz_args), int>::type size_of_type(T0* t0) { return 0; }
+		template<std::size_t i = 0, typename T0> static typename std::enable_if<(i < sz_args), int>::type size_of_type(T0* t0) {
+			arg<i> sample;
+			if (sample.type == t0->type) {
+				return sizeof(sample);
+			}
+
+			return size_of_type<i + 1, T0>(t0);
+		}
 	};
 
 	template<typename... args> class spec_pair_tuple {
@@ -106,12 +125,12 @@ namespace boost {
 	}
 
 	template <typename T> std::enable_if_t<hana::Struct<T>::value, T> to(T& var, ptree root) {
-		/*hana::for_each(hana::keys(var), [&](auto key) {
+		hana::for_each(hana::keys(var), [&](auto key) {
 			auto& value = hana::at_key(var, key);
 			using member = std::remove_reference_t<decltype(value)>;
 			auto it = root.find(hana::to<char const*>(key));
 			value = static_cast<member>(std::stoi(it->second.data()));
-			});*/
+		});
 		return var;
 	}
 }

@@ -8,7 +8,7 @@ namespace innate {
 			axon_simple = 0,
 			synapse_simple
 		} type;
-		terminal(terminal_type t) : type{ t } {};
+		terminal(terminal_type t = axon_simple) : type{ t } {};
 	};
 
 
@@ -30,7 +30,7 @@ namespace innate {
 			cluster_targeted
 		} type;
 
-		cluster(cluster_type t) : type{ t } {};
+		cluster(cluster_type t = cluster_targeted) : type{ t } {};
 
 		int width = -1;
 		int height = -1;
@@ -73,6 +73,8 @@ namespace instance {
 	class terminality
 	{
 	public:
+		terminality() = default;
+		terminality(const ptree& root);
 		ptree to_ptree() const;
 
 	protected:
