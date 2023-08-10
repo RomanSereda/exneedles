@@ -25,8 +25,25 @@ namespace hana = boost::hana;
 using ptree = boost::property_tree::ptree;
 
 namespace boost {
-
 	template<typename... args> class spec_tuple {
+	protected:
+		static const int sz_args = sizeof...(args);
+		template <int d> using arg = typename std::tuple_element<d, std::tuple<args...>>::type;
+
+	public:
+		template<std::size_t i = 0, typename T0, typename F> static typename std::enable_if<(i == sz_args), void>::type foreach(T0* t0, F f) { }
+		template<std::size_t i = 0, typename T0, typename F> static typename std::enable_if<(i < sz_args), void>::type foreach(T0* t0, F f) {
+			arg<i> sample;
+			if (sample.type == t0->type) {
+				f(static_cast<arg<i>*>(t0));
+				return;
+			}
+
+			foreach<i + 1, T0, F>(t0, f);
+		}
+	};
+
+	template<typename... args> class spec_pair_tuple {
 	protected:
 		static const int sz_args = sizeof...(args);
 		template <int d> using arg = typename std::tuple_element<d, std::tuple<args...>>::type;
@@ -48,6 +65,18 @@ namespace boost {
 			}
 			
 			foreach<i + 1, T0, T1, F>(t0, t1, f);
+		}
+
+		template<std::size_t i = 0, typename T0, typename F> static typename std::enable_if<(i == sz_args), void>::type foreach(T0* t0, F f) { }
+		template<std::size_t i = 0, typename T0, typename F> static typename std::enable_if<(i < sz_args), void>::type foreach(T0* t0, F f) {
+			arg<i> sample;
+			if ((std::get<0>(sample)).type == t0->type) {
+				using Type0 = typename std::tuple_element<0, arg<i>>::type;
+				f(static_cast<Type0*>(t0));
+				return;
+			}
+
+			foreach<i + 1, T0, F>(t0, f);
 		}
 
 		template<std::size_t i = 0, typename T0> static typename std::enable_if<(i == sz_args), std::vector<size_t>>::type size_of_types(T0* t0) { return {}; }
