@@ -62,11 +62,17 @@ namespace boost {
 		}
 	};
 
+	static std::string to_string(ptree tree) {
+		std::stringstream s;
+		write_json(s, tree);
+		return s.str();
+	}
+
 	template<typename T> auto to_ptree(T var) {
 		ptree root;
-		/*hana::for_each(var, hana::fuse([&](auto member, auto value) {
+		hana::for_each(var, hana::fuse([&](auto member, auto value) {
 			root.put(hana::to<char const*>(member), std::to_string(value));
-			}));*/
+		}));
 		return root;
 	}
 

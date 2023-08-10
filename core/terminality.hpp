@@ -72,7 +72,8 @@ namespace instance {
 	class cluster
 	{
 	public:
-		cluster();
+		explicit cluster() = default;
+		ptree to_ptree() const;
 
 	protected:
 		std::tuple<
