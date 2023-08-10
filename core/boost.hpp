@@ -32,16 +32,33 @@ namespace boost {
 		template <int d> using arg = typename std::tuple_element<d, std::tuple<args...>>::type;
 
 	public:
-		template<std::size_t i = 0, typename P, typename F> static typename std::enable_if<(i == sz_args), void>::type foreach(P* p, F f) { }
-		template<std::size_t i = 0, typename P, typename F> static typename std::enable_if<(i < sz_args), void>::type foreach(P* p, F f) {
-			if (!p) return;
+		template<std::size_t i = 0, typename T0, typename T1, typename F> static typename std::enable_if<(i == sz_args), void>::type foreach(T0* t0, T1* t1, F f) { }
+		template<std::size_t i = 0, typename T0, typename T1, typename F> static typename std::enable_if<(i < sz_args), void>::type foreach(T0* t0, T1* t1, F f) {
+			arg<i> sample;
+			if ((std::get<0>(sample)).type == t0->type) {
+				using Type0 = typename std::tuple_element<0, arg<i>>::type;
+				using Type1 = typename std::tuple_element<1, arg<i>>::type;
 
-			arg<i> m;
-			if(p->type == m.type)
-				if(auto pp = dynamic_cast<arg<i>>(p))
-					if (f(pp)) return;
+				auto p0 = static_cast<Type0*>(t0);
+				auto p1 = static_cast<Type1*>(t1);
 
-			foreach<i + 1, P, F>(p, f);
+				f(p0, p1);
+
+				return;
+			}
+			
+			foreach<i + 1, T0, T1, F>(t0, t1, f);
+		}
+
+		template<std::size_t i = 0, typename T0> static typename std::enable_if<(i == sz_args), std::vector<size_t>>::type size_of_types(T0* t0) { return {}; }
+		template<std::size_t i = 0, typename T0> static typename std::enable_if<(i < sz_args), std::vector<size_t>>::type size_of_types(T0* t0) {
+			arg<i> sample;
+			if ((std::get<0>(sample)).type == t0->type) {
+				return { sizeof(typename std::tuple_element<0, arg<i>>::type), 
+					     sizeof(typename std::tuple_element<1, arg<i>>::type) 
+				};
+			}
+			return size_of_types<i + 1, T0>(t0);
 		}
 	};
 

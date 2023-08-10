@@ -45,13 +45,10 @@ namespace innate {
 }
 
 namespace data {
-	struct axon_simple;
-	struct synapse_simple;
-
 	enum terminal_expression {
 		alive = 0x00000001
 	};
-	struct __align_4b__ terminal: public boost::spec_tuple<axon_simple, synapse_simple> {
+	struct __align_4b__ terminal {
 		state8_t expression;
 		rgstr8_t spikes;
 	};
@@ -67,33 +64,27 @@ namespace data {
 	};
 	struct __align_4b__ synapse_simple : terminal {
 	};
-
-	struct cluster {
-		std::tuple<
-			__const__ innate::cluster*, 
-			__const__ innate::terminal*> innate {nullptr, nullptr};
-
-		__mem__ float* results = nullptr;                       // bytes = layer::celulars_count * cell::width * cell::height * 4 --> shift celular number
-		__mem__ terminal* terminals = nullptr;                  // cast for terminal_type, memory alocate array.  
-														        // bytes = cell::width * cell::height * cluster::width * cluster::height * sizeof(terminal_type) --> shift cluster number
-	};
 }
 
 namespace instance {
-	class cluster : protected data::cluster {
+	using cluster_tuple = boost::spec_tuple<std::tuple<innate::axon_simple,    data::axon_simple>,
+		                                    std::tuple<innate::synapse_simple, data::synapse_simple>>;
+	class cluster
+	{
 	public:
-		int terminal_bytes_size() const;
-		ptree operator=(instance::cluster&);
+		cluster();
 
-		/*cluster& operator=(const ptree& root) {
+	protected:
+		std::tuple<
+			__const__ innate::cluster*,
+			__const__ innate::terminal*> innate{ nullptr, nullptr };
 
-
-
-			return *this;
-		}*/
+		__mem__ float* results = nullptr;                       // bytes = layer::celulars_count * cell::width * cell::height * 4 --> shift celular number
+		__mem__ data::terminal* terminals = nullptr;            // cast for terminal_type, memory alocate array.  
+		                                                        // bytes = cell::width * cell::height * cluster::width * cluster::height * sizeof(terminal_type) --> shift cluster number
 
 	private:
-		const std::string cNameJsonKey = "cluster";
+		int sz_tr_type = -1;
 	};
 }
 

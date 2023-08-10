@@ -3,7 +3,7 @@
 #include "private/assert.hpp"
 
 #include "types.hpp"
-//#include "terminality.hpp"
+#include "terminality.hpp"
 
 namespace core
 {
