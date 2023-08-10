@@ -20,7 +20,7 @@ namespace core
 		cudaDeviceReset();
 		console("reset device");
 
-		instance::cluster cluster;
-		console(boost::to_string(cluster.to_ptree()));
+		instance::terminality terminality;
+		console(boost::to_string(terminality.to_ptree()));
 	}
 }

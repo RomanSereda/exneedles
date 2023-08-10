@@ -22,7 +22,7 @@ namespace innate {
 			positive = 0,
 			negative
 		} sign;
-		synapse_simple() : terminal(terminal_type::synapse_simple) {};
+		synapse_simple() : terminal(terminal_type::synapse_simple), sign{ positive } {};
 	};
 
 	struct cluster {
@@ -70,10 +70,9 @@ namespace instance {
 	using cluster_tuple = boost::spec_tuple<innate::cluster_targeted>;
 	using cluster_data_tuple = boost::spec_pair_tuple<std::tuple<innate::axon_simple,    data::axon_simple>,
 		                                              std::tuple<innate::synapse_simple, data::synapse_simple>>;
-	class cluster
+	class terminality
 	{
 	public:
-		explicit cluster() = default;
 		ptree to_ptree() const;
 
 	protected:
@@ -86,7 +85,7 @@ namespace instance {
 		                                                        // bytes = cell::width * cell::height * cluster::width * cluster::height * sizeof(terminal_type) --> shift cluster number
 
 	private:
-		int sz_tr_type = -1;
+		
 	};
 }
 
