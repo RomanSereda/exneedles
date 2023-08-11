@@ -1,23 +1,31 @@
 #include "terminality.hpp"
 
 namespace instance {
+	terminality::terminality() {};
 	terminality::terminality(const ptree& root) {
 
 		innate::cluster* innate_cluster = nullptr;
 		auto innate_cluster_tree = root.get_child("innate_cluster");
-		auto innate_cluster_type = static_cast<innate::cluster::cluster_type>(std::stoi(innate_cluster_tree.get_value("type")));
+		auto innate_cluster_type = static_cast<innate::cluster::cluster_type>(innate_cluster_tree.get<int>("type"));
 
-		cluster_tuple::create(innate_cluster_type, [=](auto* p){
+		cluster_tuple::create(innate_cluster_type, [=, &innate_cluster](auto* p){
 			auto innate_extend_tree = innate_cluster_tree.get_child("innate_extend");
 			boost::to(*p, innate_extend_tree);
+			innate_cluster = p;
 		});
 
 
+		innate::terminal* innate_terminal = nullptr;
 		auto innate_terminal_tree = root.get_child("innate_terminal");
+		auto innate_terminal_type = static_cast<innate::terminal::terminal_type>(innate_terminal_tree.get<int>("type"));
 
-		innate::terminal terminal;
-		boost::to(terminal, innate_terminal_tree);
+		cluster_data_tuple::create_first(innate_terminal_type, [=, &innate_terminal](auto* p) {
+			auto innate_extend_tree = innate_terminal_tree.get_child("innate_extend");
+			boost::to(*p, innate_extend_tree);
+			innate_terminal = p;
+		});
 
+		innate = std::make_tuple(innate_cluster, innate_terminal);
 	}
 
 	ptree terminality::to_ptree() const {
@@ -38,4 +46,7 @@ namespace instance {
 		return root;
 	}
 
+	void terminality::test_create_innate() {
+		innate = std::make_tuple(new innate::cluster_targeted, new innate::axon_simple);
+	}
 }

@@ -51,14 +51,14 @@ namespace boost {
 			return create<i + 1, T, F>(type, f);
 		}
 
-		template<std::size_t i = 0, typename T0> static typename std::enable_if<(i == sz_args), int>::type size_of_type(T0* t0) { return 0; }
-		template<std::size_t i = 0, typename T0> static typename std::enable_if<(i < sz_args), int>::type size_of_type(T0* t0) {
+		template<std::size_t i = 0, typename T0> static typename std::enable_if<(i == sz_args), int>::type size(T0* t0) { return 0; }
+		template<std::size_t i = 0, typename T0> static typename std::enable_if<(i < sz_args), int>::type size(T0* t0) {
 			arg<i> sample;
 			if (sample.type == t0->type) {
 				return sizeof(sample);
 			}
 
-			return size_of_type<i + 1, T0>(t0);
+			return size<i + 1, T0>(t0);
 		}
 	};
 
@@ -98,15 +98,27 @@ namespace boost {
 			foreach<i + 1, T0, F>(t0, f);
 		}
 
-		template<std::size_t i = 0, typename T0> static typename std::enable_if<(i == sz_args), std::vector<size_t>>::type size_of_types(T0* t0) { return {}; }
-		template<std::size_t i = 0, typename T0> static typename std::enable_if<(i < sz_args), std::vector<size_t>>::type size_of_types(T0* t0) {
+		template<std::size_t i = 0, typename T0> static typename std::enable_if<(i == sz_args), std::vector<size_t>>::type size(T0* t0) { return {}; }
+		template<std::size_t i = 0, typename T0> static typename std::enable_if<(i < sz_args), std::vector<size_t>>::type size(T0* t0) {
 			arg<i> sample;
 			if ((std::get<0>(sample)).type == t0->type) {
 				return { sizeof(typename std::tuple_element<0, arg<i>>::type), 
 					     sizeof(typename std::tuple_element<1, arg<i>>::type) 
 				};
 			}
-			return size_of_types<i + 1, T0>(t0);
+			return size<i + 1, T0>(t0);
+		}
+	
+	
+		template<std::size_t i = 0, typename T, typename F> static typename std::enable_if<(i == sz_args), void>::type create_first(T type, F f) {}
+		template<std::size_t i = 0, typename T, typename F> static typename std::enable_if<(i < sz_args), void>::type create_first(T type, F f) {
+			arg<i> sample;
+			if ((std::get<0>(sample)).type == type) {
+				using Type0 = typename std::tuple_element<0, arg<i>>::type;
+				f(new Type0());
+			}
+
+			return create_first<i + 1, T, F>(type, f);
 		}
 	};
 

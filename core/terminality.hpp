@@ -73,9 +73,11 @@ namespace instance {
 	class terminality
 	{
 	public:
-		terminality() = default;
+		terminality();
 		terminality(const ptree& root);
 		ptree to_ptree() const;
+
+		void test_create_innate();
 
 	protected:
 		std::tuple<

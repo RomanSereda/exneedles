@@ -21,6 +21,11 @@ namespace core
 		console("reset device");
 
 		instance::terminality terminality;
-		console(boost::to_string(terminality.to_ptree()));
+		terminality.test_create_innate();
+		auto root = terminality.to_ptree();
+		console(boost::to_string(root));
+
+		instance::terminality terminality2(root);
+		console(boost::to_string(terminality2.to_ptree()));
 	}
 }
