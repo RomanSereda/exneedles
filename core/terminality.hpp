@@ -71,7 +71,7 @@ namespace data {
 
 namespace innate { struct layer; }
 namespace instance {
-	using cluster_tuple = boost::spec_tuple<innate::cluster_targeted>;
+	using cluster_tuple      = boost::spec_tuple<innate::cluster_targeted>;
 	using cluster_data_tuple = boost::spec_pair_tuple<std::tuple<innate::axon_simple,    data::axon_simple>,
 		                                              std::tuple<innate::synapse_simple, data::synapse_simple>>;
 
@@ -85,7 +85,10 @@ namespace instance {
 		__mem__ data::terminal* terminals = nullptr;            // cast for terminal_type, memory alocate array.  
 		                                                        // bytes = cell::width * cell::height * cluster::width * cluster::height * sizeof(terminal_type) --> shift cluster number
 	
-		virtual void* malloc(int size) const = 0;
+		size_t calc_results_bytes(const innate::layer& layer) const;
+		size_t calc_terminals_bytes(const innate::layer& layer,
+			                        const innate::cluster* cl,
+			                        const innate::terminal* tr) const;
 	};
 
 	class host_terminality : protected terminality {
@@ -93,14 +96,13 @@ namespace instance {
 		host_terminality(const ptree& root, const innate::layer& layer);
 		ptree to_ptree() const;
 
-	protected:
-		void* malloc(int size) const override;
+	private:
 
 	};
 
 	class device_terminality: protected terminality {
 	protected:
-		void* malloc(int size) const override;
+		void* const_malloc(int size) const;
 	};
 	
 }

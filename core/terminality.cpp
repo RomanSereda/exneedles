@@ -4,11 +4,37 @@
 #pragma warning(disable:6011)
 
 namespace instance {
-	host_terminality::host_terminality(const ptree& root, const innate::layer& layer) {
+	size_t terminality::calc_terminals_bytes(const innate::layer& layer, 
+		                                     const innate::cluster* cl, 
+		                                     const innate::terminal* tr) const {
+		if (!cl || !tr)
+			logexit();
 
+		if (cl->height < 1 && cl->width < 1)
+			logexit();
+
+		const size_t terminals_per_cluster = cl->height * cl->width;
+		const size_t cell_size = layer.height * layer.width;
+		const auto size_types = cluster_data_tuple::size(tr);
+		if (size_types.size() < 2 || size_types.back() < 1) logexit();
+		const size_t bytes_per_cluster = size_types.back() * terminals_per_cluster;
+		const size_t size_bytes_terminals = bytes_per_cluster * cell_size;
+
+		return size_bytes_terminals;
+	}
+
+	size_t terminality::calc_results_bytes(const innate::layer& layer) const {
+		const size_t cell_size = layer.height * layer.width;
+		const size_t size_bytes_results = cell_size * sizeof(float);
+
+		return size_bytes_results;
+	}
+
+	host_terminality::host_terminality(const ptree& root, const innate::layer& layer) {
 		innate::cluster* innate_cluster = nullptr;
 		auto innate_cluster_tree = root.get_child("innate_cluster");
-		auto innate_cluster_type = static_cast<innate::cluster::cluster_type>(innate_cluster_tree.get<int>("type"));
+		auto innate_cluster_type 
+			= static_cast<innate::cluster::cluster_type>(innate_cluster_tree.get<int>("type"));
 
 		cluster_tuple::create(innate_cluster_type, [=, &innate_cluster](auto* p){
 			auto innate_extend_tree = innate_cluster_tree.get_child("innate_extend");
@@ -18,12 +44,13 @@ namespace instance {
 
 		innate::terminal* innate_terminal = nullptr;
 		auto innate_terminal_tree = root.get_child("innate_terminal");
-		auto innate_terminal_type = static_cast<innate::terminal::terminal_type>(innate_terminal_tree.get<int>("type"));
+		auto innate_terminal_type 
+			= static_cast<innate::terminal::terminal_type>(innate_terminal_tree.get<int>("type"));
 
-		cluster_data_tuple::create_first(innate_terminal_type, [=, &innate_terminal](auto* p) {
+		cluster_data_tuple::create_first(innate_terminal_type, [=, &innate_terminal](auto p) {
 			auto innate_extend_tree = innate_terminal_tree.get_child("innate_extend");
-			boost::to(*p, innate_extend_tree);
-			innate_terminal = p;
+			boost::to(*p.get(), innate_extend_tree);
+			innate_terminal = p.get();
 		});
 
 		innate = std::make_tuple(innate_cluster, innate_terminal);
@@ -31,24 +58,10 @@ namespace instance {
 		if (layer.height < 1 || layer.width < 1)
 			logexit();
 
-		if (!innate_cluster || !innate_terminal)
-			logexit();
-
-		if (innate_cluster->height < 1 && innate_cluster->width < 1)
-			logexit();
-			
-		const size_t terminals_per_cluster = innate_cluster->height * innate_cluster->width;
-		const size_t cell_size = layer.height * layer.width;
-		const auto size_types = cluster_data_tuple::size(innate_terminal);
-		if (size_types.size() < 2 || size_types.back() < 1) logexit();
-		const size_t bytes_per_cluster = size_types.back() * terminals_per_cluster;
-		
-		const size_t size_bytes_terminals = bytes_per_cluster * cell_size;
-		terminals = (__mem__ data::terminal*)malloc(size_bytes_terminals);
-
-		const size_t size_bytes_results = cell_size * sizeof(float);
-		results = (__mem__ float*)malloc(size_bytes_results);
-
+		results   = (__mem__ float*)malloc(calc_results_bytes(layer));
+		terminals = (__mem__ data::terminal*)malloc(calc_terminals_bytes(layer,
+			                                                             innate_cluster, 
+			                                                             innate_terminal));
 		if (!terminals || !results)
 			logexit();
 	}
@@ -77,11 +90,7 @@ namespace instance {
 		return root;
 	}
 
-	void* host_terminality::malloc(int size) const {
-		return std::malloc(size);
-	}
-
-	void* device_terminality::malloc(int size) const {
+	void* device_terminality::const_malloc(int size) const {
 
 
 		return nullptr;

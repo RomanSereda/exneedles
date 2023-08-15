@@ -115,7 +115,8 @@ namespace boost {
 			arg<i> sample;
 			if ((std::get<0>(sample)).type == type) {
 				using Type0 = typename std::tuple_element<0, arg<i>>::type;
-				f(new Type0());
+				f(std::move(std::unique_ptr<Type0>(new Type0())));
+				return;
 			}
 
 			return create_first<i + 1, T, F>(type, f);
