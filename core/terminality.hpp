@@ -76,7 +76,7 @@ namespace instance {
 		                                              std::tuple<innate::synapse_simple, data::synapse_simple>>;
 
 	class terminality {
-	protected:
+	public:
 		std::tuple<
 			__const__ innate::cluster*,
 			__const__ innate::terminal*> innate{ nullptr, nullptr };
@@ -88,7 +88,7 @@ namespace instance {
 		virtual void* malloc(int size) const = 0;
 	};
 
-	class host_terminality : public terminality {
+	class host_terminality : protected terminality {
 	public:
 		host_terminality(const ptree& root, const innate::layer& layer);
 		ptree to_ptree() const;
@@ -98,7 +98,7 @@ namespace instance {
 
 	};
 
-	class device_terminality: public terminality {
+	class device_terminality: protected terminality {
 	protected:
 		void* malloc(int size) const override;
 	};
