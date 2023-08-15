@@ -45,40 +45,37 @@ namespace innate {
 }
 
 namespace data {
-	enum terminal_expression {
-		alive = 0x00000001
-	};
 	struct __align_4b__ terminal {
+		enum terminal_expression {
+			alive = 0x00000001
+		};
+
 		state8_t expression;
 		rgstr8_t spikes;
 	};
 
-	enum axon_simple_expression {
-		depression = 0x00000010
-	};
 	struct __align_4b__ axon_simple : terminal {
+		enum axon_simple_expression {
+			depression = 0x00000010
+		};
+
 	};
 
-	enum synapse_simple_expression {
-		augumentation = 0x00000010
-	};
 	struct __align_4b__ synapse_simple : terminal {
+		enum synapse_simple_expression {
+			augumentation = 0x00000010
+		};
+
 	};
 }
 
+namespace innate { struct layer; }
 namespace instance {
 	using cluster_tuple = boost::spec_tuple<innate::cluster_targeted>;
 	using cluster_data_tuple = boost::spec_pair_tuple<std::tuple<innate::axon_simple,    data::axon_simple>,
 		                                              std::tuple<innate::synapse_simple, data::synapse_simple>>;
-	class terminality
-	{
-	public:
-		terminality();
-		terminality(const ptree& root);
-		ptree to_ptree() const;
 
-		void test_create_innate();
-
+	class terminality {
 	protected:
 		std::tuple<
 			__const__ innate::cluster*,
@@ -87,12 +84,26 @@ namespace instance {
 		__mem__ float* results = nullptr;                       // bytes = layer::celulars_count * cell::width * cell::height * 4 --> shift celular number
 		__mem__ data::terminal* terminals = nullptr;            // cast for terminal_type, memory alocate array.  
 		                                                        // bytes = cell::width * cell::height * cluster::width * cluster::height * sizeof(terminal_type) --> shift cluster number
-
-	private:
-		
+	
+		virtual void* malloc(int size) const = 0;
 	};
-}
 
+	class host_terminality : public terminality {
+	public:
+		host_terminality(const ptree& root, const innate::layer& layer);
+		ptree to_ptree() const;
+
+	protected:
+		void* malloc(int size) const override;
+
+	};
+
+	class device_terminality: public terminality {
+	protected:
+		void* malloc(int size) const override;
+	};
+	
+}
 
 BOOST_HANA_ADAPT_STRUCT(innate::terminal, type);
 BOOST_HANA_ADAPT_STRUCT(innate::axon_simple, basic_value);

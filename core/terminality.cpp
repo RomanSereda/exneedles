@@ -1,8 +1,10 @@
 #include "terminality.hpp"
+#include "layerality.hpp"
+
+#pragma warning(disable:6011)
 
 namespace instance {
-	terminality::terminality() {};
-	terminality::terminality(const ptree& root) {
+	host_terminality::host_terminality(const ptree& root, const innate::layer& layer) {
 
 		innate::cluster* innate_cluster = nullptr;
 		auto innate_cluster_tree = root.get_child("innate_cluster");
@@ -13,7 +15,6 @@ namespace instance {
 			boost::to(*p, innate_extend_tree);
 			innate_cluster = p;
 		});
-
 
 		innate::terminal* innate_terminal = nullptr;
 		auto innate_terminal_tree = root.get_child("innate_terminal");
@@ -26,9 +27,33 @@ namespace instance {
 		});
 
 		innate = std::make_tuple(innate_cluster, innate_terminal);
+
+		if (layer.height < 1 || layer.width < 1)
+			logexit();
+
+		if (!innate_cluster || !innate_terminal)
+			logexit();
+
+		if (innate_cluster->height < 1 && innate_cluster->width < 1)
+			logexit();
+			
+		const size_t terminals_per_cluster = innate_cluster->height * innate_cluster->width;
+		const size_t cell_size = layer.height * layer.width;
+		const auto size_types = cluster_data_tuple::size(innate_terminal);
+		if (size_types.size() < 2 || size_types.back() < 1) logexit();
+		const size_t bytes_per_cluster = size_types.back() * terminals_per_cluster;
+		
+		const size_t size_bytes_terminals = bytes_per_cluster * cell_size;
+		terminals = (__mem__ data::terminal*)malloc(size_bytes_terminals);
+
+		const size_t size_bytes_results = cell_size * sizeof(float);
+		results = (__mem__ float*)malloc(size_bytes_results);
+
+		if (!terminals || !results)
+			logexit();
 	}
 
-	ptree terminality::to_ptree() const {
+	ptree host_terminality::to_ptree() const {
 		ptree root;
 		
 		if (auto cl = std::get<__const__ innate::cluster*>(innate)) {
@@ -52,7 +77,13 @@ namespace instance {
 		return root;
 	}
 
-	void terminality::test_create_innate() {
-		innate = std::make_tuple(new innate::cluster_targeted, new innate::axon_simple);
+	void* host_terminality::malloc(int size) const {
+		return std::malloc(size);
+	}
+
+	void* device_terminality::malloc(int size) const {
+
+
+		return nullptr;
 	}
 }

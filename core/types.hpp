@@ -36,3 +36,12 @@ typedef uint32_t rgstr32_t;
 static void console(std::string str) {
 	std::cout << str << std::endl;
 }
+
+#define STRINGIZING(x) #x
+#define STR(x) STRINGIZING(x)
+#define FILE_LINE __FILE__ ":" STR(__LINE__)
+
+static void logexit() {
+	console(FILE_LINE);
+	exit(1);
+}
