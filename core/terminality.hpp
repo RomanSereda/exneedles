@@ -76,26 +76,40 @@ namespace instance {
 	using cluster_data_tuple = boost::spec_pair_tuple<std::tuple<innate::axon_simple,    data::axon_simple>,
 		                                              std::tuple<innate::synapse_simple, data::synapse_simple>>;
 
+	/*EXPIMP_TEMPLATE template class LIBRARY_API std::tuple<std::unique_ptr<innate::cluster>,
+		                                                  std::unique_ptr<innate::terminal>>;
+	EXPIMP_TEMPLATE template class LIBRARY_API std::tuple<__const__ innate::cluster*,
+		                                                  __const__ innate::terminal*>;*/
+
+
 	template<typename T0, typename T1> class LIBRARY_API terminality {
 	public:
-		std::tuple<T0, T1> innate;
+		terminality();
+		virtual ~terminality();
 
-		__mem__ float* results = nullptr;                       // bytes = layer::celulars_count * cell::width * cell::height * 4 --> shift celular number
-		__mem__ data::terminal* terminals = nullptr;            // cast for terminal_type, memory alocate array.  
-		                                                        // bytes = cell::width * cell::height * cluster::width * cluster::height * sizeof(terminal_type) --> shift cluster number
-	
 		const T0& inncl() const;
 		const T1& inntr() const;
 
 		static std::unique_ptr<innate::cluster>&& toinncl(const ptree& root);
 		static std::unique_ptr<innate::terminal>&& toinntr(const ptree& root);
-		
+
 		size_t calc_results_bytes(const innate::layer& layer) const;
 		size_t calc_terminals_bytes(const innate::layer& layer,
-			                        const innate::cluster* cl,
-			                        const innate::terminal* tr) const;
+			const innate::cluster* cl,
+			const innate::terminal* tr) const;
 
+	protected:
+		std::tuple<T0, T1>* innate = nullptr;
+
+		__mem__ float* results = nullptr;                       // bytes = layer::celulars_count * cell::width * cell::height * 4 --> shift celular number
+		__mem__ data::terminal* terminals = nullptr;            // cast for terminal_type, memory alocate array.  
+		                                                        // bytes = cell::width * cell::height * cluster::width * cluster::height * sizeof(terminal_type) --> shift cluster number
 	};
+
+	/*EXPIMP_TEMPLATE template class LIBRARY_API terminality<std::unique_ptr<innate::cluster>,
+		                                                   std::unique_ptr<innate::terminal>>;
+	EXPIMP_TEMPLATE template class LIBRARY_API terminality<__const__ innate::cluster*,
+		                                                   __const__ innate::terminal*>;*/
 
 	class LIBRARY_API host_terminality : protected terminality<std::unique_ptr<innate::cluster>,
 		                                                       std::unique_ptr<innate::terminal>> {

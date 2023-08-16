@@ -16,6 +16,15 @@ namespace innate {
 }
 
 namespace instance {
+	template<typename T0, typename T1>
+	terminality<T0, T1>::terminality() {
+		innate = new std::tuple<T0, T1>();
+	}
+	template<typename T0, typename T1>
+	terminality<T0, T1>::~terminality() {
+		delete innate;
+	}
+
 	template<typename T0, typename T1> 
 	size_t terminality<T0, T1>::calc_terminals_bytes(const innate::layer& layer,
 		                                     const innate::cluster* cl, 
@@ -46,12 +55,12 @@ namespace instance {
 
 	template<typename T0, typename T1>
 	const T0& terminality<T0, T1>::inncl() const {
-		return std::get<T0>(innate);
+		return std::get<T0>(*innate);
 	}
 
 	template<typename T0, typename T1>
 	const T1& terminality<T0, T1>::inntr() const {
-		return std::get<T1>(innate);
+		return std::get<T1>(*innate);
 	}
 
 	template<typename T0, typename T1>
@@ -92,8 +101,8 @@ namespace instance {
 		return std::move(ptr);
 	}
 
-	host_terminality::host_terminality(const ptree& root, const innate::layer& layer) {
-		innate = std::make_tuple(toinncl(root), toinntr(root));
+	host_terminality::host_terminality(const ptree& root, const innate::layer& layer) : terminality() {
+		*innate = std::make_tuple(toinncl(root), toinntr(root));
 
 		if (layer.height < 1 || layer.width < 1)
 			logexit();
@@ -129,8 +138,7 @@ namespace instance {
 		return root;
 	}
 
-	device_terminality::device_terminality(const ptree& root, const innate::layer& layer)
-	{
+	device_terminality::device_terminality(const ptree& root, const innate::layer& layer) : terminality() {
 		auto cl = toinncl(root);
 		auto tr = toinntr(root);
 
@@ -145,7 +153,7 @@ namespace instance {
 			const_tr = tables::get_new_pool_part(t0);
 		});
 
-		innate = std::make_tuple(const_cl, const_tr);
+		*innate = std::make_tuple(const_cl, const_tr);
 
 		auto results_szb = calc_results_bytes(layer);
 		assert_err(cudaMalloc((void**)&results, results_szb));
@@ -157,8 +165,7 @@ namespace instance {
 			logexit();
 	}
 
-	device_terminality::~device_terminality()
-	{
+	device_terminality::~device_terminality(){
 	}
 
 }

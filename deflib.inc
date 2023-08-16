@@ -12,8 +12,10 @@
 
 
 #ifdef _WINDLL                                     
-#define LIBRARY_API __declspec(dllexport)     
+	#define LIBRARY_API __declspec(dllexport)  
+	#define EXPIMP_TEMPLATE
 #else                                              
-#define LIBRARY_API __declspec(dllimport)     
-#pragma LIBRARY_COMMENT(LIBRARY)
+	#define LIBRARY_API __declspec(dllimport)     
+	#define EXPIMP_TEMPLATE extern
+	#pragma LIBRARY_COMMENT(LIBRARY)
 #endif 

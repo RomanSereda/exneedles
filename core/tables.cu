@@ -9,8 +9,6 @@
 #include "assert.hpp"
 
 namespace tables {
-#pragma warning( disable : 6011 )
-
 	void init() {
 		init_table_nbits_values();
 		init_table_stdp_values();
@@ -115,21 +113,23 @@ namespace tables {
 		return sum_dt / 7;
 	};
 	void init_table_stdp_values() {
-		int8_t* buf = (int8_t*)malloc(sz_stdp_values);
-		for (int i = 0; i < sz_stdp_values; i++) {
-			uint8_t x = i % 128;
-			uint8_t y = i / 128;
+		if (int8_t* buf = (int8_t*)malloc(sz_stdp_values)) {
+			for (int i = 0; i < sz_stdp_values; i++) {
+				uint8_t x = i % 128;
+				uint8_t y = i / 128;
 
-			float val = comp_stdp(x, y);
+				float val = comp_stdp(x, y);
 
-			buf[x + 128 * y] = (int8_t)val;
+				buf[x + 128 * y] = (int8_t)val;
+			}
+			assert_err(cudaMemcpyToSymbol(stdp_values_table, buf,
+				sz_stdp_values * sizeof(int8_t)));
+
+			free(buf);
+
+			console("getted const mem: " + std::to_string(sz_stdp_values));
 		}
-		assert_err(cudaMemcpyToSymbol(stdp_values_table, buf,
-			sz_stdp_values * sizeof(int8_t)));
-
-		free(buf);
-
-		console("getted const mem: " + std::to_string(sz_stdp_values));
+		else logexit();
 	}
 
 	const int sz_nbits_values = 256;
@@ -146,34 +146,36 @@ namespace tables {
 		return res;
 	}
 	void init_table_nbits_values() {
-		int8_t* buf = (int8_t*)malloc(sz_nbits_values);
-		for (int i = 0; i < sz_nbits_values; i++)
-			buf[i] = comp_nbits(i);
+		if (int8_t* buf = (int8_t*)malloc(sz_nbits_values)) {
+			for (int i = 0; i < sz_nbits_values; i++)
+				buf[i] = comp_nbits(i);
 
-		assert_err(cudaMemcpyToSymbol(nbits_values_table, buf,
-			sz_nbits_values * sizeof(int8_t)));
-		free(buf);
+			assert_err(cudaMemcpyToSymbol(nbits_values_table, buf,
+				sz_nbits_values * sizeof(int8_t)));
+			free(buf);
 
-		console("getted const mem: " + std::to_string(sz_nbits_values));
+			console("getted const mem: " + std::to_string(sz_nbits_values));
+		}
+		else logexit();
 	}
 
 	const uint sz_rand_coseed = 1024;
 	__constant__ uint rand_coseed[sz_rand_coseed];
-	void init_table_rand_values()
-	{
-		uint* h_rand_coseed = (uint*)malloc(sz_rand_coseed * sizeof(uint));
+	void init_table_rand_values() {
+		if (uint* h_rand_coseed = (uint*)malloc(sz_rand_coseed * sizeof(uint))) {
+			srand((uint)time(NULL));
 
-		srand((uint)time(NULL));
+			for (size_t i = 0; i < sz_rand_coseed; i++)
+				h_rand_coseed[i] = rand();
 
-		for (size_t i = 0; i < sz_rand_coseed; i++)
-			h_rand_coseed[i] = rand();
+			assert_err(cudaMemcpyToSymbol(rand_coseed, h_rand_coseed,
+				sz_rand_coseed * sizeof(uint), 0, cudaMemcpyHostToDevice));
 
-		assert_err(cudaMemcpyToSymbol(rand_coseed, h_rand_coseed,
-			sz_rand_coseed * sizeof(uint), 0, cudaMemcpyHostToDevice));
+			free(h_rand_coseed);
 
-		free(h_rand_coseed);
-
-		console("getted const mem: " + std::to_string(sz_rand_coseed));
+			console("getted const mem: " + std::to_string(sz_rand_coseed));
+		}
+		else logexit();
 	}
 	__device__ unsigned int curand() {
 		unsigned int r = blockIdx.x * blockDim.x + threadIdx.x + clock();
@@ -187,9 +189,9 @@ namespace tables {
 	const int sz_const_pool = 16384;
 	__constant__ uint8_t const_pool_table[sz_const_pool];
 	struct part {
-		void* ptr_const_mem = nullptr;
-		void* ptr_host_mem = nullptr;
-		size_t szb = -1;
+		void* ptr_const_mem;
+		void* ptr_host_mem;
+		size_t szb;
 	};
 	std::list<part> parts;
 	void* begin_const_mem = nullptr;
@@ -198,16 +200,19 @@ namespace tables {
 		console("getted const mem: " + std::to_string(sz_const_pool));
 	}
 	void* get_new_pool_part(void* t, size_t szb){
-		void* ptr_host_mem = malloc(szb);
-		memcpy(ptr_host_mem, t, szb);
-
 		void* ptr_const_mem = nullptr;
-		if (parts.empty()) ptr_const_mem = begin_const_mem;
-		else ptr_const_mem = (void*)((size_t)begin_const_mem + parts.back().szb);
+		if (void* ptr_host_mem = malloc(szb)) {
+			memcpy(ptr_host_mem, t, szb);
 
-		assert_err(cudaMemcpyToSymbol(ptr_const_mem, ptr_host_mem, szb));
+			if (parts.empty()) ptr_const_mem = begin_const_mem;
+			else ptr_const_mem = (void*)((size_t)parts.back().ptr_const_mem + parts.back().szb);
 
-		parts.push_back({ ptr_const_mem, ptr_host_mem, szb });
+			assert_err(cudaMemcpyToSymbol(ptr_const_mem, ptr_host_mem, szb));
+
+			parts.push_back({ ptr_const_mem, ptr_host_mem, szb });
+		}
+		else logexit();
+
 		return ptr_const_mem;
 	}
 }

@@ -1,5 +1,12 @@
 #pragma once
 #pragma warning(disable : 26812)
+#pragma warning(disable : 26495)
+#pragma warning(disable : 26451)
+#pragma warning(disable : 26819)
+#pragma warning(disable : 26800)
+#pragma warning(disable : 6294)
+#pragma warning(disable : 6201)
+
 #include <tuple>
 #include <utility> 
 #include <boost/property_tree/json_parser.hpp>
@@ -160,3 +167,11 @@ namespace boost {
 		return var;
 	}
 }
+
+#pragma warning(default : 26812)
+#pragma warning(default : 26495)
+#pragma warning(default : 26451)
+#pragma warning(default : 26819)
+#pragma warning(default : 26800)
+#pragma warning(default : 6294)
+#pragma warning(default : 6201)
