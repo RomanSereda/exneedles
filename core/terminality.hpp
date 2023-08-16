@@ -83,28 +83,31 @@ namespace instance {
 		__mem__ data::terminal* terminals = nullptr;            // cast for terminal_type, memory alocate array.  
 		                                                        // bytes = cell::width * cell::height * cluster::width * cluster::height * sizeof(terminal_type) --> shift cluster number
 	
+		const T0& inncl() const;
+		const T1& inntr() const;
+
+		static std::unique_ptr<innate::cluster>&& toinncl(const ptree& root);
+		static std::unique_ptr<innate::terminal>&& toinntr(const ptree& root);
+		
 		size_t calc_results_bytes(const innate::layer& layer) const;
 		size_t calc_terminals_bytes(const innate::layer& layer,
 			                        const innate::cluster* cl,
 			                        const innate::terminal* tr) const;
+
 	};
 
-	class host_terminality : protected terminality<std::unique_ptr<innate::cluster>,
-		                                           std::unique_ptr<innate::terminal>>
-	{
+	class host_terminality : protected terminality<std::unique_ptr<innate::cluster>, 
+		                                           std::unique_ptr<innate::terminal>> {
 	public:
 		host_terminality(const ptree& root, const innate::layer& layer);
 		ptree to_ptree() const;
-
-		innate::cluster* inncl() const;
-		innate::terminal* inntr() const;
 	};
 
 	class device_terminality: protected terminality<__const__ innate::cluster*, 
-		                                            __const__ innate::terminal*> 
-	{
-	protected:
-
+		                                            __const__ innate::terminal*> {
+	public:
+		device_terminality(const ptree& root, const innate::layer& layer);
+		~device_terminality();
 	};
 	
 }
