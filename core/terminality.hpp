@@ -75,11 +75,9 @@ namespace instance {
 	using cluster_data_tuple = boost::spec_pair_tuple<std::tuple<innate::axon_simple,    data::axon_simple>,
 		                                              std::tuple<innate::synapse_simple, data::synapse_simple>>;
 
-	class terminality {
+	template<typename T0, typename T1> class terminality {
 	public:
-		std::tuple<
-			__const__ innate::cluster*,
-			__const__ innate::terminal*> innate{ nullptr, nullptr };
+		std::tuple<T0, T1> innate{ nullptr, nullptr };
 
 		__mem__ float* results = nullptr;                       // bytes = layer::celulars_count * cell::width * cell::height * 4 --> shift celular number
 		__mem__ data::terminal* terminals = nullptr;            // cast for terminal_type, memory alocate array.  
@@ -91,18 +89,22 @@ namespace instance {
 			                        const innate::terminal* tr) const;
 	};
 
-	class host_terminality : protected terminality {
+	class host_terminality : protected terminality<std::unique_ptr<innate::cluster>,
+		                                           std::unique_ptr<innate::terminal>>
+	{
 	public:
 		host_terminality(const ptree& root, const innate::layer& layer);
 		ptree to_ptree() const;
 
-	private:
-
+		innate::cluster* inncl() const;
+		innate::terminal* inntr() const;
 	};
 
-	class device_terminality: protected terminality {
+	class device_terminality: protected terminality<__const__ innate::cluster*, 
+		                                            __const__ innate::terminal*> 
+	{
 	protected:
-		void* const_malloc(int size) const;
+
 	};
 	
 }

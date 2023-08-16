@@ -39,14 +39,17 @@ namespace boost {
 				return;
 			}
 
-			foreach<i + 1, T0, F>(t0, f);
+			return foreach<i + 1, T0, F>(t0, f);
 		}
 	
 		template<std::size_t i = 0, typename T, typename F> static typename std::enable_if<(i == sz_args), void>::type create(T type, F f) {}
 		template<std::size_t i = 0, typename T, typename F> static typename std::enable_if<(i < sz_args), void>::type create(T type, F f) {
-			arg<i> sample;
-			if (sample.type == type) 
-				f(new arg<i>());
+			using Type = arg<i>;
+			std::unique_ptr<Type> sample(new Type());
+			if (sample->type == type) {
+				f(std::move(sample));
+				return;
+			}
 			
 			return create<i + 1, T, F>(type, f);
 		}
@@ -54,10 +57,9 @@ namespace boost {
 		template<std::size_t i = 0, typename T0> static typename std::enable_if<(i == sz_args), int>::type size(T0* t0) { return 0; }
 		template<std::size_t i = 0, typename T0> static typename std::enable_if<(i < sz_args), int>::type size(T0* t0) {
 			arg<i> sample;
-			if (sample.type == t0->type) {
+			if (sample.type == t0->type) 
 				return sizeof(sample);
-			}
-
+			
 			return size<i + 1, T0>(t0);
 		}
 	};
@@ -83,7 +85,7 @@ namespace boost {
 				return;
 			}
 			
-			foreach<i + 1, T0, T1, F>(t0, t1, f);
+			return foreach<i + 1, T0, T1, F>(t0, t1, f);
 		}
 
 		template<std::size_t i = 0, typename T0, typename F> static typename std::enable_if<(i == sz_args), void>::type foreach(T0* t0, F f) { }
@@ -94,8 +96,7 @@ namespace boost {
 				f(static_cast<Type0*>(t0));
 				return;
 			}
-
-			foreach<i + 1, T0, F>(t0, f);
+			return foreach<i + 1, T0, F>(t0, f);
 		}
 
 		template<std::size_t i = 0, typename T0> static typename std::enable_if<(i == sz_args), std::vector<size_t>>::type size(T0* t0) { return {}; }
@@ -118,7 +119,6 @@ namespace boost {
 				f(std::move(std::unique_ptr<Type0>(new Type0())));
 				return;
 			}
-
 			return create_first<i + 1, T, F>(type, f);
 		}
 	};
