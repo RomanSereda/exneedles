@@ -3,6 +3,8 @@
 #include <stdio.h>
 #include <cuda_runtime.h>
 #include <device_launch_parameters.h>
+#include <string> 
+
 #include "assert.hpp"
 
 namespace tables {
@@ -124,6 +126,8 @@ namespace tables {
 			sz_stdp_values * sizeof(int8_t)));
 
 		free(buf);
+
+		console("getted const mem: " + std::to_string(sz_stdp_values));
 	}
 
 	const int sz_nbits_values = 256;
@@ -147,6 +151,8 @@ namespace tables {
 		assert_err(cudaMemcpyToSymbol(nbits_values_table, buf,
 			sz_nbits_values * sizeof(int8_t)));
 		free(buf);
+
+		console("getted const mem: " + std::to_string(sz_nbits_values));
 	}
 
 	const uint sz_rand_coseed = 1024;
@@ -164,6 +170,8 @@ namespace tables {
 			sz_rand_coseed * sizeof(uint), 0, cudaMemcpyHostToDevice));
 
 		free(h_rand_coseed);
+
+		console("getted const mem: " + std::to_string(sz_rand_coseed));
 	}
 	__device__ unsigned int curand() {
 		unsigned int r = blockIdx.x * blockDim.x + threadIdx.x + clock();
