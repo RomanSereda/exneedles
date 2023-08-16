@@ -1,6 +1,9 @@
 #include "terminality.hpp"
 #include "layerality.hpp"
 
+#include "tables.cuh"
+#include "assert.hpp"
+
 #pragma warning(disable:6011)
 
 namespace innate {
@@ -107,7 +110,7 @@ namespace instance {
 		
 		if (auto cl = inncl().get()) {
 			auto innate_cl = boost::to_ptree(*cl);
-			cluster_tuple::foreach(cl, [&innate_cl](auto* t0) { 
+			cluster_tuple::to(cl, [&innate_cl](auto* t0) { 
 				innate_cl.put_child("innate_extend", boost::to_ptree(*t0));
 			});
 			
@@ -116,7 +119,7 @@ namespace instance {
 
 		if (auto tr = inntr().get()) {
 			auto innate_tr = boost::to_ptree(*tr);
-			cluster_data_tuple::foreach(tr, [&innate_tr](auto* t0) { 
+			cluster_data_tuple::to_first(tr, [&innate_tr](auto* t0) { 
 				innate_tr.put_child("innate_extend", boost::to_ptree(*t0)); 
 			});
 			
@@ -131,7 +134,27 @@ namespace instance {
 		auto cl = toinncl(root);
 		auto tr = toinntr(root);
 
+		__const__ innate::cluster* const_cl = nullptr;
+		__const__ innate::terminal* const_tr = nullptr;
 
+		cluster_tuple::to(cl.get(), [&const_cl](auto* t0) {
+			const_cl = tables::get_new_pool_part(t0);
+		});
+
+		cluster_data_tuple::to_first(tr.get(), [&const_tr](auto* t0) {
+			const_tr = tables::get_new_pool_part(t0);
+		});
+
+		innate = std::make_tuple(const_cl, const_tr);
+
+		auto results_szb = calc_results_bytes(layer);
+		assert_err(cudaMalloc((void**)&results, results_szb));
+
+		auto terminals_szb = calc_terminals_bytes(layer, inncl(), inntr());
+		assert_err(cudaMalloc((void**)&terminals, terminals_szb));
+
+		if (!terminals || !results)
+			logexit();
 	}
 
 	device_terminality::~device_terminality()

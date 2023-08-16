@@ -36,10 +36,17 @@ namespace boost {
 			arg<i> sample;
 			if (sample.type == t0->type) {
 				f(static_cast<arg<i>*>(t0));
-				return;
 			}
+			foreach<i + 1, T0, F>(t0, f);
+		}
 
-			return foreach<i + 1, T0, F>(t0, f);
+		template<std::size_t i = 0, typename T0, typename F> static typename std::enable_if<(i == sz_args), void>::type to(T0* t0, F f) { }
+		template<std::size_t i = 0, typename T0, typename F> static typename std::enable_if<(i < sz_args), void>::type to(T0* t0, F f) {
+			arg<i> sample;
+			if (sample.type == t0->type) {
+				return f(static_cast<arg<i>*>(t0));
+			}
+			return to<i + 1, T0, F>(t0, f);
 		}
 	
 		template<std::size_t i = 0, typename T, typename F> static typename std::enable_if<(i == sz_args), void>::type create(T type, F f) {}
@@ -50,7 +57,6 @@ namespace boost {
 				f(std::move(sample));
 				return;
 			}
-			
 			return create<i + 1, T, F>(type, f);
 		}
 
@@ -81,11 +87,8 @@ namespace boost {
 				auto p1 = static_cast<Type1*>(t1);
 
 				f(p0, p1);
-
-				return;
 			}
-			
-			return foreach<i + 1, T0, T1, F>(t0, t1, f);
+			foreach<i + 1, T0, T1, F>(t0, t1, f);
 		}
 
 		template<std::size_t i = 0, typename T0, typename F> static typename std::enable_if<(i == sz_args), void>::type foreach(T0* t0, F f) { }
@@ -94,9 +97,19 @@ namespace boost {
 			if ((std::get<0>(sample)).type == t0->type) {
 				using Type0 = typename std::tuple_element<0, arg<i>>::type;
 				f(static_cast<Type0*>(t0));
+			}
+			foreach<i + 1, T0, F>(t0, f);
+		}
+
+		template<std::size_t i = 0, typename T0, typename F> static typename std::enable_if<(i == sz_args), void>::type to_first(T0* t0, F f) { }
+		template<std::size_t i = 0, typename T0, typename F> static typename std::enable_if<(i < sz_args), void>::type to_first(T0* t0, F f) {
+			arg<i> sample;
+			if ((std::get<0>(sample)).type == t0->type) {
+				using Type0 = typename std::tuple_element<0, arg<i>>::type;
+				f(static_cast<Type0*>(t0));
 				return;
 			}
-			return foreach<i + 1, T0, F>(t0, f);
+			return to_first<i + 1, T0, F>(t0, f);
 		}
 
 		template<std::size_t i = 0, typename T0> static typename std::enable_if<(i == sz_args), std::vector<size_t>>::type size(T0* t0) { return {}; }

@@ -4,6 +4,7 @@
 #include <cuda_runtime.h>
 #include <device_launch_parameters.h>
 #include <string> 
+#include <list>
 
 #include "assert.hpp"
 
@@ -14,6 +15,7 @@ namespace tables {
 		init_table_nbits_values();
 		init_table_stdp_values();
 		init_table_rand_values();
+		init_table_const_pool();
 	}
 
 	const uint8_t const8 = 8;
@@ -180,6 +182,33 @@ namespace tables {
 	__device__ unsigned int static_curand() {
 		unsigned int r = blockIdx.x * blockDim.x + threadIdx.x;
 		return rand_coseed[r % sz_rand_coseed];
+	}
+
+	const int sz_const_pool = 16384;
+	__constant__ uint8_t const_pool_table[sz_const_pool];
+	struct part {
+		void* ptr_const_mem = nullptr;
+		void* ptr_host_mem = nullptr;
+		size_t szb = -1;
+	};
+	std::list<part> parts;
+	void* begin_const_mem = nullptr;
+	void init_table_const_pool() {
+		cudaGetSymbolAddress(&begin_const_mem, const_pool_table);
+		console("getted const mem: " + std::to_string(sz_const_pool));
+	}
+	void* get_new_pool_part(void* t, size_t szb){
+		void* ptr_host_mem = malloc(szb);
+		memcpy(ptr_host_mem, t, szb);
+
+		void* ptr_const_mem = nullptr;
+		if (parts.empty()) ptr_const_mem = begin_const_mem;
+		else ptr_const_mem = (void*)((size_t)begin_const_mem + parts.back().szb);
+
+		assert_err(cudaMemcpyToSymbol(ptr_const_mem, ptr_host_mem, szb));
+
+		parts.push_back({ ptr_const_mem, ptr_host_mem, szb });
+		return ptr_const_mem;
 	}
 }
 

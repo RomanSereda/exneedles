@@ -16,6 +16,12 @@ namespace tables {
 	void init_table_rand_values();
 	__device__ uint curand();
 	__device__ uint static_curand();
+
+	void init_table_const_pool();
+	void* get_new_pool_part(void* t, size_t szb);
+	template<typename T> extern T* get_new_pool_part(T* t) {
+		return static_cast<T*>(get_new_pool_part(t, sizeof(T)));
+	}
 }
 
 namespace helper {

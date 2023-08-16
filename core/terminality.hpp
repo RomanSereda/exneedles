@@ -78,7 +78,7 @@ namespace instance {
 
 	template<typename T0, typename T1> class LIBRARY_API terminality {
 	public:
-		std::tuple<T0, T1> innate{ nullptr, nullptr };
+		std::tuple<T0, T1> innate;
 
 		__mem__ float* results = nullptr;                       // bytes = layer::celulars_count * cell::width * cell::height * 4 --> shift celular number
 		__mem__ data::terminal* terminals = nullptr;            // cast for terminal_type, memory alocate array.  
