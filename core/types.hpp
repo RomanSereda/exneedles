@@ -12,6 +12,8 @@ typedef uint8_t rgstr8_t;
 typedef uint16_t rgstr16_t;
 typedef uint32_t rgstr32_t;
 
+typedef uint32_t uint;
+
 #ifdef __CUDACC__
 #define ALIGN(x)  __align__(x)
 #else

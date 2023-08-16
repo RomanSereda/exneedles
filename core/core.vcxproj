@@ -18,13 +18,18 @@
     <ClInclude Include="layerality.hpp" />
     <ClInclude Include="terminality.hpp" />
     <ClInclude Include="types.hpp" />
+    <ClInclude Include="tables.cuh" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="assert.cpp" />
     <ClCompile Include="corelib.cpp" />
     <ClCompile Include="terminality.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\deflib.inc" />
+  </ItemGroup>
+  <ItemGroup>
+    <CudaCompile Include="tables.cu" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{E097F069-744A-4C23-A188-AFD2DB0CC62B}</ProjectGuid>

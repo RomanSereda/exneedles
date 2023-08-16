@@ -15,12 +15,27 @@
     <ClInclude Include="types.hpp" />
     <ClInclude Include="corelib.hpp" />
     <ClInclude Include="boost.hpp" />
+    <ClInclude Include="tables.cuh">
+      <Filter>private</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="corelib.cpp" />
-    <ClCompile Include="terminality.cpp" />
+    <ClCompile Include="terminality.cpp">
+      <Filter>private</Filter>
+    </ClCompile>
+    <ClCompile Include="corelib.cpp">
+      <Filter>private</Filter>
+    </ClCompile>
+    <ClCompile Include="assert.cpp">
+      <Filter>private</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\deflib.inc" />
+  </ItemGroup>
+  <ItemGroup>
+    <CudaCompile Include="tables.cu">
+      <Filter>private</Filter>
+    </CudaCompile>
   </ItemGroup>
 </Project>

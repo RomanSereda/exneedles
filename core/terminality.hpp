@@ -2,42 +2,43 @@
 #include "types.hpp"
 #include "boost.hpp"
 
+#include "../deflib.inc"
+
 namespace innate {
-	struct terminal {
+	struct LIBRARY_API terminal {
 		enum terminal_type {
 			axon_simple = 0,
 			synapse_simple
 		} type;
-		terminal(terminal_type t = axon_simple) : type{ t } {};
+		terminal(terminal_type t = axon_simple);
 	};
 
-
-	struct axon_simple: public terminal {
-		axon_simple() : terminal(terminal_type::axon_simple ){};
+	struct LIBRARY_API axon_simple: public terminal {
+		axon_simple();
 		int basic_value = 1;
 	};
 
-	struct synapse_simple: public terminal {
+	struct LIBRARY_API synapse_simple: public terminal {
 		enum terminal_sign {
 			positive = 0,
 			negative
 		} sign;
-		synapse_simple() : terminal(terminal_type::synapse_simple), sign{ positive } {};
+		synapse_simple();
 	};
 
-	struct cluster {
+	struct LIBRARY_API cluster {
 		enum cluster_type {
 			cluster_targeted
 		} type;
 
-		cluster(cluster_type t = cluster_targeted) : type{ t } {};
+		cluster(cluster_type t = cluster_targeted);
 
 		int width = -1;
 		int height = -1;
 	};
 
-	struct cluster_targeted: public cluster {
-		cluster_targeted() : cluster(cluster_type::cluster_targeted) {};
+	struct LIBRARY_API cluster_targeted: public cluster {
+		cluster_targeted();
 
 		int target_layer = -1;
 		int target_region = -1;
@@ -75,7 +76,7 @@ namespace instance {
 	using cluster_data_tuple = boost::spec_pair_tuple<std::tuple<innate::axon_simple,    data::axon_simple>,
 		                                              std::tuple<innate::synapse_simple, data::synapse_simple>>;
 
-	template<typename T0, typename T1> class terminality {
+	template<typename T0, typename T1> class LIBRARY_API terminality {
 	public:
 		std::tuple<T0, T1> innate{ nullptr, nullptr };
 
@@ -96,15 +97,15 @@ namespace instance {
 
 	};
 
-	class host_terminality : protected terminality<std::unique_ptr<innate::cluster>, 
-		                                           std::unique_ptr<innate::terminal>> {
+	class LIBRARY_API host_terminality : protected terminality<std::unique_ptr<innate::cluster>,
+		                                                       std::unique_ptr<innate::terminal>> {
 	public:
 		host_terminality(const ptree& root, const innate::layer& layer);
 		ptree to_ptree() const;
 	};
 
-	class device_terminality: protected terminality<__const__ innate::cluster*, 
-		                                            __const__ innate::terminal*> {
+	class LIBRARY_API device_terminality: protected terminality<__const__ innate::cluster*,
+		                                                        __const__ innate::terminal*> {
 	public:
 		device_terminality(const ptree& root, const innate::layer& layer);
 		~device_terminality();
