@@ -64,7 +64,25 @@ namespace instance {
 	}
 
 	template<typename T0, typename T1>
-	std::unique_ptr<innate::cluster>&& terminality<T0, T1>::toinncl(const ptree& root) {
+	ptree terminality<T0, T1>::to_ptree(innate::cluster* cl) {
+		auto innate_cl = boost::to_ptree(*cl);
+		cluster_tuple::to(cl, [&innate_cl](auto* t0) {
+			innate_cl.put_child("innate_extend", boost::to_ptree(*t0));
+		});
+		return innate_cl;
+	}
+
+	template<typename T0, typename T1>
+	ptree terminality<T0, T1>::to_ptree(innate::terminal* tr) {
+		auto innate_tr = boost::to_ptree(*tr);
+		cluster_data_tuple::to_first(tr, [&innate_tr](auto* t0) {
+			innate_tr.put_child("innate_extend", boost::to_ptree(*t0));
+		});
+		return innate_tr;
+	}
+
+	template<typename T0, typename T1>
+	std::unique_ptr<innate::cluster>&& terminality<T0, T1>::to_inncl(const ptree& root) {
 		auto innate_cluster_tree = root.get_child("innate_cluster");
 		auto innate_cluster_type
 			= static_cast<innate::cluster::cluster_type>(innate_cluster_tree.get<int>("type"));
@@ -83,7 +101,7 @@ namespace instance {
 	}
 
 	template<typename T0, typename T1>
-	std::unique_ptr<innate::terminal>&& terminality<T0, T1>::toinntr(const ptree& root) {
+	std::unique_ptr<innate::terminal>&& terminality<T0, T1>::to_inntr(const ptree& root) {
 		auto innate_terminal_tree = root.get_child("innate_terminal");
 		auto innate_terminal_type
 			= static_cast<innate::terminal::terminal_type>(innate_terminal_tree.get<int>("type"));
@@ -102,7 +120,7 @@ namespace instance {
 	}
 
 	host_terminality::host_terminality(const ptree& root, const innate::layer& layer) : terminality() {
-		*innate = std::make_tuple(toinncl(root), toinntr(root));
+		*innate = std::make_tuple(to_inncl(root), to_inntr(root));
 
 		if (layer.height < 1 || layer.width < 1)
 			logexit();
@@ -117,30 +135,18 @@ namespace instance {
 	ptree host_terminality::to_ptree() const {
 		ptree root;
 		
-		if (auto cl = inncl().get()) {
-			auto innate_cl = boost::to_ptree(*cl);
-			cluster_tuple::to(cl, [&innate_cl](auto* t0) { 
-				innate_cl.put_child("innate_extend", boost::to_ptree(*t0));
-			});
-			
-			root.put_child("innate_cluster", innate_cl);
-		}
-
-		if (auto tr = inntr().get()) {
-			auto innate_tr = boost::to_ptree(*tr);
-			cluster_data_tuple::to_first(tr, [&innate_tr](auto* t0) { 
-				innate_tr.put_child("innate_extend", boost::to_ptree(*t0)); 
-			});
-			
-			root.put_child("innate_terminal", innate_tr);
-		}
-
+		if (auto cl = inncl().get()) 
+			root.put_child("innate_cluster", terminality::to_ptree(cl));
+		
+		if (auto tr = inntr().get()) 
+			root.put_child("innate_terminal", terminality::to_ptree(tr));
+		
 		return root;
 	}
 
 	device_terminality::device_terminality(const ptree& root, const innate::layer& layer) : terminality() {
-		auto cl = toinncl(root);
-		auto tr = toinntr(root);
+		auto cl = to_inncl(root);
+		auto tr = to_inntr(root);
 
 		__const__ innate::cluster* const_cl = nullptr;
 		__const__ innate::terminal* const_tr = nullptr;

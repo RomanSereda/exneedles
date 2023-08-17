@@ -85,10 +85,13 @@ namespace instance {
 		const T0& inncl() const;
 		const T1& inntr() const;
 
-		static std::unique_ptr<innate::cluster>&& toinncl(const ptree& root);
-		static std::unique_ptr<innate::terminal>&& toinntr(const ptree& root);
-
 	protected:
+		static std::unique_ptr<innate::cluster>&& to_inncl(const ptree& root);
+		static std::unique_ptr<innate::terminal>&& to_inntr(const ptree& root);
+
+		static ptree to_ptree(innate::cluster* cl);
+		static ptree to_ptree(innate::terminal* tr);
+
 		terminality();
 		virtual ~terminality();
 
