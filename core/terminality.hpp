@@ -86,8 +86,8 @@ namespace instance {
 		const T1& inntr() const;
 
 	protected:
-		static std::unique_ptr<innate::cluster>&& to_inncl(const ptree& root);
-		static std::unique_ptr<innate::terminal>&& to_inntr(const ptree& root);
+		static std::unique_ptr<innate::cluster> to_inncl(const ptree& root);
+		static std::unique_ptr<innate::terminal> to_inntr(const ptree& root);
 
 		static ptree to_ptree(innate::cluster* cl);
 		static ptree to_ptree(innate::terminal* tr);
@@ -116,6 +116,8 @@ namespace instance {
 	public:
 		host_terminality(const ptree& root, const innate::layer& layer);
 		ptree to_ptree() const;
+
+		host_terminality(); //for test
 	};
 
 

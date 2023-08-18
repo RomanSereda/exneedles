@@ -3,6 +3,7 @@
 #include <string>
 #include "tables.cuh"
 #include "assert.hpp"
+#include "terminality.hpp"
 
 namespace core
 {
@@ -14,6 +15,8 @@ namespace core
 		console("init device: " + std::string(prop.name));
 		console("total const memory: " + std::to_string(prop.totalConstMem));
 		tables::init();
+
+		instance::host_terminality htr;
 	}
 
 	device::~device() {

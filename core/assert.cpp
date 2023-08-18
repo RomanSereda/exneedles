@@ -2,6 +2,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <iostream>
 
 void assert_err(cudaError_t code) {
 	if (code != cudaError::cudaSuccess) {
@@ -17,4 +18,8 @@ void assert_last_err() {
 #ifdef _DEBUG
 	assert_err(cudaPeekAtLastError());
 #endif
+}
+
+void console(std::string str) {
+	std::cout << str << std::endl;
 }

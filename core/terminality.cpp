@@ -82,7 +82,7 @@ namespace instance {
 	}
 
 	template<typename T0, typename T1>
-	std::unique_ptr<innate::cluster>&& terminality<T0, T1>::to_inncl(const ptree& root) {
+	std::unique_ptr<innate::cluster> terminality<T0, T1>::to_inncl(const ptree& root) {
 		auto innate_cluster_tree = root.get_child("innate_cluster");
 		auto innate_cluster_type
 			= static_cast<innate::cluster::cluster_type>(innate_cluster_tree.get<int>("type"));
@@ -97,11 +97,13 @@ namespace instance {
 		if (!ptr.get())
 			logexit();
 
+		boost::to(*ptr, innate_cluster_tree);
+
 		return std::move(ptr);
 	}
 
 	template<typename T0, typename T1>
-	std::unique_ptr<innate::terminal>&& terminality<T0, T1>::to_inntr(const ptree& root) {
+	std::unique_ptr<innate::terminal> terminality<T0, T1>::to_inntr(const ptree& root) {
 		auto innate_terminal_tree = root.get_child("innate_terminal");
 		auto innate_terminal_type
 			= static_cast<innate::terminal::terminal_type>(innate_terminal_tree.get<int>("type"));
@@ -115,6 +117,8 @@ namespace instance {
 
 		if (!ptr.get())
 			logexit();
+
+		boost::to(*ptr, innate_terminal_tree);
 
 		return std::move(ptr);
 	}
@@ -142,6 +146,27 @@ namespace instance {
 			root.put_child("innate_terminal", terminality::to_ptree(tr));
 		
 		return root;
+	}
+
+	host_terminality::host_terminality()
+	{
+		innate::layer layer {128, 128, 1};
+
+		ptree root;
+		innate::cluster_targeted cl;
+		cl.width = 8;
+		cl.height = 8;
+		cl.target_layer = 3;
+		cl.target_region = 9;
+
+		innate::synapse_simple tr;
+
+		root.put_child("innate_cluster", terminality::to_ptree((innate::cluster*) &cl));
+		root.put_child("innate_terminal", terminality::to_ptree((innate::terminal*) &tr));
+
+		console(boost::to_string(root));
+
+		device_terminality(root, layer);
 	}
 
 	device_terminality::device_terminality(const ptree& root, const innate::layer& layer) : terminality() {
