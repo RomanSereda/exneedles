@@ -18,11 +18,11 @@ namespace innate {
 namespace instance {
 	template<typename T0, typename T1>
 	terminality<T0, T1>::terminality() {
-		innate = new std::tuple<T0, T1>();
+		m_innate = new std::tuple<T0, T1>();
 	}
 	template<typename T0, typename T1>
 	terminality<T0, T1>::~terminality() {
-		delete innate;
+		delete m_innate;
 	}
 
 	template<typename T0, typename T1> 
@@ -55,12 +55,12 @@ namespace instance {
 
 	template<typename T0, typename T1>
 	const T0& terminality<T0, T1>::inncl() const {
-		return std::get<T0>(*innate);
+		return std::get<T0>(*m_innate);
 	}
 
 	template<typename T0, typename T1>
 	const T1& terminality<T0, T1>::inntr() const {
-		return std::get<T1>(*innate);
+		return std::get<T1>(*m_innate);
 	}
 
 	template<typename T0, typename T1>

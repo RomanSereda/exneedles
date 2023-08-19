@@ -5,22 +5,22 @@
 namespace instance {
 
 	host_terminality::host_terminality(const ptree& root, const innate::layer& layer) : terminality() {
-		*innate = std::make_tuple(to_inncl(root), to_inntr(root));
+		*m_innate = std::make_tuple(to_inncl(root), to_inntr(root));
 
 		if (layer.height < 1 || layer.width < 1)
 			logexit();
 
-		auto results_szb = calc_results_bytes(layer);
-		auto terminals_szb = calc_terminals_bytes(layer, inncl().get(), inntr().get());
+		m_results_szb = calc_results_bytes(layer);
+		m_terminals_szb = calc_terminals_bytes(layer, inncl().get(), inntr().get());
 
-		results = (__mem__ float*)malloc(results_szb);
-		terminals = (__mem__ data::terminal*)malloc(terminals_szb);
+		m_results = (__mem__ float*)malloc(m_results_szb);
+		m_terminals = (__mem__ data::terminal*)malloc(m_terminals_szb);
 
-		memset(results, 0, results_szb);
-		memset(terminals, 0, terminals_szb);
-
-		if (!terminals || !results)
+		if (!m_terminals || !m_results)
 			logexit();
+
+		memset(m_results, 0, m_results_szb);
+		memset(m_terminals, 0, m_terminals_szb);
 	}
 
 	ptree host_terminality::to_ptree() const {
@@ -74,18 +74,18 @@ namespace instance {
 		if (!m_const_cl->calc_const_ptr || !m_const_tr->calc_const_ptr)
 			logexit();
 
-		*innate = std::make_tuple((__const__ innate::cluster**) &m_const_cl->calc_const_ptr,
+		*m_innate = std::make_tuple((__const__ innate::cluster**) &m_const_cl->calc_const_ptr,
 			                      (__const__ innate::terminal**) &m_const_tr->calc_const_ptr);
 
-		auto results_szb = calc_results_bytes(layer);
-		assert_err(cudaMalloc((void**)&results, results_szb));
-		assert_err(cudaMemset((void*)results, 0, results_szb));
+		m_results_szb = calc_results_bytes(layer);
+		assert_err(cudaMalloc((void**)&m_results, m_results_szb));
+		assert_err(cudaMemset((void*)m_results, 0, m_results_szb));
 
-		auto terminals_szb = calc_terminals_bytes(layer, cl.get(), tr.get());
-		assert_err(cudaMalloc((void**)&terminals, terminals_szb));
-		assert_err(cudaMemset((void*)terminals, 0, terminals_szb));
+		m_terminals_szb = calc_terminals_bytes(layer, cl.get(), tr.get());
+		assert_err(cudaMalloc((void**)&m_terminals, m_terminals_szb));
+		assert_err(cudaMemset((void*)m_terminals, 0, m_terminals_szb));
 
-		if (!terminals || !results)
+		if (!m_terminals || !m_results)
 			logexit();
 	}
 
