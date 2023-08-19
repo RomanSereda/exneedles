@@ -1,10 +1,12 @@
 #include "tables.cuh"
 #include <time.h>
 #include <stdio.h>
+
+#include <list>
+#include <string> 
+
 #include <cuda_runtime.h>
 #include <device_launch_parameters.h>
-#include <string> 
-#include <list>
 
 #include "assert.hpp"
 
@@ -13,55 +15,43 @@ namespace tables {
 		init_table_nbits_values();
 		init_table_stdp_values();
 		init_table_rand_values();
-		init_table_const_pool();
 	}
 
 	const uint8_t const8 = 8;
-	rgstr8_t tact_inc8(int& inc)
-	{
+	rgstr8_t tact_inc8(int& inc) {
 		rgstr8_t h_inc8 = 0;
 
-		if (inc == const8 * const8 * const8 * const8 * const8 * const8 * const8 * const8)
-		{
+		if (inc == const8 * const8 * const8 * const8 * const8 * const8 * const8 * const8) {
 			inc = 0;
 		}
 
-		if (inc == 0)
-		{
+		if (inc == 0) {
 			inc++;
 			return h_inc8;
 		}
 
-		if (inc % const8 == 0)
-		{
+		if (inc % const8 == 0) {
 			h_inc8 = h_inc8 | 0b00000001;
 
-			if (inc % (const8 * const8) == 0)
-			{
+			if (inc % (const8 * const8) == 0) {
 				h_inc8 = h_inc8 | 0b00000010;
 
-				if (inc % (const8 * const8 * const8) == 0)
-				{
+				if (inc % (const8 * const8 * const8) == 0) {
 					h_inc8 = h_inc8 | 0b00000100;
 
-					if (inc % (const8 * const8 * const8 * const8) == 0)
-					{
+					if (inc % (const8 * const8 * const8 * const8) == 0) {
 						h_inc8 = h_inc8 | 0b00001000;
 
-						if (inc % (const8 * const8 * const8 * const8 * const8) == 0)
-						{
+						if (inc % (const8 * const8 * const8 * const8 * const8) == 0) {
 							h_inc8 = h_inc8 | 0b00010000;
 
-							if (inc % (const8 * const8 * const8 * const8 * const8 * const8) == 0)
-							{
+							if (inc % (const8 * const8 * const8 * const8 * const8 * const8) == 0) {
 								h_inc8 = h_inc8 | 0b00100000;
 
-								if (inc % (const8 * const8 * const8 * const8 * const8 * const8 * const8) == 0)
-								{
+								if (inc % (const8 * const8 * const8 * const8 * const8 * const8 * const8) == 0) {
 									h_inc8 = h_inc8 | 0b01000000;
 
-									if (inc % (const8 * const8 * const8 * const8 * const8 * const8 * const8 * const8) == 0)
-									{
+									if (inc % (const8 * const8 * const8 * const8 * const8 * const8 * const8 * const8) == 0) {
 										h_inc8 = h_inc8 | 0b10000000;
 									}
 								}
@@ -185,35 +175,60 @@ namespace tables {
 		unsigned int r = blockIdx.x * blockDim.x + threadIdx.x;
 		return rand_coseed[r % sz_rand_coseed];
 	}
+}
+
+namespace dev_const_mem {
+	void dev_const_mem::deleter::operator()(void* data) const noexcept {
+		std::free(data);
+	}
+
+	std::unique_ptr<void, dev_const_mem::deleter> dev_const_mem::make_ptr(std::size_t size) {
+		return std::unique_ptr<void, dev_const_mem::deleter>(std::malloc(size));
+	}
 
 	const int sz_const_pool = 16384;
 	__constant__ uint8_t const_pool_table[sz_const_pool];
-	struct part {
-		void* ptr_const_mem;
-		void* ptr_host_mem;
-		size_t szb;
-	};
-	std::list<part> parts;
-	void* begin_const_mem = nullptr;
-	void init_table_const_pool() {
-		cudaGetSymbolAddress(&begin_const_mem, const_pool_table);
-		console("getted const mem: " + std::to_string(sz_const_pool));
-	}
-	void* get_new_pool_part(void* t, size_t szb){
-		void* ptr_const_mem = nullptr;
-		if (void* ptr_host_mem = malloc(szb)) {
-			memcpy(ptr_host_mem, t, szb);
+	std::list<offset::ptr> parts;
 
-			if (parts.empty()) ptr_const_mem = begin_const_mem;
-			else ptr_const_mem = (void*)((size_t)parts.back().ptr_const_mem + parts.back().szb);
+	offset::ptr __add_mempart(void* t, size_t szb) {
+		offset::ptr mempart = nullptr;
+		if (auto ptr_host_mem = dev_const_mem::make_ptr(szb)) {
+			memcpy(ptr_host_mem.get(), t, szb);
 
-			assert_err(cudaMemcpyToSymbol(ptr_const_mem, ptr_host_mem, szb));
+			size_t value = 0;
+			if (parts.empty()) value = 0;
+			else value = parts.back()->value + parts.back()->szb;
 
-			parts.push_back({ ptr_const_mem, ptr_host_mem, szb });
+			mempart = std::make_shared<offset>(
+				dev_const_mem::offset{ std::move(ptr_host_mem), szb, value });
+
+			parts.push_back(mempart);
 		}
 		else logexit();
 
-		return ptr_const_mem;
+		if (uint8_t* temp_table = (uint8_t*)malloc(sz_const_pool)) {
+			for (const auto& part : parts) {
+				if (!memcpy(&temp_table[part->value], part->hostmem.get(), part->szb))
+					logexit();
+			}
+			assert_err(cudaMemcpyToSymbol(const_pool_table, temp_table, sz_const_pool));
+			free(temp_table);
+
+			void* const_mem_address = nullptr;
+			assert_err(cudaGetSymbolAddress((void**)&const_mem_address, const_pool_table));
+
+			if (!const_mem_address)
+				logexit();
+
+			for (auto& part : parts)
+				part->p = (void*)((size_t)const_mem_address + part->value);
+		}
+		else logexit();
+
+		if (!mempart)
+			logexit();
+
+		return mempart;
 	}
 }
 

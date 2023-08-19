@@ -18,6 +18,9 @@
     <ClInclude Include="tables.cuh">
       <Filter>private</Filter>
     </ClInclude>
+    <ClInclude Include="instance.hpp">
+      <Filter>private</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="terminality.cpp">
@@ -27,6 +30,9 @@
       <Filter>private</Filter>
     </ClCompile>
     <ClCompile Include="assert.cpp">
+      <Filter>private</Filter>
+    </ClCompile>
+    <ClCompile Include="instance.cpp">
       <Filter>private</Filter>
     </ClCompile>
   </ItemGroup>

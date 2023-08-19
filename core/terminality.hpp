@@ -76,10 +76,6 @@ namespace instance {
 	using cluster_data_tuple = boost::spec_pair_tuple<std::tuple<innate::axon_simple,    data::axon_simple>,
 		                                              std::tuple<innate::synapse_simple, data::synapse_simple>>;
 
-#define PTR_TEMPLATE        __const__ innate::cluster*,       __const__ innate::terminal*
-#define UPTR_TEMPLATE std::unique_ptr<innate::cluster>, std::unique_ptr<innate::terminal>
-
-
 	template<typename T0, typename T1> class LIBRARY_API terminality {
 	public:
 		const T0& inncl() const;
@@ -108,25 +104,11 @@ namespace instance {
 	};
 
 
+#define PTR_TEMPLATE       __const__ innate::cluster**,      __const__ innate::terminal**
+#define UPTR_TEMPLATE std::unique_ptr<innate::cluster>, std::unique_ptr<innate::terminal>
+
 	EXPIMP_TEMPLATE template class LIBRARY_API terminality<UPTR_TEMPLATE>;
 	EXPIMP_TEMPLATE template class LIBRARY_API terminality<PTR_TEMPLATE>;
-
-
-	class LIBRARY_API host_terminality : public terminality<UPTR_TEMPLATE> {
-	public:
-		host_terminality(const ptree& root, const innate::layer& layer);
-		ptree to_ptree() const;
-
-		host_terminality(); //for test
-	};
-
-
-	class LIBRARY_API device_terminality: public terminality<PTR_TEMPLATE> {
-	public:
-		device_terminality(const ptree& root, const innate::layer& layer);
-		~device_terminality();
-	};
-	
 }
 
 BOOST_HANA_ADAPT_STRUCT(innate::terminal, type);

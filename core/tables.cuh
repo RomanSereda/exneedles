@@ -16,11 +16,27 @@ namespace tables {
 	void init_table_rand_values();
 	__device__ uint curand();
 	__device__ uint static_curand();
+}
 
-	void init_table_const_pool();
-	void* get_new_pool_part(void* t, size_t szb);
-	template<typename T> extern T* get_new_pool_part(T* t) {
-		return static_cast<T*>(get_new_pool_part(t, sizeof(T)));
+namespace dev_const_mem {
+	struct deleter {
+		void operator()(void* data) const noexcept;
+	};
+	std::unique_ptr<void, dev_const_mem::deleter> make_ptr(std::size_t size);
+
+	struct offset {
+		using ptr = std::shared_ptr<offset>;
+
+		std::unique_ptr<void, dev_const_mem::deleter> hostmem;
+		size_t szb;
+		size_t value;
+
+		__const__ void* p = nullptr;
+	};
+
+	__host__ offset::ptr __add_mempart(void* t, size_t szb);
+	template<typename T> extern offset::ptr add_mempart(T* t) {
+		return __add_mempart(t, sizeof(T));
 	}
 }
 

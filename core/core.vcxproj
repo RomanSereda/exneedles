@@ -15,6 +15,7 @@
     <ClInclude Include="boost.hpp" />
     <ClInclude Include="celularity.hpp" />
     <ClInclude Include="corelib.hpp" />
+    <ClInclude Include="instance.hpp" />
     <ClInclude Include="layerality.hpp" />
     <ClInclude Include="terminality.hpp" />
     <ClInclude Include="types.hpp" />
@@ -23,6 +24,7 @@
   <ItemGroup>
     <ClCompile Include="assert.cpp" />
     <ClCompile Include="corelib.cpp" />
+    <ClCompile Include="instance.cpp" />
     <ClCompile Include="terminality.cpp" />
   </ItemGroup>
   <ItemGroup>

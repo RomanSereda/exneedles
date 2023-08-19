@@ -3,7 +3,7 @@
 #include <string>
 #include "tables.cuh"
 #include "assert.hpp"
-#include "terminality.hpp"
+#include "instance.hpp"
 
 namespace core
 {
