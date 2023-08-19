@@ -1,7 +1,7 @@
 #include "terminality.hpp"
 #include "layerality.hpp"
 
-#include "tables.cuh"
+#include "memory.cuh"
 #include "assert.hpp"
 
 #pragma warning(disable:6011)

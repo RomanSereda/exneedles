@@ -4,6 +4,9 @@
     <Filter Include="private">
       <UniqueIdentifier>{784f13e0-6e36-4644-8931-a2710a85da42}</UniqueIdentifier>
     </Filter>
+    <Filter Include="public">
+      <UniqueIdentifier>{42979cba-6767-46c1-918c-383bff607071}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="assert.hpp">
@@ -12,14 +15,18 @@
     <ClInclude Include="terminality.hpp" />
     <ClInclude Include="celularity.hpp" />
     <ClInclude Include="layerality.hpp" />
-    <ClInclude Include="types.hpp" />
     <ClInclude Include="corelib.hpp" />
-    <ClInclude Include="boost.hpp" />
-    <ClInclude Include="tables.cuh">
+    <ClInclude Include="memory.cuh">
       <Filter>private</Filter>
     </ClInclude>
     <ClInclude Include="instance.hpp">
       <Filter>private</Filter>
+    </ClInclude>
+    <ClInclude Include="boost.hpp">
+      <Filter>public</Filter>
+    </ClInclude>
+    <ClInclude Include="types.hpp">
+      <Filter>public</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -40,7 +47,7 @@
     <None Include="..\deflib.inc" />
   </ItemGroup>
   <ItemGroup>
-    <CudaCompile Include="tables.cu">
+    <CudaCompile Include="memory.cu">
       <Filter>private</Filter>
     </CudaCompile>
   </ItemGroup>

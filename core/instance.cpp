@@ -10,8 +10,14 @@ namespace instance {
 		if (layer.height < 1 || layer.width < 1)
 			logexit();
 
-		results = (__mem__ float*)malloc(calc_results_bytes(layer));
-		terminals = (__mem__ data::terminal*)malloc(calc_terminals_bytes(layer, inncl().get(), inntr().get()));
+		auto results_szb = calc_results_bytes(layer);
+		auto terminals_szb = calc_terminals_bytes(layer, inncl().get(), inntr().get());
+
+		results = (__mem__ float*)malloc(results_szb);
+		terminals = (__mem__ data::terminal*)malloc(terminals_szb);
+
+		memset(results, 0, results_szb);
+		memset(terminals, 0, terminals_szb);
 
 		if (!terminals || !results)
 			logexit();
@@ -47,7 +53,7 @@ namespace instance {
 
 		console(boost::to_string(root));
 
-		device_terminality(root, layer);
+		host_terminality(root, layer);
 	}
 
 	device_terminality::device_terminality(const ptree& root, const innate::layer& layer) : terminality() {
@@ -55,27 +61,29 @@ namespace instance {
 		auto tr = to_inntr(root);
 
 		cluster_tuple::to(cl.get(), [&](auto* t0) {
-			m_dcm_cl = dev_const_mem::add_mempart(t0);
+			m_dcm_cl = memory::add_mempart(t0);
 		});
 
 		cluster_data_tuple::to_first(tr.get(), [&](auto* t0) {
-			m_dcm_tr = dev_const_mem::add_mempart(t0);
+			m_dcm_tr = memory::add_mempart(t0);
 		});
 
 		if (!m_dcm_cl || !m_dcm_tr)
 			logexit();
 
-		if (!m_dcm_cl->p || !m_dcm_tr->p)
+		if (!m_dcm_cl->calc_const_ptr || !m_dcm_tr->calc_const_ptr)
 			logexit();
 
-		*innate = std::make_tuple((__const__ innate::cluster**) & m_dcm_cl->p,
-			                      (__const__ innate::terminal**) & m_dcm_tr->p);
+		*innate = std::make_tuple((__const__ innate::cluster**) &m_dcm_cl->calc_const_ptr,
+			                      (__const__ innate::terminal**) &m_dcm_tr->calc_const_ptr);
 
 		auto results_szb = calc_results_bytes(layer);
 		assert_err(cudaMalloc((void**)&results, results_szb));
+		assert_err(cudaMemset((void*)results, 0, results_szb));
 
 		auto terminals_szb = calc_terminals_bytes(layer, cl.get(), tr.get());
 		assert_err(cudaMalloc((void**)&terminals, terminals_szb));
+		assert_err(cudaMemset((void*)terminals, 0, terminals_szb));
 
 		if (!terminals || !results)
 			logexit();

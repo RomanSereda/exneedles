@@ -11,7 +11,7 @@
 #define LIBRARY_COMMENT(X) comment(lib, PATH(X))
 
 
-#ifdef _WINDLL                                     
+#ifdef _CORE                                     
 	#define LIBRARY_API __declspec(dllexport)  
 	#define EXPIMP_TEMPLATE
 #else                                              

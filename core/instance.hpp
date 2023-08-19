@@ -1,6 +1,6 @@
 #pragma once
 #include "terminality.hpp"
-#include "tables.cuh"
+#include "memory.cuh"
 
 namespace instance {
 	class LIBRARY_API host_terminality : public terminality<UPTR_TEMPLATE> {
@@ -18,8 +18,8 @@ namespace instance {
 		~device_terminality();
 
 	private:
-		dev_const_mem::offset::ptr m_dcm_cl = nullptr;
-		dev_const_mem::offset::ptr m_dcm_tr = nullptr;
+		memory::const_empl::ptr m_dcm_cl = nullptr;
+		memory::const_empl::ptr m_dcm_tr = nullptr;
 	};
 
 }

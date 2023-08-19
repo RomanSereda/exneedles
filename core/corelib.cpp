@@ -1,7 +1,7 @@
 #include "corelib.hpp"
 #include <cuda_runtime.h>
 #include <string>
-#include "tables.cuh"
+#include "memory.cuh"
 #include "assert.hpp"
 #include "instance.hpp"
 

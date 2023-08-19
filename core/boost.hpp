@@ -161,8 +161,6 @@ namespace boost {
 		hana::for_each(hana::keys(var), [&](auto key) {
 			auto& value = hana::at_key(var, key);
 			using member = std::remove_reference_t<decltype(value)>;
-
-			
 			auto it = root.find(hana::to<char const*>(key));
 			if(it != root.not_found())
 				value = static_cast<member>(std::stoi(it->second.data()));

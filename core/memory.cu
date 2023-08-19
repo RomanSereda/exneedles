@@ -1,4 +1,4 @@
-#include "tables.cuh"
+#include "memory.cuh"
 #include <time.h>
 #include <stdio.h>
 
@@ -177,30 +177,30 @@ namespace tables {
 	}
 }
 
-namespace dev_const_mem {
-	void dev_const_mem::deleter::operator()(void* data) const noexcept {
+namespace memory {
+	void memory::deleter::operator()(void* data) const noexcept {
 		std::free(data);
 	}
 
-	std::unique_ptr<void, dev_const_mem::deleter> dev_const_mem::make_ptr(std::size_t size) {
-		return std::unique_ptr<void, dev_const_mem::deleter>(std::malloc(size));
+	void_uptr memory::make_void_uptr(std::size_t size) {
+		return void_uptr(std::malloc(size));
 	}
 
 	const int sz_const_pool = 16384;
 	__constant__ uint8_t const_pool_table[sz_const_pool];
-	std::list<offset::ptr> parts;
+	std::list<const_empl::ptr> parts;
 
-	offset::ptr __add_mempart(void* t, size_t szb) {
-		offset::ptr mempart = nullptr;
-		if (auto ptr_host_mem = dev_const_mem::make_ptr(szb)) {
+	const_empl::ptr __add_mempart(void* t, size_t szb) {
+		const_empl::ptr mempart = nullptr;
+		if (auto ptr_host_mem = memory::make_void_uptr(szb)) {
 			memcpy(ptr_host_mem.get(), t, szb);
 
 			size_t value = 0;
 			if (parts.empty()) value = 0;
-			else value = parts.back()->value + parts.back()->szb;
+			else value = parts.back()->offset + parts.back()->szb;
 
-			mempart = std::make_shared<offset>(
-				dev_const_mem::offset{ std::move(ptr_host_mem), szb, value });
+			mempart = std::make_shared<const_empl>(
+				memory::const_empl{ std::move(ptr_host_mem), szb, value });
 
 			parts.push_back(mempart);
 		}
@@ -208,7 +208,7 @@ namespace dev_const_mem {
 
 		if (uint8_t* temp_table = (uint8_t*)malloc(sz_const_pool)) {
 			for (const auto& part : parts) {
-				if (!memcpy(&temp_table[part->value], part->hostmem.get(), part->szb))
+				if (!memcpy(&temp_table[part->offset], part->duplicate.get(), part->szb))
 					logexit();
 			}
 			assert_err(cudaMemcpyToSymbol(const_pool_table, temp_table, sz_const_pool));
@@ -221,7 +221,7 @@ namespace dev_const_mem {
 				logexit();
 
 			for (auto& part : parts)
-				part->p = (void*)((size_t)const_mem_address + part->value);
+				part->calc_const_ptr = (void*)((size_t)const_mem_address + part->offset);
 		}
 		else logexit();
 

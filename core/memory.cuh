@@ -18,24 +18,25 @@ namespace tables {
 	__device__ uint static_curand();
 }
 
-namespace dev_const_mem {
+namespace memory {
 	struct deleter {
 		void operator()(void* data) const noexcept;
 	};
-	std::unique_ptr<void, dev_const_mem::deleter> make_ptr(std::size_t size);
+	using void_uptr = std::unique_ptr<void, memory::deleter>;
+	void_uptr make_void_uptr(std::size_t size);
 
-	struct offset {
-		using ptr = std::shared_ptr<offset>;
+	struct const_empl {
+		using ptr = std::shared_ptr<const_empl>;
 
-		std::unique_ptr<void, dev_const_mem::deleter> hostmem;
+		void_uptr duplicate;
 		size_t szb;
-		size_t value;
+		size_t offset;
 
-		__const__ void* p = nullptr;
+		__const__ void* calc_const_ptr = nullptr;
 	};
 
-	__host__ offset::ptr __add_mempart(void* t, size_t szb);
-	template<typename T> extern offset::ptr add_mempart(T* t) {
+	__host__ const_empl::ptr __add_mempart(void* t, size_t szb);
+	template<typename T> extern const_empl::ptr add_mempart(T* t) {
 		return __add_mempart(t, sizeof(T));
 	}
 }
