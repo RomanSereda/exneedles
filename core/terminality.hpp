@@ -81,6 +81,8 @@ namespace instance {
 		const T0& inncl() const;
 		const T1& inntr() const;
 
+		const innate::layer& layer() const;
+
 	protected:
 		static std::unique_ptr<innate::cluster> to_inncl(const ptree& root);
 		static std::unique_ptr<innate::terminal> to_inntr(const ptree& root);
@@ -88,7 +90,7 @@ namespace instance {
 		static ptree to_ptree(innate::cluster* cl);
 		static ptree to_ptree(innate::terminal* tr);
 
-		terminality();
+		terminality(const innate::layer& layer);
 		virtual ~terminality();
 
 		size_t calc_results_bytes(const innate::layer& layer) const;
@@ -104,6 +106,8 @@ namespace instance {
 	
 		size_t m_results_szb = -1;
 		size_t m_terminals_szb = -1;
+
+		const innate::layer& m_layer;
 	};
 
 

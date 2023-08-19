@@ -4,6 +4,7 @@
 #include "memory.cuh"
 #include "assert.hpp"
 #include "instance.hpp"
+#include "layerality.hpp"
 
 namespace core
 {
@@ -17,6 +18,10 @@ namespace core
 		tables::init();
 
 		instance::host_terminality htr;
+
+		auto root = htr.to_ptree();
+		innate::layer layer {128, 128, 1};
+		instance::device_terminality dtr(root, layer);
 	}
 
 	device::~device() {

@@ -17,7 +17,7 @@ namespace innate {
 
 namespace instance {
 	template<typename T0, typename T1>
-	terminality<T0, T1>::terminality() {
+	terminality<T0, T1>::terminality(const innate::layer& layer): m_layer(layer){
 		m_innate = new std::tuple<T0, T1>();
 	}
 	template<typename T0, typename T1>
@@ -61,6 +61,12 @@ namespace instance {
 	template<typename T0, typename T1>
 	const T1& terminality<T0, T1>::inntr() const {
 		return std::get<T1>(*m_innate);
+	}
+
+	template<typename T0, typename T1>
+	const innate::layer& terminality<T0, T1>::layer() const
+	{
+		return m_layer;
 	}
 
 	template<typename T0, typename T1>

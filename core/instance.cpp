@@ -4,7 +4,7 @@
 
 namespace instance {
 
-	host_terminality::host_terminality(const ptree& root, const innate::layer& layer) : terminality() {
+	host_terminality::host_terminality(const ptree& root, const innate::layer& layer) : terminality(layer) {
 		*m_innate = std::make_tuple(to_inncl(root), to_inntr(root));
 
 		if (layer.height < 1 || layer.width < 1)
@@ -35,7 +35,7 @@ namespace instance {
 		return root;
 	}
 
-	host_terminality::host_terminality()
+	host_terminality::host_terminality() : terminality(*(innate::layer*)nullptr)
 	{
 		innate::layer layer {128, 128, 1};
 
@@ -56,7 +56,7 @@ namespace instance {
 		host_terminality(root, layer);
 	}
 
-	device_terminality::device_terminality(const ptree& root, const innate::layer& layer) : terminality() {
+	device_terminality::device_terminality(const ptree& root, const innate::layer& layer) : terminality(layer) {
 		auto cl = to_inncl(root);
 		auto tr = to_inntr(root);
 
