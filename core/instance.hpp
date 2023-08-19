@@ -18,8 +18,8 @@ namespace instance {
 		~device_terminality();
 
 	private:
-		memory::const_empl::ptr m_dcm_cl = nullptr;
-		memory::const_empl::ptr m_dcm_tr = nullptr;
+		memory::const_empl::ptr m_const_cl = nullptr;
+		memory::const_empl::ptr m_const_tr = nullptr;
 	};
 
 }

@@ -7,19 +7,19 @@
     <Filter Include="public">
       <UniqueIdentifier>{42979cba-6767-46c1-918c-383bff607071}</UniqueIdentifier>
     </Filter>
+    <Filter Include="instance">
+      <UniqueIdentifier>{22914fd4-359b-40d7-a35a-b4025b6a99c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="struct">
+      <UniqueIdentifier>{3c712e63-268d-421c-9074-816229cd0862}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="assert.hpp">
       <Filter>private</Filter>
     </ClInclude>
-    <ClInclude Include="terminality.hpp" />
-    <ClInclude Include="celularity.hpp" />
-    <ClInclude Include="layerality.hpp" />
     <ClInclude Include="corelib.hpp" />
     <ClInclude Include="memory.cuh">
-      <Filter>private</Filter>
-    </ClInclude>
-    <ClInclude Include="instance.hpp">
       <Filter>private</Filter>
     </ClInclude>
     <ClInclude Include="boost.hpp">
@@ -28,19 +28,31 @@
     <ClInclude Include="types.hpp">
       <Filter>public</Filter>
     </ClInclude>
+    <ClInclude Include="instance.hpp">
+      <Filter>instance</Filter>
+    </ClInclude>
+    <ClInclude Include="terminality.hpp">
+      <Filter>struct</Filter>
+    </ClInclude>
+    <ClInclude Include="celularity.hpp">
+      <Filter>struct</Filter>
+    </ClInclude>
+    <ClInclude Include="layerality.hpp">
+      <Filter>struct</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="terminality.cpp">
-      <Filter>private</Filter>
-    </ClCompile>
     <ClCompile Include="corelib.cpp">
       <Filter>private</Filter>
     </ClCompile>
     <ClCompile Include="assert.cpp">
       <Filter>private</Filter>
     </ClCompile>
+    <ClCompile Include="terminality.cpp">
+      <Filter>struct</Filter>
+    </ClCompile>
     <ClCompile Include="instance.cpp">
-      <Filter>private</Filter>
+      <Filter>instance</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

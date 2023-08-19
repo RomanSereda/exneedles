@@ -61,21 +61,21 @@ namespace instance {
 		auto tr = to_inntr(root);
 
 		cluster_tuple::to(cl.get(), [&](auto* t0) {
-			m_dcm_cl = memory::add_mempart(t0);
+			m_const_cl = memory::add_mempart(t0);
 		});
 
 		cluster_data_tuple::to_first(tr.get(), [&](auto* t0) {
-			m_dcm_tr = memory::add_mempart(t0);
+			m_const_tr = memory::add_mempart(t0);
 		});
 
-		if (!m_dcm_cl || !m_dcm_tr)
+		if (!m_const_cl || !m_const_tr)
 			logexit();
 
-		if (!m_dcm_cl->calc_const_ptr || !m_dcm_tr->calc_const_ptr)
+		if (!m_const_cl->calc_const_ptr || !m_const_tr->calc_const_ptr)
 			logexit();
 
-		*innate = std::make_tuple((__const__ innate::cluster**) &m_dcm_cl->calc_const_ptr,
-			                      (__const__ innate::terminal**) &m_dcm_tr->calc_const_ptr);
+		*innate = std::make_tuple((__const__ innate::cluster**) &m_const_cl->calc_const_ptr,
+			                      (__const__ innate::terminal**) &m_const_tr->calc_const_ptr);
 
 		auto results_szb = calc_results_bytes(layer);
 		assert_err(cudaMalloc((void**)&results, results_szb));
