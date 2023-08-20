@@ -16,17 +16,17 @@ namespace innate {
 }
 
 namespace instance {
-	template<typename T0, typename T1>
-	terminality<T0, T1>::terminality(const innate::layer& layer): m_layer(layer){
-		m_innate = new std::tuple<T0, T1>();
+	template<typename CLST, typename TRMN>
+	terminality<CLST, TRMN>::terminality(const innate::layer& layer): m_layer(layer){
+		m_innate = new std::tuple<CLST, TRMN>();
 	}
-	template<typename T0, typename T1>
-	terminality<T0, T1>::~terminality() {
+	template<typename CLST, typename TRMN>
+	terminality<CLST, TRMN>::~terminality() {
 		delete m_innate;
 	}
 
-	template<typename T0, typename T1> 
-	size_t terminality<T0, T1>::calc_terminals_bytes(const innate::layer& layer,
+	template<typename CLST, typename TRMN>
+	size_t terminality<CLST, TRMN>::calc_terminals_bytes(const innate::layer& layer,
 		                                     const innate::cluster* cl, 
 		                                     const innate::terminal* tr) const {
 		if (!cl || !tr)
@@ -45,32 +45,32 @@ namespace instance {
 		return size_bytes_terminals;
 	}
 
-	template<typename T0, typename T1>
-	size_t terminality<T0, T1>::calc_results_bytes(const innate::layer& layer) const {
+	template<typename CLST, typename TRMN>
+	size_t terminality<CLST, TRMN>::calc_results_bytes(const innate::layer& layer) const {
 		const size_t cell_size = layer.height * layer.width;
 		const size_t size_bytes_results = cell_size * sizeof(float);
 
 		return size_bytes_results;
 	}
 
-	template<typename T0, typename T1>
-	const T0& terminality<T0, T1>::inncl() const {
-		return std::get<T0>(*m_innate);
+	template<typename CLST, typename TRMN>
+	const CLST& terminality<CLST, TRMN>::inncl() const {
+		return std::get<CLST>(*m_innate);
 	}
 
-	template<typename T0, typename T1>
-	const T1& terminality<T0, T1>::inntr() const {
-		return std::get<T1>(*m_innate);
+	template<typename CLST, typename TRMN>
+	const TRMN& terminality<CLST, TRMN>::inntr() const {
+		return std::get<TRMN>(*m_innate);
 	}
 
-	template<typename T0, typename T1>
-	const innate::layer& terminality<T0, T1>::layer() const
+	template<typename CLST, typename TRMN>
+	const innate::layer& terminality<CLST, TRMN>::layer() const
 	{
 		return m_layer;
 	}
 
-	template<typename T0, typename T1>
-	ptree terminality<T0, T1>::to_ptree(innate::cluster* cl) {
+	template<typename CLST, typename TRMN>
+	ptree terminality<CLST, TRMN>::to_ptree(innate::cluster* cl) {
 		auto innate_cl = boost::to_ptree(*cl);
 		cluster_tuple::to(cl, [&innate_cl](auto* t0) {
 			innate_cl.put_child("innate_extend", boost::to_ptree(*t0));
@@ -78,8 +78,8 @@ namespace instance {
 		return innate_cl;
 	}
 
-	template<typename T0, typename T1>
-	ptree terminality<T0, T1>::to_ptree(innate::terminal* tr) {
+	template<typename CLST, typename TRMN>
+	ptree terminality<CLST, TRMN>::to_ptree(innate::terminal* tr) {
 		auto innate_tr = boost::to_ptree(*tr);
 		cluster_data_tuple::to_first(tr, [&innate_tr](auto* t0) {
 			innate_tr.put_child("innate_extend", boost::to_ptree(*t0));
@@ -87,8 +87,8 @@ namespace instance {
 		return innate_tr;
 	}
 
-	template<typename T0, typename T1>
-	std::unique_ptr<innate::cluster> terminality<T0, T1>::to_inncl(const ptree& root) {
+	template<typename CLST, typename TRMN>
+	std::unique_ptr<innate::cluster> terminality<CLST, TRMN>::to_inncl(const ptree& root) {
 		boost::to_string(root);
 		auto innate_cluster_tree = root.get_child("innate_cluster");
 		auto innate_cluster_type
@@ -109,8 +109,8 @@ namespace instance {
 		return std::move(ptr);
 	}
 
-	template<typename T0, typename T1>
-	std::unique_ptr<innate::terminal> terminality<T0, T1>::to_inntr(const ptree& root) {
+	template<typename CLST, typename TRMN>
+	std::unique_ptr<innate::terminal> terminality<CLST, TRMN>::to_inntr(const ptree& root) {
 		auto innate_terminal_tree = root.get_child("innate_terminal");
 		auto innate_terminal_type
 			= static_cast<innate::terminal::terminal_type>(innate_terminal_tree.get<int>("type"));

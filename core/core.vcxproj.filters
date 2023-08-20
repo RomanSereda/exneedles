@@ -59,6 +59,9 @@
     <ClCompile Include="corelib.cpp">
       <Filter>lib</Filter>
     </ClCompile>
+    <ClCompile Include="celularity.cpp">
+      <Filter>struct</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\deflib.inc" />

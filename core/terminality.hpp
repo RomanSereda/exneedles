@@ -76,10 +76,10 @@ namespace instance {
 	using cluster_data_tuple = boost::spec_pair_tuple<std::tuple<innate::axon_simple,    data::axon_simple>,
 		                                              std::tuple<innate::synapse_simple, data::synapse_simple>>;
 
-	template<typename T0, typename T1> class LIBRARY_API terminality {
+	template<typename CLST, typename TRMN> class LIBRARY_API terminality {
 	public:
-		const T0& inncl() const;
-		const T1& inntr() const;
+		const CLST& inncl() const;
+		const TRMN& inntr() const;
 
 		const innate::layer& layer() const;
 
@@ -89,16 +89,17 @@ namespace instance {
 		static ptree to_ptree(innate::cluster* cl);
 		static ptree to_ptree(innate::terminal* tr);
 
+		virtual ~terminality();
+
 	protected:
 		terminality(const innate::layer& layer);
-		virtual ~terminality();
 
 		size_t calc_results_bytes(const innate::layer& layer) const;
 		size_t calc_terminals_bytes(const innate::layer& layer,
 			const innate::cluster* cl,
 			const innate::terminal* tr) const;
 
-		std::tuple<T0, T1>* m_innate = nullptr;
+		std::tuple<CLST, TRMN>* m_innate = nullptr;
 
 		__mem__ float* m_results = nullptr;                       // bytes = layer::celulars_count * cell::width * cell::height * 4 --> shift celular number
 		__mem__ data::terminal* m_terminals = nullptr;            // cast for terminal_type, memory alocate array.  
@@ -111,11 +112,11 @@ namespace instance {
 	};
 
 
-#define PTR_TEMPLATE       __const__ innate::cluster**,      __const__ innate::terminal**
-#define UPTR_TEMPLATE std::unique_ptr<innate::cluster>, std::unique_ptr<innate::terminal>
+#define PTR_TEMPLATE_TR       __const__ innate::cluster**,      __const__ innate::terminal**
+#define UPTR_TEMPLATE_TR std::unique_ptr<innate::cluster>, std::unique_ptr<innate::terminal>
 
-	EXPIMP_TEMPLATE template class LIBRARY_API terminality<UPTR_TEMPLATE>;
-	EXPIMP_TEMPLATE template class LIBRARY_API terminality<PTR_TEMPLATE>;
+	EXPIMP_TEMPLATE template class LIBRARY_API terminality<UPTR_TEMPLATE_TR>;
+	EXPIMP_TEMPLATE template class LIBRARY_API terminality<PTR_TEMPLATE_TR>;
 }
 
 BOOST_HANA_ADAPT_STRUCT(innate::terminal, type);

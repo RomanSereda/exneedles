@@ -23,6 +23,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="assert.cpp" />
+    <ClCompile Include="celularity.cpp" />
     <ClCompile Include="corelib.cpp" />
     <ClCompile Include="instance.cpp" />
     <ClCompile Include="terminality.cpp" />

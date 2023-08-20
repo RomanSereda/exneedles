@@ -3,7 +3,6 @@
 #include "layerality.hpp"
 
 namespace instance {
-
 	host_terminality::host_terminality(const ptree& root, const innate::layer& layer) : terminality(layer) {
 		if (layer.height < 1 || layer.width < 1)
 			logexit();
@@ -101,5 +100,43 @@ namespace instance {
 		if (!m_terminals || !m_results)
 			logexit();
 	}
+}
 
+namespace instance {
+	host_celularity::host_celularity(const ptree& root, const innate::layer& layer)
+		: UPTR_TEMPLATE_CELULARITY(layer){
+	}
+
+	ptree host_celularity::to_ptree() const
+	{
+		return ptree();
+	}
+
+	const std::vector<std::unique_ptr<terminality<UPTR_TEMPLATE_TR>>>& host_celularity::cltr_instances() const
+	{
+		// TODO: insert return statement here
+	}
+
+	device_celularity::device_celularity(const ptree& root, const innate::layer& layer)
+		: PTR_TEMPLATE_CELULARITY(layer)
+	{
+	}
+
+	device_celularity::~device_celularity()
+	{
+	}
+
+	const std::vector<std::unique_ptr<terminality<PTR_TEMPLATE_TR>>>& device_celularity::cltr_instances() const
+	{
+		// TODO: insert return statement here
+	}
+
+	memory::const_empl::ptr device_celularity::const_emplace_cell() const
+	{
+		return memory::const_empl::ptr();
+	}
+
+	void device_celularity::setup_const_memory(const std::unique_ptr<innate::cell>& c)
+	{
+	}
 }
