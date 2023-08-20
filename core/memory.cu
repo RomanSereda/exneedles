@@ -211,15 +211,12 @@ namespace memory {
 		if (!mempart)
 			logexit();
 
-		setup_const_memoryparts();
-
 		return mempart;
 	}
 
 	__host__ void remove_mempart(const const_empl::ptr& ptr)
 	{
 		parts.remove(ptr);
-		setup_const_memoryparts();
 	}
 
 	__host__ void setup_const_memoryparts()

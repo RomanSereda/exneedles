@@ -58,10 +58,16 @@ namespace instance {
 		if (!m_const_cl || !m_const_tr)
 			logexit();
 
+		memory::setup_const_memoryparts();
 		setup_const_memory(cl, tr);
 	}
 
 	device_terminality::~device_terminality() {
+		memory::remove_mempart(m_const_cl);
+		memory::remove_mempart(m_const_tr);
+
+		memory::setup_const_memoryparts();
+
 		if (m_results) cudaFree(m_results);
 		if (m_terminals) cudaFree(m_terminals);
 	}

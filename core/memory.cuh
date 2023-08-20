@@ -42,7 +42,6 @@ namespace memory {
 	}
 	__host__ void setup_const_memoryparts();
 
-
 	__host__ void test_mempart_cltr(const const_empl::ptr& ptr_cl, const const_empl::ptr& ptr_tr);
 }
 
