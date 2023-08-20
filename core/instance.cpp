@@ -58,25 +58,12 @@ namespace instance {
 		if (!m_const_cl || !m_const_tr)
 			logexit();
 
-		if (!m_const_cl->const_ptr || !m_const_tr->const_ptr)
-			logexit();
-
-		*m_innate = std::make_tuple((__const__ innate::cluster**) &m_const_cl->const_ptr,
-			                        (__const__ innate::terminal**) &m_const_tr->const_ptr);
-
-		m_results_szb = calc_results_bytes(layer);
-		assert_err(cudaMalloc((void**)&m_results, m_results_szb));
-		assert_err(cudaMemset((void*)m_results, 0, m_results_szb));
-
-		m_terminals_szb = calc_terminals_bytes(layer, cl.get(), tr.get());
-		assert_err(cudaMalloc((void**)&m_terminals, m_terminals_szb));
-		assert_err(cudaMemset((void*)m_terminals, 0, m_terminals_szb));
-
-		if (!m_terminals || !m_results)
-			logexit();
+		setup_const_memory(cl, tr);
 	}
 
 	device_terminality::~device_terminality() {
+		if (m_results) cudaFree(m_results);
+		if (m_terminals) cudaFree(m_terminals);
 	}
 
 	memory::const_empl::ptr device_terminality::const_emplace_cl() const
@@ -87,6 +74,26 @@ namespace instance {
 	memory::const_empl::ptr device_terminality::const_emplace_tr() const
 	{
 		return m_const_tr;
+	}
+
+	void device_terminality::setup_const_memory(const std::unique_ptr<innate::cluster>& cl, const std::unique_ptr<innate::terminal>& tr)
+	{
+		if (!m_const_cl->const_ptr || !m_const_tr->const_ptr)
+			logexit();
+
+		*m_innate = std::make_tuple((__const__ innate::cluster**) & m_const_cl->const_ptr,
+			(__const__ innate::terminal**) & m_const_tr->const_ptr);
+
+		m_results_szb = calc_results_bytes(layer());
+		assert_err(cudaMalloc((void**)&m_results, m_results_szb));
+		assert_err(cudaMemset((void*)m_results, 0, m_results_szb));
+
+		m_terminals_szb = calc_terminals_bytes(layer(), cl.get(), tr.get());
+		assert_err(cudaMalloc((void**)&m_terminals, m_terminals_szb));
+		assert_err(cudaMemset((void*)m_terminals, 0, m_terminals_szb));
+
+		if (!m_terminals || !m_results)
+			logexit();
 	}
 
 }

@@ -36,11 +36,14 @@ namespace memory {
 	};
 
 	__host__ const_empl::ptr __add_mempart(void* t, size_t szb);
+	__host__ void remove_mempart(const const_empl::ptr& ptr);
 	template<typename T> extern const_empl::ptr add_mempart(T* t) {
 		return __add_mempart(t, sizeof(T));
 	}
+	__host__ void setup_const_memoryparts();
 
-	void test_mempart_cltr(const const_empl::ptr& ptr_cl, const const_empl::ptr& ptr_tr);
+
+	__host__ void test_mempart_cltr(const const_empl::ptr& ptr_cl, const const_empl::ptr& ptr_tr);
 }
 
 namespace helper {

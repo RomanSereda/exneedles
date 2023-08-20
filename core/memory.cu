@@ -208,6 +208,22 @@ namespace memory {
 		}
 		else logexit();
 
+		if (!mempart)
+			logexit();
+
+		setup_const_memoryparts();
+
+		return mempart;
+	}
+
+	__host__ void remove_mempart(const const_empl::ptr& ptr)
+	{
+		parts.remove(ptr);
+		setup_const_memoryparts();
+	}
+
+	__host__ void setup_const_memoryparts()
+	{
 		if (uint8_t* temp_table = (uint8_t*)malloc(sz_const_pool)) {
 			for (const auto& part : parts) {
 				if (!memcpy(&temp_table[part->offset], part->duplicate.get(), part->szb))
@@ -226,16 +242,10 @@ namespace memory {
 				part->const_ptr = (void*)((size_t)const_mem_address + part->offset);
 		}
 		else logexit();
-
-		if (!mempart)
-			logexit();
-
-		return mempart;
 	}
 
 	__global__ void test_mempart_kernel_cltr(const innate::cluster_targeted* cl,
-		                                     const innate::synapse_simple* tr)
-	{
+		                                     const innate::synapse_simple* tr) {
 		printf("cluster height: %d\n", cl->height);
 		printf("cluster width: %d\n", cl->width);
 
@@ -245,7 +255,7 @@ namespace memory {
 		printf("synapse sign: %d\n", tr->sign);
 		printf("synapse type: %d\n", tr->type);
 	}
-	void test_mempart_cltr(const memory::const_empl::ptr& ptr_cl, 
+	void test_mempart_cltr(const memory::const_empl::ptr& ptr_cl,
 		                                       const const_empl::ptr& ptr_tr) {
 		test_mempart_kernel_cltr <<<1, 1 >>> ((const innate::cluster_targeted*)ptr_cl->const_ptr,
 			                                  (const innate::synapse_simple*)ptr_tr->const_ptr);
