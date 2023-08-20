@@ -10,6 +10,8 @@
 
 #include "assert.hpp"
 
+#include "terminality.hpp" // for test
+
 namespace tables {
 	void init() {
 		init_table_nbits_values();
@@ -221,7 +223,7 @@ namespace memory {
 				logexit();
 
 			for (auto& part : parts)
-				part->calc_const_ptr = (void*)((size_t)const_mem_address + part->offset);
+				part->const_ptr = (void*)((size_t)const_mem_address + part->offset);
 		}
 		else logexit();
 
@@ -229,6 +231,24 @@ namespace memory {
 			logexit();
 
 		return mempart;
+	}
+
+	__global__ void test_mempart_kernel_cltr(const innate::cluster_targeted* cl,
+		                                     const innate::synapse_simple* tr)
+	{
+		printf("cluster height: %d\n", cl->height);
+		printf("cluster width: %d\n", cl->width);
+
+		printf("cluster target_layer: %d\n", cl->target_layer);
+		printf("cluster target_region: %d\n", cl->target_region);
+
+		printf("synapse sign: %d\n", tr->sign);
+		printf("synapse type: %d\n", tr->type);
+	}
+	void test_mempart_cltr(const memory::const_empl::ptr& ptr_cl, 
+		                                       const const_empl::ptr& ptr_tr) {
+		test_mempart_kernel_cltr <<<1, 1 >>> ((const innate::cluster_targeted*)ptr_cl->const_ptr,
+			                                  (const innate::synapse_simple*)ptr_tr->const_ptr);
 	}
 }
 

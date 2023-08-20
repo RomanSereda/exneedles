@@ -14,6 +14,9 @@ namespace instance {
 		device_terminality(const ptree& root, const innate::layer& layer);
 		~device_terminality();
 
+		memory::const_empl::ptr const_emplace_cl() const;
+		memory::const_empl::ptr const_emplace_tr() const;
+
 	private:
 		memory::const_empl::ptr m_const_cl = nullptr;
 		memory::const_empl::ptr m_const_tr = nullptr;

@@ -32,13 +32,15 @@ namespace memory {
 		size_t szb;
 		size_t offset;
 
-		__const__ void* calc_const_ptr = nullptr;
+		__const__ void* const_ptr = nullptr;
 	};
 
 	__host__ const_empl::ptr __add_mempart(void* t, size_t szb);
 	template<typename T> extern const_empl::ptr add_mempart(T* t) {
 		return __add_mempart(t, sizeof(T));
 	}
+
+	void test_mempart_cltr(const const_empl::ptr& ptr_cl, const const_empl::ptr& ptr_tr);
 }
 
 namespace helper {

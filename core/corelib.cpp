@@ -6,9 +6,7 @@
 #include "instance.hpp"
 #include "layerality.hpp"
 
-namespace core
-{
-
+namespace core {
 	ptree test_ptree_cltr() {
 		ptree root;
 		innate::cluster_targeted cl;
@@ -30,6 +28,8 @@ namespace core
 		auto root = test_ptree_cltr();
 		instance::host_terminality htr(root, layer);
 		instance::device_terminality dtr(htr.to_ptree(), layer);
+
+		memory::test_mempart_cltr(dtr.const_emplace_cl(), dtr.const_emplace_tr());
 	}
 
 	device::device()

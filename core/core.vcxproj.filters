@@ -13,12 +13,14 @@
     <Filter Include="struct">
       <UniqueIdentifier>{3c712e63-268d-421c-9074-816229cd0862}</UniqueIdentifier>
     </Filter>
+    <Filter Include="lib">
+      <UniqueIdentifier>{8f1911da-f7f4-4e60-8333-d9b83e8d332c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="assert.hpp">
       <Filter>private</Filter>
     </ClInclude>
-    <ClInclude Include="corelib.hpp" />
     <ClInclude Include="memory.cuh">
       <Filter>private</Filter>
     </ClInclude>
@@ -40,11 +42,11 @@
     <ClInclude Include="layerality.hpp">
       <Filter>struct</Filter>
     </ClInclude>
+    <ClInclude Include="corelib.hpp">
+      <Filter>lib</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="corelib.cpp">
-      <Filter>private</Filter>
-    </ClCompile>
     <ClCompile Include="assert.cpp">
       <Filter>private</Filter>
     </ClCompile>
@@ -53,6 +55,9 @@
     </ClCompile>
     <ClCompile Include="instance.cpp">
       <Filter>instance</Filter>
+    </ClCompile>
+    <ClCompile Include="corelib.cpp">
+      <Filter>lib</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

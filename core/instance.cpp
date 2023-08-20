@@ -58,11 +58,11 @@ namespace instance {
 		if (!m_const_cl || !m_const_tr)
 			logexit();
 
-		if (!m_const_cl->calc_const_ptr || !m_const_tr->calc_const_ptr)
+		if (!m_const_cl->const_ptr || !m_const_tr->const_ptr)
 			logexit();
 
-		*m_innate = std::make_tuple((__const__ innate::cluster**) &m_const_cl->calc_const_ptr,
-			                      (__const__ innate::terminal**) &m_const_tr->calc_const_ptr);
+		*m_innate = std::make_tuple((__const__ innate::cluster**) &m_const_cl->const_ptr,
+			                        (__const__ innate::terminal**) &m_const_tr->const_ptr);
 
 		m_results_szb = calc_results_bytes(layer);
 		assert_err(cudaMalloc((void**)&m_results, m_results_szb));
@@ -77,6 +77,16 @@ namespace instance {
 	}
 
 	device_terminality::~device_terminality() {
+	}
+
+	memory::const_empl::ptr device_terminality::const_emplace_cl() const
+	{
+		return m_const_cl;
+	}
+
+	memory::const_empl::ptr device_terminality::const_emplace_tr() const
+	{
+		return m_const_tr;
 	}
 
 }
