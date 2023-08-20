@@ -83,13 +83,13 @@ namespace instance {
 
 		const innate::layer& layer() const;
 
-	protected:
 		static std::unique_ptr<innate::cluster> to_inncl(const ptree& root);
 		static std::unique_ptr<innate::terminal> to_inntr(const ptree& root);
 
 		static ptree to_ptree(innate::cluster* cl);
 		static ptree to_ptree(innate::terminal* tr);
 
+	protected:
 		terminality(const innate::layer& layer);
 		virtual ~terminality();
 
@@ -104,8 +104,8 @@ namespace instance {
 		__mem__ data::terminal* m_terminals = nullptr;            // cast for terminal_type, memory alocate array.  
 		                                                        // bytes = cell::width * cell::height * cluster::width * cluster::height * sizeof(terminal_type) --> shift cluster number
 	
-		size_t m_results_szb = -1;
-		size_t m_terminals_szb = -1;
+		size_t m_results_szb = 0;
+		size_t m_terminals_szb = 0;
 
 		const innate::layer& m_layer;
 	};

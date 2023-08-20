@@ -7,10 +7,7 @@ namespace instance {
 	public:
 		host_terminality(const ptree& root, const innate::layer& layer);
 		ptree to_ptree() const;
-
-		host_terminality(); //for test
 	};
-
 
 	class LIBRARY_API device_terminality : public terminality<PTR_TEMPLATE> {
 	public:

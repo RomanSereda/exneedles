@@ -8,6 +8,30 @@
 
 namespace core
 {
+
+	ptree test_ptree_cltr() {
+		ptree root;
+		innate::cluster_targeted cl;
+		cl.width = 8;
+		cl.height = 8;
+		cl.target_layer = 3;
+		cl.target_region = 9;
+
+		innate::synapse_simple tr;
+
+		root.put_child("innate_cluster", instance::terminality<UPTR_TEMPLATE>::to_ptree((innate::cluster*)&cl));
+		root.put_child("innate_terminal", instance::terminality<UPTR_TEMPLATE>::to_ptree((innate::terminal*)&tr));
+		return root;
+	}
+
+	void test_cltr() {
+		innate::layer layer {128, 128, 1};
+
+		auto root = test_ptree_cltr();
+		instance::host_terminality htr(root, layer);
+		instance::device_terminality dtr(htr.to_ptree(), layer);
+	}
+
 	device::device()
 	{
 		cudaDeviceProp prop;
@@ -17,11 +41,7 @@ namespace core
 		console("total const memory: " + std::to_string(prop.totalConstMem));
 		tables::init();
 
-		instance::host_terminality htr;
-
-		auto root = htr.to_ptree();
-		innate::layer layer {128, 128, 1};
-		instance::device_terminality dtr(root, layer);
+		test_cltr();
 	}
 
 	device::~device() {

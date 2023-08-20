@@ -5,13 +5,19 @@
 namespace instance {
 
 	host_terminality::host_terminality(const ptree& root, const innate::layer& layer) : terminality(layer) {
-		*m_innate = std::make_tuple(to_inncl(root), to_inntr(root));
-
 		if (layer.height < 1 || layer.width < 1)
+			logexit();
+
+		*m_innate = std::make_tuple(std::move(to_inncl(root)), std::move(to_inntr(root)));
+
+		if (!inncl().get() || !inntr().get())
 			logexit();
 
 		m_results_szb = calc_results_bytes(layer);
 		m_terminals_szb = calc_terminals_bytes(layer, inncl().get(), inntr().get());
+
+		if (!m_results_szb || !m_terminals_szb)
+			logexit();
 
 		m_results = (__mem__ float*)malloc(m_results_szb);
 		m_terminals = (__mem__ data::terminal*)malloc(m_terminals_szb);
@@ -27,33 +33,14 @@ namespace instance {
 		ptree root;
 
 		if (auto cl = inncl().get())
-			root.put_child("innate_cluster", terminality::to_ptree(cl));
+			root.put_child("innate_cluster", terminality::to_ptree((innate::cluster*)cl));
+		else logexit();
 
 		if (auto tr = inntr().get())
-			root.put_child("innate_terminal", terminality::to_ptree(tr));
+			root.put_child("innate_terminal", terminality::to_ptree((innate::terminal*)tr));
+		else logexit();
 
 		return root;
-	}
-
-	host_terminality::host_terminality() : terminality(*(innate::layer*)nullptr)
-	{
-		innate::layer layer {128, 128, 1};
-
-		ptree root;
-		innate::cluster_targeted cl;
-		cl.width = 8;
-		cl.height = 8;
-		cl.target_layer = 3;
-		cl.target_region = 9;
-
-		innate::synapse_simple tr;
-
-		root.put_child("innate_cluster", terminality::to_ptree((innate::cluster*)&cl));
-		root.put_child("innate_terminal", terminality::to_ptree((innate::terminal*)&tr));
-
-		console(boost::to_string(root));
-
-		host_terminality(root, layer);
 	}
 
 	device_terminality::device_terminality(const ptree& root, const innate::layer& layer) : terminality(layer) {
