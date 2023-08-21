@@ -66,6 +66,8 @@ namespace instance {
 		static std::unique_ptr<innate::cell> to_innate(const ptree& root);
 		static ptree to_ptree(innate::cell* c);
 
+		const std::vector<std::unique_ptr<TR>>& terminalitys() const;
+
 		virtual ~cellularity();
 
 	protected:
@@ -83,6 +85,8 @@ namespace instance {
 		size_t m_results_szb = 0;
 
 		const innate::layer& m_layer;
+
+		std::vector<std::unique_ptr<TR>>* m_terminalitys = nullptr;
 	};
 
 

@@ -17,12 +17,12 @@ namespace innate {
 
 namespace instance {
 	template<typename CLST, typename TRMN>
-	terminality<CLST, TRMN>::terminality(const innate::layer& layer): m_layer(layer){
-		m_innate = new std::tuple<CLST, TRMN>();
-	}
+	terminality<CLST, TRMN>::terminality(const innate::layer& layer)
+		: m_layer(layer), m_innate(new std::tuple<CLST, TRMN>()) {}
+
 	template<typename CLST, typename TRMN>
 	terminality<CLST, TRMN>::~terminality() {
-		delete m_innate;
+		if(m_innate) delete m_innate;
 	}
 
 	template<typename CLST, typename TRMN>

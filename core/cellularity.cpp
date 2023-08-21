@@ -49,7 +49,13 @@ namespace instance {
 	}
 
 	template<typename T, typename TR>
-	cellularity<T, TR>::cellularity(const innate::layer& layer) : m_layer(layer) {}
+	const std::vector<std::unique_ptr<TR>>& cellularity<T, TR>::terminalitys() const {
+		return *m_terminalitys;
+	}
+
+	template<typename T, typename TR>
+	cellularity<T, TR>::cellularity(const innate::layer& layer) 
+		: m_layer(layer), m_terminalitys(new std::vector<std::unique_ptr<TR>>()){}
 
 	template<typename T, typename TR>
 	size_t cellularity<T, TR>::calc_results_bytes(const innate::layer& layer) const {
@@ -72,7 +78,9 @@ namespace instance {
 	}
 
 	template<typename T, typename TR>
-	cellularity<T, TR>::~cellularity(){};
+	cellularity<T, TR>::~cellularity(){
+		if (m_terminalitys) delete m_terminalitys;
+	};
 
 
 }
