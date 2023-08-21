@@ -129,13 +129,12 @@ namespace instance {
 		return std::move(ptr);
 	}
 	template<typename CLST, typename TRMN>
-	std::tuple<UPTR_TEMPLATE_TR> terminality<CLST, TRMN>::to_innate(const ptree& root)
-	{
+	std::tuple<UPTR_TEMPLATE_TR> terminality<CLST, TRMN>::to_innate(const ptree& root) {
 		return std::make_tuple<UPTR_TEMPLATE_TR>(std::move(to_inncl(root)), std::move(to_inntr(root)));
 	}
+
 	template<typename CLST, typename TRMN>
-	ptree terminality<CLST, TRMN>::to_ptree(innate::cluster* cl, innate::terminal* tr)
-	{
+	ptree terminality<CLST, TRMN>::to_ptree(innate::cluster* cl, innate::terminal* tr) {
 		if (!cl || !tr)
 			logexit();
 

@@ -46,7 +46,7 @@ namespace instance {
 	private:
 		memory::const_empl::ptr m_const_cell = nullptr;
 
-		void setup_const_memory(const std::unique_ptr<innate::cell>& c);
+		void setup_const_memory(const innate::cell* c);
 
 		
 	};

@@ -109,29 +109,83 @@ namespace instance {
 		if (layer.height < 1 || layer.width < 1)
 			logexit();
 
+		m_innate = to_innate(root);
+		if(!m_innate)
+			logexit();
 
+		m_results_szb = calc_results_bytes(layer);
+		m_cells_szb = calc_cells_bytes(layer, m_innate.get());
+
+		if (!m_results_szb || !m_cells_szb)
+			logexit();
+
+		m_results = (__mem__ float*)malloc(m_results_szb);
+		m_cells = (__mem__ data::cell*)malloc(m_cells_szb);
+
+		if (!m_cells || !m_results)
+			logexit();
+
+		memset(m_results, 0, m_results_szb);
+		memset(m_cells, 0, m_cells_szb);
 	}
 
 	ptree host_celularity::to_ptree() const
 	{
-		return ptree();
+		auto c = inncell().get();
+		if (!c)
+			logexit();
+
+		return celularity::to_ptree(c);
 	}
 
 	device_celularity::device_celularity(const ptree& root, const innate::layer& layer)
 		: PTR_TEMPLATE_CELL(layer)
 	{
+		auto innate = celularity::to_innate(root);
+
+		auto c = innate.get();
+		if (!c)
+			logexit();
+
+		cell_data_tuple::to_first(c, [&](auto* t0) {
+			m_const_cell = memory::add_mempart(t0);
+		});
+
+		if (!m_const_cell)
+			logexit();
+
+		memory::setup_const_memoryparts();
+		setup_const_memory(c);
 	}
 
-	device_celularity::~device_celularity()
-	{
+	device_celularity::~device_celularity() {
+		memory::remove_mempart(m_const_cell);
+		memory::setup_const_memoryparts();
+
+		if (m_results) cudaFree(m_results);
+		if (m_cells) cudaFree(m_cells);
 	}
 
 	memory::const_empl::ptr device_celularity::const_emplace_cell() const
 	{
-		return memory::const_empl::ptr();
+		return m_const_cell;
 	}
 
-	void device_celularity::setup_const_memory(const std::unique_ptr<innate::cell>& c)
-	{
+	void device_celularity::setup_const_memory(const innate::cell* c) {
+		if (!m_const_cell->const_ptr)
+			logexit();
+
+		m_innate = (__const__ innate::cell**) &m_const_cell->const_ptr;
+
+		m_results_szb = calc_results_bytes(layer());
+		assert_err(cudaMalloc((void**)&m_results, m_results_szb));
+		assert_err(cudaMemset((void*)m_results, 0, m_results_szb));
+
+		m_cells_szb = calc_cells_bytes(layer(), c);
+		assert_err(cudaMalloc((void**)&m_cells, m_cells_szb));
+		assert_err(cudaMemset((void*)m_cells, 0, m_cells_szb));
+
+		if (!m_cells || !m_results)
+			logexit();
 	}
 }
