@@ -76,6 +76,9 @@ namespace instance {
 	using cluster_data_tuple = boost::spec_pair_tuple<std::tuple<innate::axon_simple,    data::axon_simple>,
 		                                              std::tuple<innate::synapse_simple, data::synapse_simple>>;
 
+#define PTR_TEMPLATE_TR       __const__ innate::cluster**,      __const__ innate::terminal**
+#define UPTR_TEMPLATE_TR std::unique_ptr<innate::cluster>, std::unique_ptr<innate::terminal>
+
 	template<typename CLST, typename TRMN> class LIBRARY_API terminality {
 	public:
 		const CLST& inncl() const;
@@ -83,11 +86,8 @@ namespace instance {
 
 		const innate::layer& layer() const;
 
-		static std::unique_ptr<innate::cluster> to_inncl(const ptree& root);
-		static std::unique_ptr<innate::terminal> to_inntr(const ptree& root);
-
-		static ptree to_ptree(innate::cluster* cl);
-		static ptree to_ptree(innate::terminal* tr);
+		static std::tuple<UPTR_TEMPLATE_TR> to_innate(const ptree& root);
+		static ptree to_ptree(innate::cluster* cl, innate::terminal* tr);
 
 		virtual ~terminality();
 
@@ -109,11 +109,14 @@ namespace instance {
 		size_t m_terminals_szb = 0;
 
 		const innate::layer& m_layer;
+
+	private:
+		static std::unique_ptr<innate::cluster> to_inncl(const ptree& root);
+		static std::unique_ptr<innate::terminal> to_inntr(const ptree& root);
+
+		static ptree to_ptree(innate::cluster* cl);
+		static ptree to_ptree(innate::terminal* tr);
 	};
-
-
-#define PTR_TEMPLATE_TR       __const__ innate::cluster**,      __const__ innate::terminal**
-#define UPTR_TEMPLATE_TR std::unique_ptr<innate::cluster>, std::unique_ptr<innate::terminal>
 
 	EXPIMP_TEMPLATE template class LIBRARY_API terminality<UPTR_TEMPLATE_TR>;
 	EXPIMP_TEMPLATE template class LIBRARY_API terminality<PTR_TEMPLATE_TR>;

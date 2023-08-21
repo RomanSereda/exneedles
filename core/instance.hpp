@@ -22,8 +22,7 @@ namespace instance {
 		memory::const_empl::ptr m_const_cl = nullptr;
 		memory::const_empl::ptr m_const_tr = nullptr;
 
-		void setup_const_memory(const std::unique_ptr<innate::cluster>& cl, 
-			                    const std::unique_ptr<innate::terminal>& tr);
+		void setup_const_memory(innate::cluster* cl, innate::terminal* tr);
 	};
 }
 

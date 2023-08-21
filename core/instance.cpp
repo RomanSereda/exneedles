@@ -7,7 +7,7 @@ namespace instance {
 		if (layer.height < 1 || layer.width < 1)
 			logexit();
 
-		*m_innate = std::make_tuple(std::move(to_inncl(root)), std::move(to_inntr(root)));
+		*m_innate = to_innate(root);
 
 		if (!inncl().get() || !inntr().get())
 			logexit();
@@ -31,26 +31,26 @@ namespace instance {
 	ptree host_terminality::to_ptree() const {
 		ptree root;
 
-		if (auto cl = inncl().get())
-			root.put_child("innate_cluster", terminality::to_ptree((innate::cluster*)cl));
-		else logexit();
+		auto cl = inncl().get();
+		auto tr = inntr().get();
 
-		if (auto tr = inntr().get())
-			root.put_child("innate_terminal", terminality::to_ptree((innate::terminal*)tr));
-		else logexit();
+		if (!cl || !tr)
+			logexit();
 
-		return root;
+		return terminality::to_ptree((innate::cluster*)cl, (innate::terminal*)tr);
 	}
 
 	device_terminality::device_terminality(const ptree& root, const innate::layer& layer) : terminality(layer) {
-		auto cl = to_inncl(root);
-		auto tr = to_inntr(root);
+		auto innate = terminality::to_innate(root);
+		
+		auto cl = std::get<0>(innate).get();
+		auto tr = std::get<1>(innate).get();
 
-		cluster_tuple::to(cl.get(), [&](auto* t0) {
+		cluster_tuple::to(cl, [&](auto* t0) {
 			m_const_cl = memory::add_mempart(t0);
 		});
 
-		cluster_data_tuple::to_first(tr.get(), [&](auto* t0) {
+		cluster_data_tuple::to_first(tr, [&](auto* t0) {
 			m_const_tr = memory::add_mempart(t0);
 		});
 
@@ -81,7 +81,7 @@ namespace instance {
 		return m_const_tr;
 	}
 
-	void device_terminality::setup_const_memory(const std::unique_ptr<innate::cluster>& cl, const std::unique_ptr<innate::terminal>& tr)
+	void device_terminality::setup_const_memory(innate::cluster* cl, innate::terminal* tr)
 	{
 		if (!m_const_cl->const_ptr || !m_const_tr->const_ptr)
 			logexit();
@@ -93,7 +93,7 @@ namespace instance {
 		assert_err(cudaMalloc((void**)&m_results, m_results_szb));
 		assert_err(cudaMemset((void*)m_results, 0, m_results_szb));
 
-		m_terminals_szb = calc_terminals_bytes(layer(), cl.get(), tr.get());
+		m_terminals_szb = calc_terminals_bytes(layer(), cl, tr);
 		assert_err(cudaMalloc((void**)&m_terminals, m_terminals_szb));
 		assert_err(cudaMemset((void*)m_terminals, 0, m_terminals_szb));
 

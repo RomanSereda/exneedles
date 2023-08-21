@@ -17,9 +17,8 @@ namespace core {
 
 		innate::synapse_simple tr;
 
-		root.put_child("innate_cluster", instance::terminality<UPTR_TEMPLATE_TR>::to_ptree((innate::cluster*)&cl));
-		root.put_child("innate_terminal", instance::terminality<UPTR_TEMPLATE_TR>::to_ptree((innate::terminal*)&tr));
-		return root;
+		return instance::terminality<UPTR_TEMPLATE_TR>::
+			to_ptree((innate::cluster*)&cl, (innate::terminal*)&tr);
 	}
 
 	void test_cltr() {
