@@ -103,7 +103,7 @@ namespace instance {
 
 		__mem__ float* m_results = nullptr;                       // bytes = layer::celulars_count * cell::width * cell::height * 4 --> shift celular number
 		__mem__ data::terminal* m_terminals = nullptr;            // cast for terminal_type, memory alocate array.  
-		                                                        // bytes = cell::width * cell::height * cluster::width * cluster::height * sizeof(terminal_type) --> shift cluster number
+		                                                          // bytes = cell::width * cell::height * cluster::width * cluster::height * sizeof(terminal_type) --> shift cluster number
 	
 		size_t m_results_szb = 0;
 		size_t m_terminals_szb = 0;

@@ -17,7 +17,6 @@ namespace innate {
 
 		int width = -1;
 		int height = -1;
-		int spillover = 0;
 	};
 ;
 	struct LIBRARY_API cell_simple : public cell {
@@ -59,12 +58,15 @@ namespace data {
 }
 
 namespace instance {
-	template<typename T, typename TR> class LIBRARY_API celularity {
+	using cell_tuple = boost::spec_tuple<innate::cell_simple, innate::cell_exre>;
+
+	template<typename T> class LIBRARY_API celularity {
 	public:
 		const T& inncell() const;
 		const innate::layer& layer() const;
 
-		virtual const std::vector<std::unique_ptr<TR>>& cltr_instances() const = 0;
+		static std::unique_ptr<innate::cell> to_inncell(const ptree& root);
+		static ptree to_ptree(innate::cell* c);
 
 		virtual ~celularity();
 
@@ -83,13 +85,15 @@ namespace instance {
 		const innate::layer& m_layer;
 	};
 
-#define PTR_TEMPLATE_CELL      __const__ innate::cell**
-#define UPTR_TEMPLATE_CELL std::unique_ptr<innate::cell>
 
-#define UPTR_TEMPLATE_CELLULARITY celularity<UPTR_TEMPLATE_CELL, terminality<UPTR_TEMPLATE_TR>>
-#define PTR_TEMPLATE_CELLULARITY  celularity<PTR_TEMPLATE_CELL, terminality<PTR_TEMPLATE_TR>>
+#define UPTR_TEMPLATE_CELL celularity<__const__ innate::cell**>
+#define PTR_TEMPLATE_CELL  celularity<std::unique_ptr<innate::cell>>
 
-	EXPIMP_TEMPLATE template class LIBRARY_API UPTR_TEMPLATE_CELLULARITY;
-	EXPIMP_TEMPLATE template class LIBRARY_API PTR_TEMPLATE_CELLULARITY;
+	EXPIMP_TEMPLATE template class LIBRARY_API UPTR_TEMPLATE_CELL;
+	EXPIMP_TEMPLATE template class LIBRARY_API PTR_TEMPLATE_CELL;
 
 }
+
+BOOST_HANA_ADAPT_STRUCT(innate::cell, type, width, height);
+BOOST_HANA_ADAPT_STRUCT(innate::cell_simple);
+BOOST_HANA_ADAPT_STRUCT(innate::cell_exre, tacts_excitation, tacts_relaxation);

@@ -28,20 +28,19 @@ namespace instance {
 }
 
 namespace instance {
-	class LIBRARY_API host_celularity : public UPTR_TEMPLATE_CELLULARITY {
+	class LIBRARY_API host_celularity : public UPTR_TEMPLATE_CELL {
 	public:
 		host_celularity(const ptree& root, const innate::layer& layer);
 		ptree to_ptree() const;
 
-		const std::vector<std::unique_ptr<terminality<UPTR_TEMPLATE_TR>>>& cltr_instances() const override;
+	private:
+	
 	};
 
-	class LIBRARY_API device_celularity : public PTR_TEMPLATE_CELLULARITY {
+	class LIBRARY_API device_celularity : public PTR_TEMPLATE_CELL {
 	public:
 		device_celularity(const ptree& root, const innate::layer& layer);
 		virtual ~device_celularity();
-
-		const std::vector<std::unique_ptr<terminality<PTR_TEMPLATE_TR>>>& cltr_instances() const override;
 
 		memory::const_empl::ptr const_emplace_cell() const;
 
@@ -49,6 +48,8 @@ namespace instance {
 		memory::const_empl::ptr m_const_cell = nullptr;
 
 		void setup_const_memory(const std::unique_ptr<innate::cell>& c);
+
+		
 	};
 
 }

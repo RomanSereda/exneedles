@@ -89,7 +89,6 @@ namespace instance {
 
 	template<typename CLST, typename TRMN>
 	std::unique_ptr<innate::cluster> terminality<CLST, TRMN>::to_inncl(const ptree& root) {
-		boost::to_string(root);
 		auto innate_cluster_tree = root.get_child("innate_cluster");
 		auto innate_cluster_type
 			= static_cast<innate::cluster::cluster_type>(innate_cluster_tree.get<int>("type"));

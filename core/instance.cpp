@@ -104,7 +104,12 @@ namespace instance {
 
 namespace instance {
 	host_celularity::host_celularity(const ptree& root, const innate::layer& layer)
-		: UPTR_TEMPLATE_CELLULARITY(layer){
+		: UPTR_TEMPLATE_CELL(layer){
+
+		if (layer.height < 1 || layer.width < 1)
+			logexit();
+
+
 	}
 
 	ptree host_celularity::to_ptree() const
@@ -112,23 +117,13 @@ namespace instance {
 		return ptree();
 	}
 
-	const std::vector<std::unique_ptr<terminality<UPTR_TEMPLATE_TR>>>& host_celularity::cltr_instances() const
-	{
-		// TODO: insert return statement here
-	}
-
 	device_celularity::device_celularity(const ptree& root, const innate::layer& layer)
-		: PTR_TEMPLATE_CELLULARITY(layer)
+		: PTR_TEMPLATE_CELL(layer)
 	{
 	}
 
 	device_celularity::~device_celularity()
 	{
-	}
-
-	const std::vector<std::unique_ptr<terminality<PTR_TEMPLATE_TR>>>& device_celularity::cltr_instances() const
-	{
-		// TODO: insert return statement here
 	}
 
 	memory::const_empl::ptr device_celularity::const_emplace_cell() const
