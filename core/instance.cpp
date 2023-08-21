@@ -100,7 +100,7 @@ namespace instance {
 }
 
 namespace instance {
-	host_celularity::host_celularity(const ptree& root, const innate::layer& layer)
+	host_cellularity::host_cellularity(const ptree& root, const innate::layer& layer)
 		: UPTR_TEMPLATE_CELL(layer){
 
 		if (layer.height < 1 || layer.width < 1)
@@ -126,19 +126,19 @@ namespace instance {
 		memset(m_cells, 0, m_cells_szb);
 	}
 
-	ptree host_celularity::to_ptree() const
+	ptree host_cellularity::to_ptree() const
 	{
 		auto c = inncell().get();
 		if (!c)
 			logexit();
 
-		return celularity::to_ptree(c);
+		return cellularity::to_ptree(c);
 	}
 
-	device_celularity::device_celularity(const ptree& root, const innate::layer& layer)
+	device_cellularity::device_cellularity(const ptree& root, const innate::layer& layer)
 		: PTR_TEMPLATE_CELL(layer)
 	{
-		auto innate = celularity::to_innate(root);
+		auto innate = cellularity::to_innate(root);
 
 		auto c = innate.get();
 		if (!c)
@@ -155,7 +155,7 @@ namespace instance {
 		setup_const_memory(c);
 	}
 
-	device_celularity::~device_celularity() {
+	device_cellularity::~device_cellularity() {
 		memory::remove_mempart(m_const_cell);
 		memory::setup_const_memoryparts();
 
@@ -163,12 +163,12 @@ namespace instance {
 		if (m_cells) cudaFree(m_cells);
 	}
 
-	memory::const_empl::ptr device_celularity::const_emplace_cell() const
+	memory::const_empl::ptr device_cellularity::const_emplace_cell() const
 	{
 		return m_const_cell;
 	}
 
-	void device_celularity::setup_const_memory(const innate::cell* c) {
+	void device_cellularity::setup_const_memory(const innate::cell* c) {
 		if (!m_const_cell->const_ptr)
 			logexit();
 

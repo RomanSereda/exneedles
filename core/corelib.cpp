@@ -5,6 +5,7 @@
 #include "assert.hpp"
 #include "instance.hpp"
 #include "layerality.hpp"
+#include "terminality.hpp"
 #include "cellularity.hpp"
 
 namespace core {
@@ -25,7 +26,7 @@ namespace core {
 		innate::cell_exre c;
 		c.tacts_excitation = 2;
 		c.tacts_relaxation = 3;
-		
+
 		return instance::UPTR_TEMPLATE_CELL::to_ptree((innate::cell*)&c);
 	}
 
@@ -43,8 +44,8 @@ namespace core {
 		innate::layer layer {128, 128, 1};
 
 		auto root = test_ptree_cell();
-		instance::host_celularity htr(root, layer);
-		instance::device_celularity dtr(htr.to_ptree(), layer);
+		instance::host_cellularity htr(root, layer);
+		instance::device_cellularity dtr(htr.to_ptree(), layer);
 
 		memory::test_mempart_cell(dtr.const_emplace_cell());
 	}

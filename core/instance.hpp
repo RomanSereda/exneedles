@@ -27,16 +27,16 @@ namespace instance {
 }
 
 namespace instance {
-	class LIBRARY_API host_celularity : public UPTR_TEMPLATE_CELL {
+	class LIBRARY_API host_cellularity : public UPTR_TEMPLATE_CELL {
 	public:
-		host_celularity(const ptree& root, const innate::layer& layer);
+		host_cellularity(const ptree& root, const innate::layer& layer);
 		ptree to_ptree() const;
 	};
 
-	class LIBRARY_API device_celularity : public PTR_TEMPLATE_CELL {
+	class LIBRARY_API device_cellularity : public PTR_TEMPLATE_CELL {
 	public:
-		device_celularity(const ptree& root, const innate::layer& layer);
-		virtual ~device_celularity();
+		device_cellularity(const ptree& root, const innate::layer& layer);
+		virtual ~device_cellularity();
 
 		memory::const_empl::ptr const_emplace_cell() const;
 

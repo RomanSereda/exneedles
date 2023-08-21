@@ -58,7 +58,7 @@ namespace instance {
 	using cell_data_tuple = boost::spec_pair_tuple<std::tuple<innate::cell_simple, data::cell_simple>,
 		                                           std::tuple<innate::cell_exre,   data::cell_exre>>;
 
-	template<typename T> class LIBRARY_API celularity {
+	template<typename T, typename TR> class LIBRARY_API cellularity {
 	public:
 		const T& inncell() const;
 		const innate::layer& layer() const;
@@ -66,10 +66,10 @@ namespace instance {
 		static std::unique_ptr<innate::cell> to_innate(const ptree& root);
 		static ptree to_ptree(innate::cell* c);
 
-		virtual ~celularity();
+		virtual ~cellularity();
 
 	protected:
-		celularity(const innate::layer& layer);
+		cellularity(const innate::layer& layer);
 
 		size_t calc_results_bytes(const innate::layer& layer) const;
 		size_t calc_cells_bytes(const innate::layer& layer, const innate::cell* c) const;
@@ -86,8 +86,8 @@ namespace instance {
 	};
 
 
-#define PTR_TEMPLATE_CELL  celularity<__const__ innate::cell**>
-#define UPTR_TEMPLATE_CELL celularity<std::unique_ptr<innate::cell>>
+#define PTR_TEMPLATE_CELL  cellularity<__const__ innate::cell**, instance::terminality<PTR_TEMPLATE_TR>>
+#define UPTR_TEMPLATE_CELL cellularity<std::unique_ptr<innate::cell>, instance::terminality<UPTR_TEMPLATE_TR>>
 
 	EXPIMP_TEMPLATE template class LIBRARY_API UPTR_TEMPLATE_CELL;
 	EXPIMP_TEMPLATE template class LIBRARY_API PTR_TEMPLATE_CELL;
