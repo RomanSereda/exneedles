@@ -1,6 +1,6 @@
 #pragma once
 #include "types.hpp"
-#include "celularity.hpp"
+#include "cellularity.hpp"
 
 namespace innate {
 	struct layer {

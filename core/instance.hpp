@@ -1,6 +1,6 @@
 #pragma once
 #include "terminality.hpp"
-#include "celularity.hpp"
+#include "cellularity.hpp"
 #include "memory.cuh"
 
 namespace instance {
@@ -28,7 +28,7 @@ namespace instance {
 }
 
 namespace instance {
-	class LIBRARY_API host_celularity : public UPTR_TEMPLATE_CELULARITY {
+	class LIBRARY_API host_celularity : public UPTR_TEMPLATE_CELLULARITY {
 	public:
 		host_celularity(const ptree& root, const innate::layer& layer);
 		ptree to_ptree() const;
@@ -36,7 +36,7 @@ namespace instance {
 		const std::vector<std::unique_ptr<terminality<UPTR_TEMPLATE_TR>>>& cltr_instances() const override;
 	};
 
-	class LIBRARY_API device_celularity : public PTR_TEMPLATE_CELULARITY {
+	class LIBRARY_API device_celularity : public PTR_TEMPLATE_CELLULARITY {
 	public:
 		device_celularity(const ptree& root, const innate::layer& layer);
 		virtual ~device_celularity();

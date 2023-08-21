@@ -13,7 +13,7 @@
   <ItemGroup>
     <ClInclude Include="assert.hpp" />
     <ClInclude Include="boost.hpp" />
-    <ClInclude Include="celularity.hpp" />
+    <ClInclude Include="cellularity.hpp" />
     <ClInclude Include="corelib.hpp" />
     <ClInclude Include="instance.hpp" />
     <ClInclude Include="layerality.hpp" />
@@ -23,7 +23,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="assert.cpp" />
-    <ClCompile Include="celularity.cpp" />
+    <ClCompile Include="cellularity.cpp" />
     <ClCompile Include="corelib.cpp" />
     <ClCompile Include="instance.cpp" />
     <ClCompile Include="terminality.cpp" />

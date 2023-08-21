@@ -104,7 +104,7 @@ namespace instance {
 
 namespace instance {
 	host_celularity::host_celularity(const ptree& root, const innate::layer& layer)
-		: UPTR_TEMPLATE_CELULARITY(layer){
+		: UPTR_TEMPLATE_CELLULARITY(layer){
 	}
 
 	ptree host_celularity::to_ptree() const
@@ -118,7 +118,7 @@ namespace instance {
 	}
 
 	device_celularity::device_celularity(const ptree& root, const innate::layer& layer)
-		: PTR_TEMPLATE_CELULARITY(layer)
+		: PTR_TEMPLATE_CELLULARITY(layer)
 	{
 	}
 

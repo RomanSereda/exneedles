@@ -36,7 +36,7 @@
     <ClInclude Include="terminality.hpp">
       <Filter>struct</Filter>
     </ClInclude>
-    <ClInclude Include="celularity.hpp">
+    <ClInclude Include="cellularity.hpp">
       <Filter>struct</Filter>
     </ClInclude>
     <ClInclude Include="layerality.hpp">
@@ -59,7 +59,7 @@
     <ClCompile Include="corelib.cpp">
       <Filter>lib</Filter>
     </ClCompile>
-    <ClCompile Include="celularity.cpp">
+    <ClCompile Include="cellularity.cpp">
       <Filter>struct</Filter>
     </ClCompile>
   </ItemGroup>
