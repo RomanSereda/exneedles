@@ -14,9 +14,6 @@ namespace innate {
 		} type;
 
 		cell(cell_type t = cell_simple);
-
-		int width = -1;
-		int height = -1;
 	};
 ;
 	struct LIBRARY_API cell_simple : public cell {
@@ -97,6 +94,6 @@ namespace instance {
 
 }
 
-BOOST_HANA_ADAPT_STRUCT(innate::cell, type, width, height);
+BOOST_HANA_ADAPT_STRUCT(innate::cell, type);
 BOOST_HANA_ADAPT_STRUCT(innate::cell_simple);
 BOOST_HANA_ADAPT_STRUCT(innate::cell_exre, tacts_excitation, tacts_relaxation);

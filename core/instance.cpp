@@ -71,18 +71,15 @@ namespace instance {
 		if (m_terminals) cudaFree(m_terminals);
 	}
 
-	memory::const_empl::ptr device_terminality::const_emplace_cl() const
-	{
+	memory::const_empl::ptr device_terminality::const_emplace_cl() const {
 		return m_const_cl;
 	}
 
-	memory::const_empl::ptr device_terminality::const_emplace_tr() const
-	{
+	memory::const_empl::ptr device_terminality::const_emplace_tr() const {
 		return m_const_tr;
 	}
 
-	void device_terminality::setup_const_memory(innate::cluster* cl, innate::terminal* tr)
-	{
+	void device_terminality::setup_const_memory(innate::cluster* cl, innate::terminal* tr) {
 		if (!m_const_cl->const_ptr || !m_const_tr->const_ptr)
 			logexit();
 

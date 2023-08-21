@@ -11,6 +11,7 @@
 #include "assert.hpp"
 
 #include "terminality.hpp" // for test
+#include "cellularity.hpp" // for test
 
 namespace tables {
 	void init() {
@@ -256,6 +257,13 @@ namespace memory {
 		                                       const const_empl::ptr& ptr_tr) {
 		test_mempart_kernel_cltr <<<1, 1 >>> ((const innate::cluster_targeted*)ptr_cl->const_ptr,
 			                                  (const innate::synapse_simple*)ptr_tr->const_ptr);
+	}
+	__global__ void test_mempart_kernel_cell(const innate::cell_exre* c) {
+		printf("cell tacts_excitation: %d\n", c->tacts_excitation);
+		printf("cell tacts_relaxation: %d\n", c->tacts_relaxation);
+	}
+	void test_mempart_cell(const memory::const_empl::ptr& ptr_c) {
+		test_mempart_kernel_cell << <1, 1 >> > ((const innate::cell_exre*)ptr_c->const_ptr);
 	}
 }
 

@@ -31,9 +31,6 @@ namespace instance {
 	public:
 		host_celularity(const ptree& root, const innate::layer& layer);
 		ptree to_ptree() const;
-
-	private:
-	
 	};
 
 	class LIBRARY_API device_celularity : public PTR_TEMPLATE_CELL {
@@ -47,8 +44,6 @@ namespace instance {
 		memory::const_empl::ptr m_const_cell = nullptr;
 
 		void setup_const_memory(const innate::cell* c);
-
-		
 	};
 
 }
