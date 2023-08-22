@@ -37,8 +37,8 @@ namespace core {
 		innate::layer layer {128, 128, 1};
 
 		auto root = test_ptree_cltr();
-		instance::host_terminality htr(root, layer);
-		instance::device_terminality dtr(htr.to_ptree(), layer);
+		instance::terminality_host htr(root, layer);
+		instance::terminality_device dtr(htr.to_ptree(), layer);
 
 		memory::test_mempart_cltr(dtr.const_emplace_cl(), dtr.const_emplace_tr());
 	}
