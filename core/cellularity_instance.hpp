@@ -6,23 +6,23 @@
 #include "cellularity.hpp"
 #include "terminality_instance.hpp"
 
-namespace innate { struct layer; }
 namespace instance {
-	template<typename T, typename TR> class cellularity {
+	template<typename T, typename TR> class cellularity: public icellularity {
 	public:
 		const T& inncell() const;
-		const innate::layer& layer() const;
 
-		static std::unique_ptr<innate::cell> to_innate(const ptree& root);
-		static ptree to_ptree(innate::cell* c);
+		const innate::layer& layer() const override;
+
+		__mem__ float* results() const override;
+		__mem__ void* cells() const override;
+
+		size_t results_szb() const override;
+		size_t cells_szb() const override;
 
 		virtual ~cellularity();
 
 	protected:
 		cellularity(const innate::layer& layer);
-
-		size_t calc_results_bytes(const innate::layer& layer) const;
-		size_t calc_cells_bytes(const innate::layer& layer, const innate::cell* c) const;
 
 		T m_innate = nullptr;                            
 
@@ -33,8 +33,6 @@ namespace instance {
 		size_t m_results_szb = 0;
 
 		const innate::layer& m_layer;
-
-		std::vector<std::unique_ptr<TR>> m_terminalitys;
 	};
 
 	using cellularity_gpu_type = cellularity<__const__ innate::cell**, terminality_gpu_type>;
@@ -43,21 +41,27 @@ namespace instance {
 
 
 namespace instance {
-	class host_cellularity : public cellularity_cpu_type {
+	class cellularity_host : public cellularity_cpu_type {
 	public:
-		host_cellularity(const ptree& root, const innate::layer& layer);
-		ptree to_ptree() const;
+		cellularity_host(const ptree& root, const innate::layer& layer);
+
+		ptree to_ptree() const override;
+		readable_cell_innate innate() const override;
 	};
 
-	class device_cellularity : public cellularity_gpu_type {
+	class cellularity_device : public cellularity_gpu_type {
 	public:
-		device_cellularity(const ptree& root, const innate::layer& layer);
-		virtual ~device_cellularity();
+		cellularity_device(const ptree& root, const innate::layer& layer);
+		virtual ~cellularity_device();
+
+		ptree to_ptree() const override;
+		readable_cell_innate innate() const override;
 
 		memory::const_empl::ptr const_emplace_cell() const;
 
 	private:
 		memory::const_empl::ptr m_const_cell = nullptr;
+		std::unique_ptr<innate::cell> m_uptr_innate {nullptr};
 
 		void setup_const_memory(const innate::cell* c);
 	};

@@ -13,6 +13,12 @@ namespace instance {
 
 		const innate::layer& layer() const override;
 
+		__mem__ float* results() const override;
+		__mem__ void* terminals() const override;
+
+		size_t results_szb() const override;
+		size_t terminals_szb() const override;
+
 		virtual ~terminality();
 
 	protected:
@@ -56,9 +62,8 @@ namespace instance {
 	private:
 		memory::const_empl::ptr m_const_cl = nullptr;
 		memory::const_empl::ptr m_const_tr = nullptr;
+		std::tuple<UPTR_TEMPLATE_TR> m_uptr_innate {nullptr, nullptr};
 
 		void setup_const_memory(innate::cluster* cl, innate::terminal* tr);
-
-		std::tuple<UPTR_TEMPLATE_TR> m_uptr_innate;
 	};
 }

@@ -18,32 +18,23 @@ namespace instance {
 	}
 
 	template<typename T, typename TR>
-	std::unique_ptr<innate::cell> cellularity<T, TR>::to_innate(const ptree& root) {
-		auto innate_cell_type
-			= static_cast<innate::cluster::cluster_type>(root.get<int>("type"));
-
-		std::unique_ptr<innate::cell> ptr(nullptr);
-		cell_data_tuple::create_first(innate_cell_type, [&](auto p) {
-			auto innate_extend_tree = root.get_child("innate_extend");
-			boost::to(*p, innate_extend_tree);
-			ptr = std::move(p);
-			});
-
-		if (!ptr.get())
-			logexit();
-
-		boost::to(*ptr, root);
-
-		return ptr;
+	__mem__ float* cellularity<T, TR>::results() const {
+		return m_results;
 	}
 
 	template<typename T, typename TR>
-	ptree cellularity<T, TR>::to_ptree(innate::cell* c) {
-		auto innate_c = boost::to_ptree(*c);
-		cell_data_tuple::to_first(c, [&innate_c](auto* t) {
-			innate_c.put_child("innate_extend", boost::to_ptree(*t));
-			});
-		return innate_c;
+	__mem__ void* cellularity<T, TR>::cells() const {
+		return m_cells;
+	}
+
+	template<typename T, typename TR>
+	size_t cellularity<T, TR>::results_szb() const {
+		return m_results_szb;
+	}
+
+	template<typename T, typename TR>
+	size_t cellularity<T, TR>::cells_szb() const {
+		return m_cells_szb;
 	}
 
 	template<typename T, typename TR>
@@ -52,32 +43,12 @@ namespace instance {
 	}
 
 	template<typename T, typename TR>
-	size_t cellularity<T, TR>::calc_results_bytes(const innate::layer& layer) const {
-		return layer.height * layer.width * sizeof(float);
-	}
-
-	template<typename T, typename TR>
-	size_t cellularity<T, TR>::calc_cells_bytes(const innate::layer& layer, const innate::cell* c) const {
-		if (!c)
-			logexit();
-
-		const auto size_types = cell_data_tuple::size(c);
-		if (size_types.empty())
-			logexit();
-
-		if (size_types.size() < 2 || size_types.back() < 1)
-			logexit();
-
-		return layer.height * layer.width * size_types.back();
-	}
-
-	template<typename T, typename TR>
 	cellularity<T, TR>::~cellularity() {
 	};
 }
 
 namespace instance {
-	host_cellularity::host_cellularity(const ptree& root, const innate::layer& layer)
+	cellularity_host::cellularity_host(const ptree& root, const innate::layer& layer)
 		: cellularity_cpu_type(layer){
 
 		if (layer.height < 1 || layer.width < 1)
@@ -103,8 +74,7 @@ namespace instance {
 		memset(m_cells, 0, m_cells_szb);
 	}
 
-	ptree host_cellularity::to_ptree() const
-	{
+	ptree cellularity_host::to_ptree() const {
 		auto c = inncell().get();
 		if (!c)
 			logexit();
@@ -112,13 +82,17 @@ namespace instance {
 		return cellularity::to_ptree(c);
 	}
 
+	readable_cell_innate cellularity_host::innate() const {
+		return { *m_innate.get() };
+	}
 
-	device_cellularity::device_cellularity(const ptree& root, const innate::layer& layer)
+
+	cellularity_device::cellularity_device(const ptree& root, const innate::layer& layer)
 		: cellularity_gpu_type(layer)
 	{
-		auto innate = to_innate(root);
+		m_uptr_innate = to_innate(root);
 
-		auto c = innate.get();
+		auto c = m_uptr_innate.get();
 		if (!c)
 			logexit();
 
@@ -133,7 +107,7 @@ namespace instance {
 		setup_const_memory(c);
 	}
 
-	device_cellularity::~device_cellularity() {
+	cellularity_device::~cellularity_device() {
 		memory::remove_mempart(m_const_cell);
 		memory::setup_const_memoryparts();
 
@@ -141,12 +115,19 @@ namespace instance {
 		if (m_cells) cudaFree(m_cells);
 	}
 
-	memory::const_empl::ptr device_cellularity::const_emplace_cell() const
-	{
+	ptree cellularity_device::to_ptree() const {
+		return icellularity::to_ptree(m_uptr_innate.get());
+	}
+
+	readable_cell_innate cellularity_device::innate() const {
+		return { *m_uptr_innate.get() };
+	}
+
+	memory::const_empl::ptr cellularity_device::const_emplace_cell() const {
 		return m_const_cell;
 	}
 
-	void device_cellularity::setup_const_memory(const innate::cell* c) {
+	void cellularity_device::setup_const_memory(const innate::cell* c) {
 		if (!m_const_cell->const_ptr)
 			logexit();
 

@@ -96,14 +96,20 @@ namespace instance {
 		virtual ptree to_ptree() const = 0;
 		virtual readable_cltr_innate innate() const = 0;
 
+		virtual __mem__ float* results() const = 0;
+		virtual __mem__ void* terminals() const = 0;
+
+		virtual size_t results_szb() const = 0;
+		virtual size_t terminals_szb() const = 0;
+
 		static std::tuple<UPTR_TEMPLATE_TR> to_innate(const ptree& root);
 		static ptree to_ptree(innate::cluster* cl, innate::terminal* tr);
 
+	protected:
 		static size_t calc_results_bytes(const innate::layer& layer);
 		static size_t calc_terminals_bytes(const innate::layer& layer,
-			const innate::cluster* cl,
-			const innate::terminal* tr);
-
+			                               const innate::cluster* cl,
+			                               const innate::terminal* tr);
 	private:
 		static std::unique_ptr<innate::cluster> to_inncl(const ptree& root);
 		static std::unique_ptr<innate::terminal> to_inntr(const ptree& root);

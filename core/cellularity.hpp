@@ -59,3 +59,27 @@ BOOST_HANA_ADAPT_STRUCT(innate::cell_exre, tacts_excitation, tacts_relaxation);
 using cell_data_tuple = boost::spec_pair_tuple<std::tuple<innate::cell_simple, data::cell_simple>,
 	                                           std::tuple<innate::cell_exre, data::cell_exre>>;
 
+namespace innate { struct layer; }
+namespace instance {
+	struct readable_cell_innate { const innate::cell& cell; };
+
+	class LIBRARY_API icellularity {
+	public:
+		virtual const innate::layer& layer() const = 0;
+		virtual ptree to_ptree() const = 0;
+		virtual readable_cell_innate innate() const = 0;
+
+		virtual __mem__ float* results() const = 0;
+		virtual __mem__ void* cells() const = 0;
+
+		virtual size_t results_szb() const = 0;
+		virtual size_t cells_szb() const = 0;
+
+		static std::unique_ptr<innate::cell> to_innate(const ptree& root);
+		static ptree to_ptree(innate::cell* c);
+
+	protected:
+		static size_t calc_results_bytes(const innate::layer& layer);
+		static size_t calc_cells_bytes(const innate::layer& layer, const innate::cell* c);
+	};
+}

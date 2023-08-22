@@ -31,6 +31,26 @@ namespace instance {
 	{
 		return m_layer;
 	}
+
+	template<typename CLST, typename TRMN>
+	__mem__ float* terminality<CLST, TRMN>::results() const {
+		return m_results;
+	}
+
+	template<typename CLST, typename TRMN>
+	__mem__ void* terminality<CLST, TRMN>::terminals() const {
+		return m_terminals;
+	}
+	
+	template<typename CLST, typename TRMN>
+	size_t terminality<CLST, TRMN>::results_szb() const {
+		return m_results_szb;
+	}
+	
+	template<typename CLST, typename TRMN>
+	size_t terminality<CLST, TRMN>::terminals_szb() const {
+		return m_terminals_szb;
+	}
 }
 
 

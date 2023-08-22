@@ -47,8 +47,8 @@ namespace core {
 		innate::layer layer {128, 128, 1};
 
 		auto root = test_ptree_cell();
-		instance::host_cellularity htr(root, layer);
-		instance::device_cellularity dtr(htr.to_ptree(), layer);
+		instance::cellularity_host htr(root, layer);
+		instance::cellularity_device dtr(htr.to_ptree(), layer);
 
 		memory::test_mempart_cell(dtr.const_emplace_cell());
 	}
