@@ -8,9 +8,6 @@
 
 namespace innate { struct layer; }
 namespace instance {
-	using cell_data_tuple = boost::spec_pair_tuple<std::tuple<innate::cell_simple, data::cell_simple>,
-		std::tuple<innate::cell_exre, data::cell_exre>>;
-
 	template<typename T, typename TR> class cellularity {
 	public:
 		const T& inncell() const;
@@ -36,6 +33,8 @@ namespace instance {
 		size_t m_results_szb = 0;
 
 		const innate::layer& m_layer;
+
+		std::vector<std::unique_ptr<TR>> m_terminalitys;
 	};
 
 	using cellularity_gpu_type = cellularity<__const__ innate::cell**, terminality_gpu_type>;

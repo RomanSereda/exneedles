@@ -112,10 +112,11 @@ namespace instance {
 		return cellularity::to_ptree(c);
 	}
 
+
 	device_cellularity::device_cellularity(const ptree& root, const innate::layer& layer)
 		: cellularity_gpu_type(layer)
 	{
-		auto innate = cellularity::to_innate(root);
+		auto innate = to_innate(root);
 
 		auto c = innate.get();
 		if (!c)

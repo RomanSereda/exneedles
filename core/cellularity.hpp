@@ -55,3 +55,7 @@ namespace data {
 BOOST_HANA_ADAPT_STRUCT(innate::cell, type);
 BOOST_HANA_ADAPT_STRUCT(innate::cell_simple);
 BOOST_HANA_ADAPT_STRUCT(innate::cell_exre, tacts_excitation, tacts_relaxation);
+
+using cell_data_tuple = boost::spec_pair_tuple<std::tuple<innate::cell_simple, data::cell_simple>,
+	                                           std::tuple<innate::cell_exre, data::cell_exre>>;
+

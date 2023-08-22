@@ -76,3 +76,7 @@ BOOST_HANA_ADAPT_STRUCT(innate::synapse_simple, sign);
 
 BOOST_HANA_ADAPT_STRUCT(innate::cluster, type, width, height);
 BOOST_HANA_ADAPT_STRUCT(innate::cluster_targeted, target_layer, target_region);
+
+using cluster_tuple = boost::spec_tuple<innate::cluster_targeted>;
+using cluster_data_tuple = boost::spec_pair_tuple<std::tuple<innate::axon_simple, data::axon_simple>,
+	                                              std::tuple<innate::synapse_simple, data::synapse_simple>>;
