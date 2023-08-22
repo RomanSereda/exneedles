@@ -27,8 +27,8 @@ namespace instance {
 
 		size_t calc_results_bytes(const innate::layer& layer) const;
 		size_t calc_terminals_bytes(const innate::layer& layer,
-			const innate::cluster* cl,
-			const innate::terminal* tr) const;
+			                        const innate::cluster* cl,
+			                        const innate::terminal* tr) const;
 
 		std::tuple<CLST, TRMN> m_innate {nullptr, nullptr};
 
