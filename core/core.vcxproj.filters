@@ -30,7 +30,7 @@
     <ClInclude Include="types.hpp">
       <Filter>public</Filter>
     </ClInclude>
-    <ClInclude Include="instance.hpp">
+    <ClInclude Include="cellularity_instance.hpp">
       <Filter>instance</Filter>
     </ClInclude>
     <ClInclude Include="terminality.hpp">
@@ -45,6 +45,9 @@
     <ClInclude Include="corelib.hpp">
       <Filter>lib</Filter>
     </ClInclude>
+    <ClInclude Include="terminality_instance.hpp">
+      <Filter>instance</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="assert.cpp">
@@ -53,7 +56,7 @@
     <ClCompile Include="terminality.cpp">
       <Filter>struct</Filter>
     </ClCompile>
-    <ClCompile Include="instance.cpp">
+    <ClCompile Include="cellularity_instance.cpp">
       <Filter>instance</Filter>
     </ClCompile>
     <ClCompile Include="corelib.cpp">
@@ -61,6 +64,9 @@
     </ClCompile>
     <ClCompile Include="cellularity.cpp">
       <Filter>struct</Filter>
+    </ClCompile>
+    <ClCompile Include="terminality_instance.cpp">
+      <Filter>instance</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

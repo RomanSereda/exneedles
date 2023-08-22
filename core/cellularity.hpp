@@ -2,8 +2,6 @@
 #include "types.hpp"
 #include "boost.hpp"
 
-#include "terminality.hpp"
-
 #include "../deflib.inc"
 
 namespace innate {
@@ -52,50 +50,6 @@ namespace data {
 		uint8_t counter_tacts_excitation;
 		uint8_t counter_tacts_relaxation;
 	};
-}
-
-namespace instance {
-	using cell_data_tuple = boost::spec_pair_tuple<std::tuple<innate::cell_simple, data::cell_simple>,
-		                                           std::tuple<innate::cell_exre,   data::cell_exre>>;
-
-	template<typename T, typename TR> class LIBRARY_API cellularity {
-	public:
-		const T& inncell() const;
-		const innate::layer& layer() const;
-
-		static std::unique_ptr<innate::cell> to_innate(const ptree& root);
-		static ptree to_ptree(innate::cell* c);
-
-		const std::vector<std::unique_ptr<TR>>& terminalitys() const;
-
-		virtual ~cellularity();
-
-	protected:
-		cellularity(const innate::layer& layer);
-
-		size_t calc_results_bytes(const innate::layer& layer) const;
-		size_t calc_cells_bytes(const innate::layer& layer, const innate::cell* c) const;
-
-		T m_innate = nullptr;                             // cast for innate::cell_type
-
-		__mem__ data::cell* m_cells = nullptr;            // cast for innate::cell_type, memory alocate array
-		__mem__ float* m_results = nullptr;               // size = cluster_count * cell::width * cell::height * 4
-
-		size_t m_cells_szb = 0;
-		size_t m_results_szb = 0;
-
-		const innate::layer& m_layer;
-
-		std::vector<std::unique_ptr<TR>>* m_terminalitys = nullptr;
-	};
-
-
-#define PTR_TEMPLATE_CELL  cellularity<__const__ innate::cell**, instance::terminality<PTR_TEMPLATE_TR>>
-#define UPTR_TEMPLATE_CELL cellularity<std::unique_ptr<innate::cell>, instance::terminality<UPTR_TEMPLATE_TR>>
-
-	EXPIMP_TEMPLATE template class LIBRARY_API UPTR_TEMPLATE_CELL;
-	EXPIMP_TEMPLATE template class LIBRARY_API PTR_TEMPLATE_CELL;
-
 }
 
 BOOST_HANA_ADAPT_STRUCT(innate::cell, type);

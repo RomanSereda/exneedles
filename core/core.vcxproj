@@ -15,9 +15,10 @@
     <ClInclude Include="boost.hpp" />
     <ClInclude Include="cellularity.hpp" />
     <ClInclude Include="corelib.hpp" />
-    <ClInclude Include="instance.hpp" />
+    <ClInclude Include="cellularity_instance.hpp" />
     <ClInclude Include="layerality.hpp" />
     <ClInclude Include="terminality.hpp" />
+    <ClInclude Include="terminality_instance.hpp" />
     <ClInclude Include="types.hpp" />
     <ClInclude Include="memory.cuh" />
   </ItemGroup>
@@ -25,8 +26,9 @@
     <ClCompile Include="assert.cpp" />
     <ClCompile Include="cellularity.cpp" />
     <ClCompile Include="corelib.cpp" />
-    <ClCompile Include="instance.cpp" />
+    <ClCompile Include="cellularity_instance.cpp" />
     <ClCompile Include="terminality.cpp" />
+    <ClCompile Include="terminality_instance.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\deflib.inc" />

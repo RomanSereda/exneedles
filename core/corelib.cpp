@@ -3,10 +3,13 @@
 #include <string>
 #include "memory.cuh"
 #include "assert.hpp"
-#include "instance.hpp"
-#include "layerality.hpp"
+
 #include "terminality.hpp"
 #include "cellularity.hpp"
+#include "layerality.hpp"
+
+#include "terminality_instance.hpp"
+#include "cellularity_instance.hpp"
 
 namespace core {
 	ptree test_ptree_cltr() {
@@ -27,7 +30,7 @@ namespace core {
 		c.tacts_excitation = 2;
 		c.tacts_relaxation = 3;
 
-		return instance::UPTR_TEMPLATE_CELL::to_ptree((innate::cell*)&c);
+		return instance::cellularity_cpu_type::to_ptree((innate::cell*)&c);
 	}
 
 	void test_cltr() {

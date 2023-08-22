@@ -70,58 +70,6 @@ namespace data {
 	};
 }
 
-namespace innate { struct layer; }
-namespace instance {
-	using cluster_tuple      = boost::spec_tuple<innate::cluster_targeted>;
-	using cluster_data_tuple = boost::spec_pair_tuple<std::tuple<innate::axon_simple,    data::axon_simple>,
-		                                              std::tuple<innate::synapse_simple, data::synapse_simple>>;
-
-#define PTR_TEMPLATE_TR       __const__ innate::cluster**,      __const__ innate::terminal**
-#define UPTR_TEMPLATE_TR std::unique_ptr<innate::cluster>, std::unique_ptr<innate::terminal>
-
-	template<typename CLST, typename TRMN> class LIBRARY_API terminality {
-	public:
-		const CLST& inncl() const;
-		const TRMN& inntr() const;
-
-		const innate::layer& layer() const;
-
-		static std::tuple<UPTR_TEMPLATE_TR> to_innate(const ptree& root);
-		static ptree to_ptree(innate::cluster* cl, innate::terminal* tr);
-
-		virtual ~terminality();
-
-	protected:
-		terminality(const innate::layer& layer);
-
-		size_t calc_results_bytes(const innate::layer& layer) const;
-		size_t calc_terminals_bytes(const innate::layer& layer,
-			const innate::cluster* cl,
-			const innate::terminal* tr) const;
-
-		std::tuple<CLST, TRMN>* m_innate = nullptr;
-
-		__mem__ float* m_results = nullptr;                       // bytes = layer::celulars_count * cell::width * cell::height * 4 --> shift celular number
-		__mem__ data::terminal* m_terminals = nullptr;            // cast for terminal_type, memory alocate array.  
-		                                                          // bytes = cell::width * cell::height * cluster::width * cluster::height * sizeof(terminal_type) --> shift cluster number
-	
-		size_t m_results_szb = 0;
-		size_t m_terminals_szb = 0;
-
-		const innate::layer& m_layer;
-
-	private:
-		static std::unique_ptr<innate::cluster> to_inncl(const ptree& root);
-		static std::unique_ptr<innate::terminal> to_inntr(const ptree& root);
-
-		static ptree to_ptree(innate::cluster* cl);
-		static ptree to_ptree(innate::terminal* tr);
-	};
-
-	EXPIMP_TEMPLATE template class LIBRARY_API terminality<UPTR_TEMPLATE_TR>;
-	EXPIMP_TEMPLATE template class LIBRARY_API terminality<PTR_TEMPLATE_TR>;
-}
-
 BOOST_HANA_ADAPT_STRUCT(innate::terminal, type);
 BOOST_HANA_ADAPT_STRUCT(innate::axon_simple, basic_value);
 BOOST_HANA_ADAPT_STRUCT(innate::synapse_simple, sign);
