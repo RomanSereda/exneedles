@@ -33,24 +33,30 @@ namespace core {
 		return instance::cellularity_cpu_type::to_ptree((innate::cell*)&c);
 	}
 
-	void test_cltr() {
+	void test() {
 		innate::layer layer {128, 128, 1};
 
 		auto root = test_ptree_cltr();
 		instance::terminality_host htr(root, layer);
 		instance::terminality_device dtr(htr.to_ptree(), layer);
-
 		memory::test_mempart_cltr(dtr.const_emplace_cl(), dtr.const_emplace_tr());
-	}
 
-	void test_cell() {
-		innate::layer layer {128, 128, 1};
+		instance::cellularity_host hcr(test_ptree_cell(), layer);
+		auto cell_host_ptree = hcr.to_ptree();
+		std::vector<instance::terminality_host*> ths;
+		ths.push_back(&htr);
+		ths.push_back(&htr);
 
-		auto root = test_ptree_cell();
-		instance::cellularity_host htr(root, layer);
-		instance::cellularity_device dtr(htr.to_ptree(), layer);
+		boost::add_array(cell_host_ptree, "terminalitys", ths);
+		
 
-		memory::test_mempart_cell(dtr.const_emplace_cell());
+		instance::cellularity_host hcr2(cell_host_ptree, layer);
+
+
+
+		instance::cellularity_device dcr(root, layer);
+		memory::test_mempart_cell(dcr.const_emplace_cell());
+
 	}
 
 	device::device()
@@ -62,8 +68,7 @@ namespace core {
 		console("total const memory: " + std::to_string(prop.totalConstMem));
 		tables::init();
 
-		test_cltr();
-		test_cell();
+		test();
 	}
 
 	device::~device() {

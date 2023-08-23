@@ -73,10 +73,16 @@ namespace instance {
 		memset(m_results, 0, m_results_szb);
 		memset(m_cells, 0, m_cells_szb);
 
-		/*BOOST_FOREACH(const ptree::value_type & v, root.get_child("terminalitys")) {
-			auto terminality = std::make_unique<terminality_host>(new terminality_host(v.second, m_layer));
-			m_terminalitys.push_back(std::move(terminality));
-		}*/
+		console(boost::to_string(root));
+
+		if (root.find("terminalitys") != root.not_found()) {
+			auto tree = root.get_child("terminalitys");
+			BOOST_FOREACH(ptree::value_type& v, tree) {
+				assert(v.first.empty());
+				auto terminality = std::make_unique<terminality_host>(v.second, m_layer);
+				m_terminalitys.push_back(std::move(terminality));
+			}
+		}
 	}
 
 	ptree cellularity_host::to_ptree() const {
@@ -85,9 +91,7 @@ namespace instance {
 			logexit();
 
 		auto root = cellularity::to_ptree(c);
-		for (auto& terminality : m_terminalitys) {
-			root.push_back(std::make_pair("terminalitys", terminality->to_ptree()));
-		}
+		boost::add_array(root, "terminalitys", m_terminalitys);
 
 		return root;
 	}

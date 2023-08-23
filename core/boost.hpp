@@ -23,7 +23,6 @@
 
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
-
 #include <boost/foreach.hpp>
 
 #include "types.hpp"
@@ -168,6 +167,14 @@ namespace boost {
 				value = static_cast<member>(std::stoi(it->second.data()));
 		});
 		return var;
+	}
+
+	template <typename T> void add_array(ptree& root, const std::string& key, const std::vector<T>& ts) {
+		ptree children;
+		for (const auto& t : ts) {
+			children.push_back(std::make_pair("", t->to_ptree()));
+		}
+		root.add_child(key, children);
 	}
 }
 
