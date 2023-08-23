@@ -47,6 +47,9 @@ namespace instance {
 
 		ptree to_ptree() const override;
 		readable_cell_innate innate() const override;
+
+	private:
+		std::vector<std::unique_ptr<terminality_host>> m_terminalitys;
 	};
 
 	class cellularity_device : public cellularity_gpu_type {

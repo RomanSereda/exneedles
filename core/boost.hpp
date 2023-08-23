@@ -24,6 +24,8 @@
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
 
+#include <boost/foreach.hpp>
+
 #include "types.hpp"
 
 #pragma comment(lib, "libboost_json-vc143-mt-gd-x64-1_82.lib")
