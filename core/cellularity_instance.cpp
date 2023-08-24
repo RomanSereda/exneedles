@@ -112,6 +112,11 @@ namespace instance {
 
 		if (!m_cells || !m_results)
 			logexit();
+
+		for (const auto& child : boost::to_vector(root, "terminalitys")) {
+			auto terminality = std::make_unique<terminality_device>(child, m_layer);
+			m_terminalitys.push_back(std::move(terminality));
+		}
 	}
 
 	cellularity_device::~cellularity_device() {

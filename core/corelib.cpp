@@ -49,11 +49,10 @@ namespace core {
 		boost::add_array(cell_host_ptree, "terminalitys", ths);
 		
 		instance::cellularity_host hcr2(cell_host_ptree, layer);
-
-		console(boost::to_string(hcr2.to_ptree()));
-
 		instance::cellularity_device dcr(hcr2.to_ptree(), layer);
 		memory::test_mempart_cell(dcr.const_emplace_cell());
+
+		console(boost::to_string(dcr.to_ptree()));
 
 	}
 
