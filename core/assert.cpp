@@ -11,7 +11,7 @@ void assert_last_err() {
 #endif
 }
 
-void console(std::string str) {
+void console(const std::string& str) {
 	std::cout << str << std::endl;
 }
 

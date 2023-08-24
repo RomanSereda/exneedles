@@ -91,7 +91,10 @@ namespace instance {
 	}
 
 	readable_cell_innate cellularity_host::innate() const {
-		return { *m_innate.get() };
+		std::vector<readable_cltr_innate> terminality;
+		for (const auto& trmn : m_terminalitys)
+			terminality.push_back(trmn->innate());
+		return { m_innate.get(), std::move(terminality) };
 	}
 
 
@@ -134,7 +137,11 @@ namespace instance {
 	}
 
 	readable_cell_innate cellularity_device::innate() const {
-		return { *m_uptr_innate.get() };
+		std::vector<readable_cltr_innate> terminality;
+		for (const auto& trmn : m_terminalitys)
+			terminality.push_back(trmn->innate());
+
+		return { m_uptr_innate.get(), terminality };
 	}
 
 	memory::const_empl::ptr cellularity_device::const_emplace_cell() const {

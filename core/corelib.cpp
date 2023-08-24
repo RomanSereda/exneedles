@@ -53,6 +53,9 @@ namespace core {
 		memory::test_mempart_cell(dcr.const_emplace_cell());
 
 		console(boost::to_string(dcr.to_ptree()));
+		auto d = dcr.innate();
+
+		int t = 0;
 
 	}
 

@@ -1,6 +1,7 @@
 #pragma once
 #include "types.hpp"
 #include "boost.hpp"
+#include "terminality.hpp"
 
 #include "../deflib.inc"
 
@@ -61,7 +62,10 @@ using cell_data_tuple = boost::spec_pair_tuple<std::tuple<innate::cell_simple, d
 
 namespace innate { struct layer; }
 namespace instance {
-	struct readable_cell_innate { const innate::cell& cell; };
+	struct readable_cell_innate { 
+		const innate::cell* cell; 
+		const std::vector<readable_cltr_innate> terminality;
+	};
 
 	class LIBRARY_API icellularity {
 	public:

@@ -101,7 +101,7 @@ namespace instance {
 		if (!cl || !tr)
 			logexit();
 
-		return {*cl, *tr};
+		return {cl, tr};
 	}
 
 	terminality_device::terminality_device(const ptree& root, const innate::layer& layer)
@@ -141,7 +141,7 @@ namespace instance {
 		if (!cl || !tr)
 			logexit();
 
-		return { *cl , *tr};
+		return { cl , tr};
 	}
 
 	terminality_device::~terminality_device() {

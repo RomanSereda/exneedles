@@ -1,7 +1,7 @@
 #pragma once
-#include <string>
 #include <cuda_runtime.h>
 #include "boost.hpp"
+#include <string>
 
 #define assert_err(code) {                        \
 	if (code != cudaError::cudaSuccess) {         \
@@ -15,7 +15,7 @@
 
 void assert_last_err();
 
-void console(std::string str);
+void console(const std::string& str);
 void console(const ptree& root);
 
 #define STRINGIZING(x) #x

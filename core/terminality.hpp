@@ -85,7 +85,10 @@ using cluster_data_tuple = boost::spec_pair_tuple<std::tuple<innate::axon_simple
 #define PTR_TEMPLATE_TR       __const__ innate::cluster**,      __const__ innate::terminal**
 #define UPTR_TEMPLATE_TR std::unique_ptr<innate::cluster>, std::unique_ptr<innate::terminal>
 
-struct readable_cltr_innate { const innate::cluster& cl; const innate::terminal& tr; };
+struct readable_cltr_innate { 
+	const innate::cluster* cl; 
+	const innate::terminal* tr; 
+};
 
 namespace innate { struct layer; }
 

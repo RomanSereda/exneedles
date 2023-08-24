@@ -144,7 +144,7 @@ namespace boost {
 		}
 	};
 
-	static std::string to_string(ptree tree) {
+	static std::string to_string(const ptree& tree) {
 		std::stringstream s;
 		write_json(s, tree);
 		return s.str();
