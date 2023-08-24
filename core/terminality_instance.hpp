@@ -64,6 +64,6 @@ namespace instance {
 		memory::const_empl::ptr m_const_tr = nullptr;
 		std::tuple<UPTR_TEMPLATE_TR> m_uptr_innate {nullptr, nullptr};
 
-		void setup_const_memory(innate::cluster* cl, innate::terminal* tr);
+		void setup_const_memory();
 	};
 }

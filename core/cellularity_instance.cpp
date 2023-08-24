@@ -73,15 +73,9 @@ namespace instance {
 		memset(m_results, 0, m_results_szb);
 		memset(m_cells, 0, m_cells_szb);
 
-		console(boost::to_string(root));
-
-		if (root.find("terminalitys") != root.not_found()) {
-			auto tree = root.get_child("terminalitys");
-			BOOST_FOREACH(ptree::value_type& v, tree) {
-				assert(v.first.empty());
-				auto terminality = std::make_unique<terminality_host>(v.second, m_layer);
-				m_terminalitys.push_back(std::move(terminality));
-			}
+		for (const auto& child : boost::to_vector(root, "terminalitys")) {
+			auto terminality = std::make_unique<terminality_host>(child, m_layer);
+			m_terminalitys.push_back(std::move(terminality));
 		}
 	}
 
@@ -106,19 +100,18 @@ namespace instance {
 	{
 		m_uptr_innate = to_innate(root);
 
-		auto c = m_uptr_innate.get();
-		if (!c)
+		setup_const_memory();
+
+		m_results_szb = calc_results_bytes(m_layer);
+		assert_err(cudaMalloc((void**)&m_results, m_results_szb));
+		assert_err(cudaMemset((void*)m_results, 0, m_results_szb));
+
+		m_cells_szb = calc_cells_bytes(m_layer, m_uptr_innate.get());
+		assert_err(cudaMalloc((void**)&m_cells, m_cells_szb));
+		assert_err(cudaMemset((void*)m_cells, 0, m_cells_szb));
+
+		if (!m_cells || !m_results)
 			logexit();
-
-		cell_data_tuple::to_first(c, [&](auto* t0) {
-			m_const_cell = memory::add_mempart(t0);
-		});
-
-		if (!m_const_cell)
-			logexit();
-
-		memory::setup_const_memoryparts();
-		setup_const_memory(c);
 	}
 
 	cellularity_device::~cellularity_device() {
@@ -130,7 +123,9 @@ namespace instance {
 	}
 
 	ptree cellularity_device::to_ptree() const {
-		return icellularity::to_ptree(m_uptr_innate.get());
+		auto root = icellularity::to_ptree(m_uptr_innate.get());
+		boost::add_array(root, "terminalitys", m_terminalitys);
+		return root;
 	}
 
 	readable_cell_innate cellularity_device::innate() const {
@@ -141,21 +136,23 @@ namespace instance {
 		return m_const_cell;
 	}
 
-	void cellularity_device::setup_const_memory(const innate::cell* c) {
+	void cellularity_device::setup_const_memory() {
+		auto c = m_uptr_innate.get();
+		if (!c)
+			logexit();
+
+		cell_data_tuple::to_first(c, [&](auto* t0) {
+			m_const_cell = memory::add_mempart(t0);
+			});
+
+		if (!m_const_cell)
+			logexit();
+
+		memory::setup_const_memoryparts();
+		
 		if (!m_const_cell->const_ptr)
 			logexit();
 
 		m_innate = (__const__ innate::cell**) &m_const_cell->const_ptr;
-
-		m_results_szb = calc_results_bytes(layer());
-		assert_err(cudaMalloc((void**)&m_results, m_results_szb));
-		assert_err(cudaMemset((void*)m_results, 0, m_results_szb));
-
-		m_cells_szb = calc_cells_bytes(layer(), c);
-		assert_err(cudaMalloc((void**)&m_cells, m_cells_szb));
-		assert_err(cudaMemset((void*)m_cells, 0, m_cells_szb));
-
-		if (!m_cells || !m_results)
-			logexit();
 	}
 }

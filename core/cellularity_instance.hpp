@@ -66,7 +66,9 @@ namespace instance {
 		memory::const_empl::ptr m_const_cell = nullptr;
 		std::unique_ptr<innate::cell> m_uptr_innate {nullptr};
 
-		void setup_const_memory(const innate::cell* c);
+		void setup_const_memory();
+
+		std::vector<std::unique_ptr<terminality_device>> m_terminalitys;
 	};
 
 }

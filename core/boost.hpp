@@ -174,7 +174,20 @@ namespace boost {
 		for (const auto& t : ts) {
 			children.push_back(std::make_pair("", t->to_ptree()));
 		}
-		root.add_child(key, children);
+		if(!children.empty())
+			root.add_child(key, children);
+	}
+
+	static std::vector<ptree> to_vector(const ptree& root, const std::string& key) {
+		std::vector<ptree> vec;
+		if (root.find(key) != root.not_found()) {
+			auto tree = root.get_child(key);
+			BOOST_FOREACH(ptree::value_type& v, tree) {
+				assert(v.first.empty());
+				vec.push_back(v.second);
+			}
+		}
+		return vec;
 	}
 }
 
