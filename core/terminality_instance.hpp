@@ -12,6 +12,7 @@ namespace instance {
 		const TRMN& inntr() const;
 
 		const innate::layer& layer() const override;
+		readable_trmn_instance instance() const override;
 
 		__mem__ float* results() const override;
 		__mem__ void* terminals() const override;
@@ -31,7 +32,7 @@ namespace instance {
 
 		size_t m_results_szb = 0;
 		size_t m_terminals_szb = 0;
-
+	private:
 		const innate::layer& m_layer;
 	};
 
@@ -43,18 +44,18 @@ namespace instance {
 	class terminality_host : public terminality_cpu_type {
 	public:
 		terminality_host(const ptree& root, const innate::layer& layer);
-		
 		ptree to_ptree() const override;
-		readable_cltr_innate innate() const override;
+
+		readable_trmn_innate innate() const override;
 	};
 
 	class terminality_device : public terminality_gpu_type {
 	public:
 		terminality_device(const ptree& root, const innate::layer& layer);
 		virtual ~terminality_device();
-
 		ptree to_ptree() const override;
-		readable_cltr_innate innate() const override;
+
+		readable_trmn_innate innate() const override;
 
 		memory::const_empl::ptr const_emplace_cl() const;
 		memory::const_empl::ptr const_emplace_tr() const;

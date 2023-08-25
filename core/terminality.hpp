@@ -85,30 +85,39 @@ using cluster_data_tuple = boost::spec_pair_tuple<std::tuple<innate::axon_simple
 #define PTR_TEMPLATE_TR       __const__ innate::cluster**,      __const__ innate::terminal**
 #define UPTR_TEMPLATE_TR std::unique_ptr<innate::cluster>, std::unique_ptr<innate::terminal>
 
-struct readable_cltr_innate { 
-	const innate::cluster* cl; 
-	const innate::terminal* tr; 
-};
 
 namespace innate { struct layer; }
 
 namespace instance {
+	struct readable_trmn_innate {
+		const innate::cluster* cl;
+		const innate::terminal* tr;
+	};
+	struct readable_trmn_instance {
+		__mem__ void* terminals = nullptr;
+		__mem__ float* results = nullptr;
+		size_t terminals_szb = -1;
+		size_t results_szb = -1;
+	};
+
 	class LIBRARY_API iterminality {
 	public:
 		virtual const innate::layer& layer() const = 0;
 		virtual ptree to_ptree() const = 0;
-		virtual readable_cltr_innate innate() const = 0;
 
+		virtual readable_trmn_innate innate() const = 0;
+		virtual readable_trmn_instance instance() const = 0;
+
+		static std::tuple<UPTR_TEMPLATE_TR> to_innate(const ptree& root);
+		static ptree to_ptree(innate::cluster* cl, innate::terminal* tr);
+
+	protected:
 		virtual __mem__ float* results() const = 0;
 		virtual __mem__ void* terminals() const = 0;
 
 		virtual size_t results_szb() const = 0;
 		virtual size_t terminals_szb() const = 0;
 
-		static std::tuple<UPTR_TEMPLATE_TR> to_innate(const ptree& root);
-		static ptree to_ptree(innate::cluster* cl, innate::terminal* tr);
-
-	protected:
 		static size_t calc_results_bytes(const innate::layer& layer);
 		static size_t calc_terminals_bytes(const innate::layer& layer,
 			                               const innate::cluster* cl,

@@ -10,7 +10,9 @@ namespace instance {
 	template<typename T, typename TR> class cellularity: public icellularity {
 	public:
 		const T& inncell() const;
+
 		const innate::layer& layer() const override;
+		readable_cell_instance instance() const override;
 
 		__mem__ float* results() const override;
 		__mem__ void* cells() const override;
@@ -31,9 +33,10 @@ namespace instance {
 		size_t m_cells_szb = 0;
 		size_t m_results_szb = 0;
 
-		const innate::layer& m_layer;
-
 		std::vector<std::unique_ptr<TR>> m_terminalitys;
+
+	private:
+		const innate::layer& m_layer;
 	};
 
 	using cellularity_gpu_type = cellularity<__const__ innate::cell**, terminality_gpu_type>;
@@ -45,8 +48,8 @@ namespace instance {
 	class cellularity_host : public cellularity_cpu_type {
 	public:
 		cellularity_host(const ptree& root, const innate::layer& layer);
-
 		ptree to_ptree() const override;
+
 		readable_cell_innate innate() const override;
 	};
 
@@ -54,8 +57,8 @@ namespace instance {
 	public:
 		cellularity_device(const ptree& root, const innate::layer& layer);
 		virtual ~cellularity_device();
-
 		ptree to_ptree() const override;
+
 		readable_cell_innate innate() const override;
 
 		memory::const_empl::ptr const_emplace_cell() const;

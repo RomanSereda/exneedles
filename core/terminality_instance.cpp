@@ -27,9 +27,14 @@ namespace instance {
 	}
 
 	template<typename CLST, typename TRMN>
-	const innate::layer& terminality<CLST, TRMN>::layer() const
-	{
+	const innate::layer& terminality<CLST, TRMN>::layer() const {
 		return m_layer;
+	}
+
+	template<typename CLST, typename TRMN>
+	readable_trmn_instance terminality<CLST, TRMN>::instance() const
+	{
+		return {m_terminals, m_results, m_terminals_szb, m_results_szb};
 	}
 
 	template<typename CLST, typename TRMN>
@@ -94,7 +99,7 @@ namespace instance {
 		return terminality::to_ptree((innate::cluster*)cl, (innate::terminal*)tr);
 	}
 
-	readable_cltr_innate terminality_host::innate() const {
+	readable_trmn_innate terminality_host::innate() const {
 		auto cl = inncl().get();
 		auto tr = inntr().get();
 
@@ -111,12 +116,12 @@ namespace instance {
 
 		setup_const_memory();
 
-		m_results_szb = calc_results_bytes(m_layer);
+		m_results_szb = calc_results_bytes(layer);
 		assert_err(cudaMalloc((void**)&m_results, m_results_szb));
 		assert_err(cudaMemset((void*)m_results, 0, m_results_szb));
 
-		m_terminals_szb = calc_terminals_bytes(m_layer, std::get<0>(m_uptr_innate).get(), 
-			                                            std::get<1>(m_uptr_innate).get());
+		m_terminals_szb = calc_terminals_bytes(layer, std::get<0>(m_uptr_innate).get(), 
+			                                          std::get<1>(m_uptr_innate).get());
 		assert_err(cudaMalloc((void**)&m_terminals, m_terminals_szb));
 		assert_err(cudaMemset((void*)m_terminals, 0, m_terminals_szb));
 
@@ -134,7 +139,7 @@ namespace instance {
 		return iterminality::to_ptree(cl, tr);
 	}
 
-	readable_cltr_innate terminality_device::innate() const {
+	readable_trmn_innate terminality_device::innate() const {
 		auto cl = std::get<0>(m_uptr_innate).get();
 		auto tr = std::get<1>(m_uptr_innate).get();
 

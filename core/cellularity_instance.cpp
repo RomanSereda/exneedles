@@ -18,6 +18,15 @@ namespace instance {
 	}
 
 	template<typename T, typename TR>
+	readable_cell_instance cellularity<T, TR>::instance() const {
+		std::vector<readable_trmn_instance> terminality;
+		for (const auto& trmn : m_terminalitys)
+			terminality.push_back(trmn->instance());
+		
+		return {m_cells, m_results, m_cells_szb, m_results_szb, terminality};
+	}
+
+	template<typename T, typename TR>
 	__mem__ float* cellularity<T, TR>::results() const {
 		return m_results;
 	}
@@ -74,7 +83,7 @@ namespace instance {
 		memset(m_cells, 0, m_cells_szb);
 
 		for (const auto& child : boost::to_vector(root, "terminalitys")) {
-			auto terminality = std::make_unique<terminality_host>(child, m_layer);
+			auto terminality = std::make_unique<terminality_host>(child, layer);
 			m_terminalitys.push_back(std::move(terminality));
 		}
 	}
@@ -91,7 +100,7 @@ namespace instance {
 	}
 
 	readable_cell_innate cellularity_host::innate() const {
-		std::vector<readable_cltr_innate> terminality;
+		std::vector<readable_trmn_innate> terminality;
 		for (const auto& trmn : m_terminalitys)
 			terminality.push_back(trmn->innate());
 		return { m_innate.get(), std::move(terminality) };
@@ -105,11 +114,11 @@ namespace instance {
 
 		setup_const_memory();
 
-		m_results_szb = calc_results_bytes(m_layer);
+		m_results_szb = calc_results_bytes(layer);
 		assert_err(cudaMalloc((void**)&m_results, m_results_szb));
 		assert_err(cudaMemset((void*)m_results, 0, m_results_szb));
 
-		m_cells_szb = calc_cells_bytes(m_layer, m_uptr_innate.get());
+		m_cells_szb = calc_cells_bytes(layer, m_uptr_innate.get());
 		assert_err(cudaMalloc((void**)&m_cells, m_cells_szb));
 		assert_err(cudaMemset((void*)m_cells, 0, m_cells_szb));
 
@@ -117,7 +126,7 @@ namespace instance {
 			logexit();
 
 		for (const auto& child : boost::to_vector(root, "terminalitys")) {
-			auto terminality = std::make_unique<terminality_device>(child, m_layer);
+			auto terminality = std::make_unique<terminality_device>(child, layer);
 			m_terminalitys.push_back(std::move(terminality));
 		}
 	}
@@ -137,7 +146,7 @@ namespace instance {
 	}
 
 	readable_cell_innate cellularity_device::innate() const {
-		std::vector<readable_cltr_innate> terminality;
+		std::vector<readable_trmn_innate> terminality;
 		for (const auto& trmn : m_terminalitys)
 			terminality.push_back(trmn->innate());
 
