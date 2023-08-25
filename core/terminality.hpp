@@ -40,8 +40,9 @@ namespace innate {
 	struct LIBRARY_API cluster_targeted: public cluster {
 		cluster_targeted();
 
-		int target_layer = -1;
-		int target_region = -1;
+		int target_region_id = -1;
+		int target_layer_id = -1;
+		int target_spillover_id = -1;
 	};
 }
 
@@ -75,7 +76,7 @@ BOOST_HANA_ADAPT_STRUCT(innate::axon_simple, basic_value);
 BOOST_HANA_ADAPT_STRUCT(innate::synapse_simple, sign);
 
 BOOST_HANA_ADAPT_STRUCT(innate::cluster, type, width, height);
-BOOST_HANA_ADAPT_STRUCT(innate::cluster_targeted, target_layer, target_region);
+BOOST_HANA_ADAPT_STRUCT(innate::cluster_targeted, target_region_id, target_layer_id, target_spillover_id);
 
 using cluster_tuple = boost::spec_tuple<innate::cluster_targeted>;
 using cluster_data_tuple = boost::spec_pair_tuple<std::tuple<innate::axon_simple, data::axon_simple>,
