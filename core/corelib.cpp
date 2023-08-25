@@ -34,7 +34,7 @@ namespace core {
 	}
 
 	void test() {
-		innate::layer layer {128, 128, 1};
+		innate::layer layer {128, 128};
 
 		auto root = test_ptree_cltr();
 		instance::terminality_host htr(root, layer);

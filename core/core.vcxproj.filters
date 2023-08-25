@@ -48,6 +48,9 @@
     <ClInclude Include="terminality_instance.hpp">
       <Filter>instance</Filter>
     </ClInclude>
+    <ClInclude Include="layerality_instance.hpp">
+      <Filter>instance</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="assert.cpp">
@@ -67,6 +70,12 @@
     </ClCompile>
     <ClCompile Include="terminality_instance.cpp">
       <Filter>instance</Filter>
+    </ClCompile>
+    <ClCompile Include="layerality_instance.cpp">
+      <Filter>instance</Filter>
+    </ClCompile>
+    <ClCompile Include="layerality.cpp">
+      <Filter>struct</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
