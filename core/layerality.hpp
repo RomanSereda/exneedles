@@ -8,9 +8,13 @@
 #include "../deflib.inc"
 
 namespace innate {
+	struct region;
+
 	struct LIBRARY_API layer {
-		int width = -1;
-		int height = -1;
+		layer(const region& r);
+
+		const int& width;
+		const int& height;
 	};
 
 	struct LIBRARY_API region {
@@ -37,9 +41,9 @@ namespace instance {
 		virtual readable_layer_innate innate() const = 0;
 		virtual readable_layer_instance instance() const = 0;
 
-		static std::unique_ptr<innate::layer> to_innate(const ptree& root);
+		static std::unique_ptr<innate::layer> to_innate(const ptree& root, const innate::region& r);
 		static ptree to_ptree(innate::layer* l);
 	};
 }
 
-BOOST_HANA_ADAPT_STRUCT(innate::layer, width, height);
+BOOST_HANA_ADAPT_STRUCT(innate::layer);

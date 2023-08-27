@@ -34,7 +34,9 @@ namespace core {
 	}
 
 	void test() {
-		innate::layer layer {128, 128};
+		innate::region r{128, 128};
+
+		innate::layer layer(r);
 
 		auto root = test_ptree_cltr();
 		instance::terminality_host htr(root, layer);
@@ -55,10 +57,6 @@ namespace core {
 		console(boost::to_string(dcr.to_ptree()));
 		auto d = dcr.innate();
 		auto v = dcr.instance();
-
-
-		int t = 0;
-
 	}
 
 	device::device()

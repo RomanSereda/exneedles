@@ -21,7 +21,7 @@ namespace instance {
 			auto innate_extend_tree = innate_spillover_tree.get_child("innate_extend");
 			boost::to(*p, innate_extend_tree);
 			ptr = std::move(p);
-			});
+		});
 
 		if (!ptr.get())
 			logexit();
@@ -35,7 +35,7 @@ namespace instance {
 		auto innate_splvr = boost::to_ptree(*c);
 		spillover_data_tuple::to_first(c, [&innate_splvr](auto* t0) {
 			innate_splvr.put_child("innate_extend", boost::to_ptree(*t0));
-			});
+		});
 		return innate_splvr;
 	}
 
@@ -43,7 +43,7 @@ namespace instance {
 		if (!splvr)
 			logexit();
 
-		const size_t cell_size = layer.height * layer.width;
+		const size_t cell_size = (size_t)layer.height * layer.width;
 		const auto size_types = spillover_data_tuple::size(splvr);
 		if (size_types.size() < 2 || size_types.back() < 1)
 			logexit();
