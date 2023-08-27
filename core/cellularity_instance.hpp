@@ -69,5 +69,4 @@ namespace instance {
 
 		void setup_const_memory();
 	};
-
 }

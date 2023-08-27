@@ -51,6 +51,12 @@
     <ClInclude Include="layerality_instance.hpp">
       <Filter>instance</Filter>
     </ClInclude>
+    <ClInclude Include="spilloverity.hpp">
+      <Filter>struct</Filter>
+    </ClInclude>
+    <ClInclude Include="spilloverity_instance.hpp">
+      <Filter>instance</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="assert.cpp">
@@ -76,6 +82,12 @@
     </ClCompile>
     <ClCompile Include="layerality.cpp">
       <Filter>struct</Filter>
+    </ClCompile>
+    <ClCompile Include="spilloverity.cpp">
+      <Filter>struct</Filter>
+    </ClCompile>
+    <ClCompile Include="spilloverity_instance.cpp">
+      <Filter>instance</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
