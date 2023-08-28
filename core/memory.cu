@@ -247,8 +247,8 @@ namespace memory {
 		printf("cluster height: %d\n", cl->height);
 		printf("cluster width: %d\n", cl->width);
 
-		printf("cluster target_layer: %d\n", cl->target_layer_id);
-		printf("cluster target_region: %d\n", cl->target_region_id);
+		printf("cluster target_layer: %d\n", cl->target_layer_index);
+		printf("cluster target_spillover: %d\n", cl->target_spillover_index);
 
 		printf("synapse sign: %d\n", tr->sign);
 		printf("synapse type: %d\n", tr->type);

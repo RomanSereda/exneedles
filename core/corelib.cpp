@@ -16,8 +16,8 @@ namespace core {
 		innate::cluster_targeted cl;
 		cl.width = 8;
 		cl.height = 8;
-		cl.target_layer_id = 3;
-		cl.target_region_id = 9;
+		cl.target_layer_index= 3;
+		cl.target_spillover_index = 9;
 
 		innate::synapse_simple tr;
 

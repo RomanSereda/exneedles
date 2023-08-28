@@ -11,7 +11,7 @@ namespace instance {
 		const CLST& inncl() const;
 		const TRMN& inntr() const;
 
-		const core::region& region() const override;
+		const innate::size& size() const override;
 		readable_trmn_instance instance() const override;
 
 		__mem__ float* results() const override;
@@ -23,7 +23,7 @@ namespace instance {
 		virtual ~terminality();
 
 	protected:
-		terminality(const core::region& region);
+		terminality(const innate::size& size);
 
 		std::tuple<CLST, TRMN> m_innate {nullptr, nullptr};
 
@@ -33,7 +33,7 @@ namespace instance {
 		size_t m_results_szb = 0;
 		size_t m_terminals_szb = 0;
 	private:
-		const core::region& m_region;
+		const innate::size& m_size;
 	};
 
 	using terminality_gpu_type = terminality<PTR_TEMPLATE_TR>;
@@ -43,7 +43,7 @@ namespace instance {
 namespace instance {
 	class terminality_host : public terminality_cpu_type {
 	public:
-		terminality_host(const ptree& root, const core::region& region);
+		terminality_host(const ptree& root, const innate::size& size);
 		ptree to_ptree() const override;
 
 		readable_trmn_innate innate() const override;
@@ -51,7 +51,7 @@ namespace instance {
 
 	class terminality_device : public terminality_gpu_type {
 	public:
-		terminality_device(const ptree& root, const core::region& region);
+		terminality_device(const ptree& root, const innate::size& size);
 		virtual ~terminality_device();
 		ptree to_ptree() const override;
 

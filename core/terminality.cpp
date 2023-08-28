@@ -30,14 +30,14 @@ namespace instance {
 		return root;
 	}
 
-	size_t iterminality::calc_results_bytes(const core::region& region) {
-		const size_t cell_size = region.height * region.width;
+	size_t iterminality::calc_results_bytes(const innate::size& size) {
+		const size_t cell_size = size.height * size.width;
 		const size_t size_bytes_results = cell_size * sizeof(float);
 
 		return size_bytes_results;
 	}
 
-	size_t iterminality::calc_terminals_bytes(const core::region& region,
+	size_t iterminality::calc_terminals_bytes(const innate::size& size,
 		                                      const innate::cluster* cl, 
 		                                      const innate::terminal* tr) {
 		if (!cl || !tr)
@@ -47,7 +47,7 @@ namespace instance {
 			logexit();
 
 		const size_t terminals_per_cluster = cl->height * cl->width;
-		const size_t cell_size = region.height * region.width;
+		const size_t cell_size = size.height * size.width;
 		const auto size_types = cluster_data_tuple::size(tr);
 		if (size_types.size() < 2 || size_types.back() < 1) logexit();
 		const size_t bytes_per_cluster = size_types.back() * terminals_per_cluster;

@@ -27,6 +27,10 @@ namespace innate {
 	};
 }
 
+BOOST_HANA_ADAPT_STRUCT(innate::cell, type);
+BOOST_HANA_ADAPT_STRUCT(innate::cell_simple);
+BOOST_HANA_ADAPT_STRUCT(innate::cell_exre, tacts_excitation, tacts_relaxation);
+
 namespace data {
 	struct __align_4b__ cell {
 		enum cell_expression {
@@ -53,14 +57,10 @@ namespace data {
 	};
 }
 
-BOOST_HANA_ADAPT_STRUCT(innate::cell, type);
-BOOST_HANA_ADAPT_STRUCT(innate::cell_simple);
-BOOST_HANA_ADAPT_STRUCT(innate::cell_exre, tacts_excitation, tacts_relaxation);
-
 using cell_data_tuple = boost::spec_pair_tuple<std::tuple<innate::cell_simple, data::cell_simple>,
 	                                           std::tuple<innate::cell_exre, data::cell_exre>>;
 
-namespace core { class region; }
+namespace innate { struct size; }
 namespace instance {
 	struct readable_cell_innate { 
 		const innate::cell* cell; 
@@ -77,7 +77,7 @@ namespace instance {
 
 	class LIBRARY_API icellularity {
 	public:
-		virtual const core::region& region() const = 0;
+		virtual const innate::size& size() const = 0;
 		virtual ptree to_ptree() const = 0;
 
 		virtual readable_cell_innate innate() const = 0;
@@ -93,7 +93,7 @@ namespace instance {
 		virtual size_t results_szb() const = 0;
 		virtual size_t cells_szb() const = 0;
 
-		static size_t calc_results_bytes(const core::region& region);
-		static size_t calc_cells_bytes(const core::region& region, const innate::cell* c);
+		static size_t calc_results_bytes(const innate::size& size);
+		static size_t calc_cells_bytes(const innate::size& size, const innate::cell* c);
 	};
 }

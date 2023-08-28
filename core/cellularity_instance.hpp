@@ -11,7 +11,7 @@ namespace instance {
 	public:
 		const T& inncell() const;
 
-		const core::region& region() const override;
+		const innate::size& size() const override;
 		readable_cell_instance instance() const override;
 
 		__mem__ float* results() const override;
@@ -25,7 +25,7 @@ namespace instance {
 		const std::unique_ptr<TR>& terminality(int index) const;
 
 	protected:
-		cellularity(const core::region& region);
+		cellularity(const innate::size& size);
 
 		T m_innate = nullptr;                            
 
@@ -38,7 +38,7 @@ namespace instance {
 		std::vector<std::unique_ptr<TR>> m_terminalitys;
 
 	private:
-		const core::region& m_region;
+		const innate::size& m_size;
 	};
 
 	using cellularity_gpu_type = cellularity<__const__ innate::cell**, terminality_gpu_type>;
@@ -49,7 +49,7 @@ namespace instance {
 namespace instance {
 	class cellularity_host : public cellularity_cpu_type {
 	public:
-		cellularity_host(const ptree& root, const core::region& region);
+		cellularity_host(const ptree& root, const innate::size& size);
 		ptree to_ptree() const override;
 
 		readable_cell_innate innate() const override;
@@ -57,7 +57,7 @@ namespace instance {
 
 	class cellularity_device : public cellularity_gpu_type {
 	public:
-		cellularity_device(const ptree& root, const core::region& region);
+		cellularity_device(const ptree& root, const innate::size& size);
 		virtual ~cellularity_device();
 		ptree to_ptree() const override;
 

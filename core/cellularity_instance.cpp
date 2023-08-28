@@ -13,8 +13,8 @@ namespace instance {
 	}
 
 	template<typename T, typename TR>
-	const core::region& cellularity<T, TR>::region() const {
-		return m_region;
+	const innate::size& cellularity<T, TR>::size() const {
+		return m_size;
 	}
 
 	template<typename T, typename TR>
@@ -47,8 +47,8 @@ namespace instance {
 	}
 
 	template<typename T, typename TR>
-	cellularity<T, TR>::cellularity(const core::region& region)
-		: m_region(region) {
+	cellularity<T, TR>::cellularity(const innate::size& size)
+		: m_size(size) {
 	}
 
 	template<typename T, typename TR>
@@ -61,18 +61,18 @@ namespace instance {
 }
 
 namespace instance {
-	cellularity_host::cellularity_host(const ptree& root, const core::region& region)
-		: cellularity_cpu_type(region){
+	cellularity_host::cellularity_host(const ptree& root, const innate::size& size)
+		: cellularity_cpu_type(size){
 
-		if (region.height < 1 || region.width < 1)
+		if (size.height < 1 || size.width < 1)
 			logexit();
 
 		m_innate = to_innate(root);
 		if(!m_innate)
 			logexit();
 
-		m_results_szb = calc_results_bytes(region);
-		m_cells_szb = calc_cells_bytes(region, m_innate.get());
+		m_results_szb = calc_results_bytes(size);
+		m_cells_szb = calc_cells_bytes(size, m_innate.get());
 
 		if (!m_results_szb || !m_cells_szb)
 			logexit();
@@ -87,7 +87,7 @@ namespace instance {
 		memset(m_cells, 0, m_cells_szb);
 
 		for (const auto& child : boost::to_vector(root, "terminalitys")) {
-			auto terminality = std::make_unique<terminality_host>(child, region);
+			auto terminality = std::make_unique<terminality_host>(child, size);
 			m_terminalitys.push_back(std::move(terminality));
 		}
 	}
@@ -111,18 +111,18 @@ namespace instance {
 	}
 
 
-	cellularity_device::cellularity_device(const ptree& root, const core::region& region)
-		: cellularity_gpu_type(region)
+	cellularity_device::cellularity_device(const ptree& root, const innate::size& size)
+		: cellularity_gpu_type(size)
 	{
 		m_uptr_innate = to_innate(root);
 
 		setup_const_memory();
 
-		m_results_szb = calc_results_bytes(region);
+		m_results_szb = calc_results_bytes(size);
 		assert_err(cudaMalloc((void**)&m_results, m_results_szb));
 		assert_err(cudaMemset((void*)m_results, 0, m_results_szb));
 
-		m_cells_szb = calc_cells_bytes(region, m_uptr_innate.get());
+		m_cells_szb = calc_cells_bytes(size, m_uptr_innate.get());
 		assert_err(cudaMalloc((void**)&m_cells, m_cells_szb));
 		assert_err(cudaMemset((void*)m_cells, 0, m_cells_szb));
 
@@ -130,7 +130,7 @@ namespace instance {
 			logexit();
 
 		for (const auto& child : boost::to_vector(root, "terminalitys")) {
-			auto terminality = std::make_unique<terminality_device>(child, region);
+			auto terminality = std::make_unique<terminality_device>(child, size);
 			m_terminalitys.push_back(std::move(terminality));
 		}
 	}

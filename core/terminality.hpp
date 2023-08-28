@@ -40,9 +40,8 @@ namespace innate {
 	struct LIBRARY_API cluster_targeted: public cluster {
 		cluster_targeted();
 
-		int target_region_id = -1;
-		int target_layer_id = -1;
-		int target_spillover_id = -1;
+		int target_layer_index = -1;
+		int target_spillover_index = -1;
 	};
 }
 
@@ -76,7 +75,7 @@ BOOST_HANA_ADAPT_STRUCT(innate::axon_simple, basic_value);
 BOOST_HANA_ADAPT_STRUCT(innate::synapse_simple, sign);
 
 BOOST_HANA_ADAPT_STRUCT(innate::cluster, type, width, height);
-BOOST_HANA_ADAPT_STRUCT(innate::cluster_targeted, target_region_id, target_layer_id, target_spillover_id);
+BOOST_HANA_ADAPT_STRUCT(innate::cluster_targeted, target_layer_index, target_spillover_index);
 
 using cluster_tuple = boost::spec_tuple<innate::cluster_targeted>;
 using cluster_data_tuple = boost::spec_pair_tuple<std::tuple<innate::axon_simple, data::axon_simple>,
@@ -87,7 +86,7 @@ using cluster_data_tuple = boost::spec_pair_tuple<std::tuple<innate::axon_simple
 #define UPTR_TEMPLATE_TR std::unique_ptr<innate::cluster>, std::unique_ptr<innate::terminal>
 
 
-namespace core { class region; }
+namespace innate { struct size; }
 namespace instance {
 	struct readable_trmn_innate {
 		const innate::cluster* cl;
@@ -102,7 +101,7 @@ namespace instance {
 
 	class LIBRARY_API iterminality {
 	public:
-		virtual const core::region& region() const = 0;
+		virtual const innate::size& size() const = 0;
 		virtual ptree to_ptree() const = 0;
 
 		virtual readable_trmn_innate innate() const = 0;
@@ -118,8 +117,8 @@ namespace instance {
 		virtual size_t results_szb() const = 0;
 		virtual size_t terminals_szb() const = 0;
 
-		static size_t calc_results_bytes(const core::region& region);
-		static size_t calc_terminals_bytes(const core::region& region,
+		static size_t calc_results_bytes(const innate::size& size);
+		static size_t calc_terminals_bytes(const innate::size& size,
 			                               const innate::cluster* cl,
 			                               const innate::terminal* tr);
 	private:

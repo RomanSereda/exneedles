@@ -8,8 +8,8 @@
 
 namespace instance {
 	template<typename CLST, typename TRMN>
-	terminality<CLST, TRMN>::terminality(const core::region& region)
-		: m_region(region) {
+	terminality<CLST, TRMN>::terminality(const innate::size& size)
+		: m_size(size) {
 	}
 
 	template<typename CLST, typename TRMN>
@@ -27,8 +27,8 @@ namespace instance {
 	}
 
 	template<typename CLST, typename TRMN>
-	const core::region& terminality<CLST, TRMN>::region() const {
-		return m_region;
+	const innate::size& terminality<CLST, TRMN>::size() const {
+		return m_size;
 	}
 
 	template<typename CLST, typename TRMN>
@@ -60,10 +60,10 @@ namespace instance {
 
 
 namespace instance {
-	terminality_host::terminality_host(const ptree& root, const core::region& region)
-		: terminality_cpu_type(region)
+	terminality_host::terminality_host(const ptree& root, const innate::size& size)
+		: terminality_cpu_type(size)
 	{
-		if (region.height < 1 || region.width < 1)
+		if (size.height < 1 || size.width < 1)
 			logexit();
 
 		m_innate = to_innate(root);
@@ -71,8 +71,8 @@ namespace instance {
 		if (!inncl().get() || !inntr().get())
 			logexit();
 
-		m_results_szb = calc_results_bytes(region);
-		m_terminals_szb = calc_terminals_bytes(region, inncl().get(), inntr().get());
+		m_results_szb = calc_results_bytes(size);
+		m_terminals_szb = calc_terminals_bytes(size, inncl().get(), inntr().get());
 
 		if (!m_results_szb || !m_terminals_szb)
 			logexit();
@@ -109,18 +109,18 @@ namespace instance {
 		return {cl, tr};
 	}
 
-	terminality_device::terminality_device(const ptree& root, const core::region& region)
-		: terminality_gpu_type(region)
+	terminality_device::terminality_device(const ptree& root, const innate::size& size)
+		: terminality_gpu_type(size)
 	{
 		m_uptr_innate = terminality::to_innate(root);
 
 		setup_const_memory();
 
-		m_results_szb = calc_results_bytes(region);
+		m_results_szb = calc_results_bytes(size);
 		assert_err(cudaMalloc((void**)&m_results, m_results_szb));
 		assert_err(cudaMemset((void*)m_results, 0, m_results_szb));
 
-		m_terminals_szb = calc_terminals_bytes(region, std::get<0>(m_uptr_innate).get(),
+		m_terminals_szb = calc_terminals_bytes(size, std::get<0>(m_uptr_innate).get(),
 			                                          std::get<1>(m_uptr_innate).get());
 		assert_err(cudaMalloc((void**)&m_terminals, m_terminals_szb));
 		assert_err(cudaMemset((void*)m_terminals, 0, m_terminals_szb));

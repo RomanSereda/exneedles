@@ -38,11 +38,11 @@ namespace instance {
 		return innate_c;
 	}
 
-	size_t icellularity::calc_results_bytes(const core::region& region) {
-		return region.height * region.width * sizeof(float);
+	size_t icellularity::calc_results_bytes(const innate::size& size) {
+		return size.height * size.width * sizeof(float);
 	}
 
-	size_t icellularity::calc_cells_bytes(const core::region& region, const innate::cell* c) {
+	size_t icellularity::calc_cells_bytes(const innate::size& size, const innate::cell* c) {
 		if (!c)
 			logexit();
 
@@ -53,6 +53,6 @@ namespace instance {
 		if (size_types.size() < 2 || size_types.back() < 1)
 			logexit();
 
-		return region.height * region.width * size_types.back();
+		return size.height * size.width * size_types.back();
 	}
 }

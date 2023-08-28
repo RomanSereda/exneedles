@@ -26,9 +26,12 @@ namespace data {
 	};
 }
 
+BOOST_HANA_ADAPT_STRUCT(innate::spillover, type);
+BOOST_HANA_ADAPT_STRUCT(innate::simple_spillover);
+
 using spillover_data_tuple = boost::spec_pair_tuple<std::tuple<innate::simple_spillover, data::simple_spillover>>;
 
-namespace core { class region; }
+namespace innate { struct size; }
 namespace instance {
 	struct readable_splvr_innate {
 		const innate::spillover* splvr;
@@ -40,7 +43,7 @@ namespace instance {
 
 	class LIBRARY_API ispilloverity {
 	public:
-		virtual const core::region& region() const = 0;
+		virtual const innate::size& size() const = 0;
 		virtual ptree to_ptree() const = 0;
 
 		virtual readable_splvr_innate innate() const = 0;
@@ -53,10 +56,7 @@ namespace instance {
 		virtual __mem__ void* spillovers() const = 0;
 		virtual size_t spillovers_szb() const = 0;
 
-		static size_t calc_spillovers_bytes(const core::region& region,
+		static size_t calc_spillovers_bytes(const innate::size& size,
 			                                const innate::spillover* splvr);
 	};
 }
-
-BOOST_HANA_ADAPT_STRUCT(innate::spillover, type);
-BOOST_HANA_ADAPT_STRUCT(innate::simple_spillover);

@@ -11,7 +11,7 @@ namespace instance {
 	public:
 		const SPLVR& innsplvr() const;
 
-		const core::region& region() const override;
+		const innate::size& size() const override;
 		readable_splvr_instance instance() const override;
 
 		__mem__ void* spillovers() const override;
@@ -20,7 +20,7 @@ namespace instance {
 		virtual ~spilloverity();
 
 	protected:
-		spilloverity(const core::region& region);
+		spilloverity(const innate::size& size);
 
 		SPLVR m_innate = nullptr;
 
@@ -28,7 +28,7 @@ namespace instance {
 		size_t m_spillovers_szb = 0;
 
 	private:
-		const core::region& m_region;
+		const innate::size& m_size;
 	};
 
 	using spilloverity_gpu_type = spilloverity<__const__ innate::spillover**>;
@@ -38,7 +38,7 @@ namespace instance {
 namespace instance {
 	class spilloverity_host : public spilloverity_cpu_type {
 	public:
-		spilloverity_host(const ptree& root, const core::region& region);
+		spilloverity_host(const ptree& root, const innate::size& size);
 		ptree to_ptree() const override;
 
 		readable_splvr_innate innate() const override;
@@ -46,7 +46,7 @@ namespace instance {
 
 	class spilloverity_device : public spilloverity_gpu_type {
 	public:
-		spilloverity_device(const ptree& root, const core::region& region);
+		spilloverity_device(const ptree& root, const innate::size& size);
 		virtual ~spilloverity_device();
 		ptree to_ptree() const override;
 
