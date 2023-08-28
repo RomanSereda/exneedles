@@ -13,8 +13,8 @@ namespace instance {
 	}
 
 	template<typename T, typename TR>
-	const innate::layer& cellularity<T, TR>::layer() const {
-		return m_layer;
+	const core::region& cellularity<T, TR>::region() const {
+		return m_region;
 	}
 
 	template<typename T, typename TR>
@@ -47,28 +47,32 @@ namespace instance {
 	}
 
 	template<typename T, typename TR>
-	cellularity<T, TR>::cellularity(const innate::layer& layer)
-		: m_layer(layer) {
+	cellularity<T, TR>::cellularity(const core::region& region)
+		: m_region(region) {
 	}
 
 	template<typename T, typename TR>
 	cellularity<T, TR>::~cellularity() {
-	};
+	}
+	template<typename T, typename TR>
+	const std::unique_ptr<TR>& cellularity<T, TR>::terminality(int index) const {
+		return m_terminalitys[index];
+	}
 }
 
 namespace instance {
-	cellularity_host::cellularity_host(const ptree& root, const innate::layer& layer)
-		: cellularity_cpu_type(layer){
+	cellularity_host::cellularity_host(const ptree& root, const core::region& region)
+		: cellularity_cpu_type(region){
 
-		if (layer.height < 1 || layer.width < 1)
+		if (region.height < 1 || region.width < 1)
 			logexit();
 
 		m_innate = to_innate(root);
 		if(!m_innate)
 			logexit();
 
-		m_results_szb = calc_results_bytes(layer);
-		m_cells_szb = calc_cells_bytes(layer, m_innate.get());
+		m_results_szb = calc_results_bytes(region);
+		m_cells_szb = calc_cells_bytes(region, m_innate.get());
 
 		if (!m_results_szb || !m_cells_szb)
 			logexit();
@@ -83,7 +87,7 @@ namespace instance {
 		memset(m_cells, 0, m_cells_szb);
 
 		for (const auto& child : boost::to_vector(root, "terminalitys")) {
-			auto terminality = std::make_unique<terminality_host>(child, layer);
+			auto terminality = std::make_unique<terminality_host>(child, region);
 			m_terminalitys.push_back(std::move(terminality));
 		}
 	}
@@ -107,18 +111,18 @@ namespace instance {
 	}
 
 
-	cellularity_device::cellularity_device(const ptree& root, const innate::layer& layer)
-		: cellularity_gpu_type(layer)
+	cellularity_device::cellularity_device(const ptree& root, const core::region& region)
+		: cellularity_gpu_type(region)
 	{
 		m_uptr_innate = to_innate(root);
 
 		setup_const_memory();
 
-		m_results_szb = calc_results_bytes(layer);
+		m_results_szb = calc_results_bytes(region);
 		assert_err(cudaMalloc((void**)&m_results, m_results_szb));
 		assert_err(cudaMemset((void*)m_results, 0, m_results_szb));
 
-		m_cells_szb = calc_cells_bytes(layer, m_uptr_innate.get());
+		m_cells_szb = calc_cells_bytes(region, m_uptr_innate.get());
 		assert_err(cudaMalloc((void**)&m_cells, m_cells_szb));
 		assert_err(cudaMemset((void*)m_cells, 0, m_cells_szb));
 
@@ -126,7 +130,7 @@ namespace instance {
 			logexit();
 
 		for (const auto& child : boost::to_vector(root, "terminalitys")) {
-			auto terminality = std::make_unique<terminality_device>(child, layer);
+			auto terminality = std::make_unique<terminality_device>(child, region);
 			m_terminalitys.push_back(std::move(terminality));
 		}
 	}

@@ -14,8 +14,8 @@ namespace instance {
 	}
 
 	template<typename SPLVR>
-	const innate::layer& spilloverity<SPLVR>::layer() const {
-		return m_layer;
+	const core::region& spilloverity<SPLVR>::region() const {
+		return m_region;
 	}
 
 	template<typename SPLVR>
@@ -38,14 +38,14 @@ namespace instance {
 	}
 
 	template<typename SPLVR>
-	spilloverity<SPLVR>::spilloverity(const innate::layer& layer) : m_layer(layer) {
+	spilloverity<SPLVR>::spilloverity(const core::region& region) : m_region(region) {
 	}
 }
 
 namespace instance {
-	spilloverity_host::spilloverity_host(const ptree& root, const innate::layer& layer) 
-		: spilloverity_cpu_type(layer) {
-		if (layer.height < 1 || layer.width < 1)
+	spilloverity_host::spilloverity_host(const ptree& root, const core::region& region)
+		: spilloverity_cpu_type(region) {
+		if (region.height < 1 || region.width < 1)
 			logexit();
 
 		m_innate = to_innate(root);
@@ -53,7 +53,7 @@ namespace instance {
 		if (!innsplvr().get())
 			logexit();
 
-		m_spillovers_szb = calc_spillovers_bytes(layer, innsplvr().get());
+		m_spillovers_szb = calc_spillovers_bytes(region, innsplvr().get());
 
 		if (!m_spillovers_szb)
 			logexit();
@@ -87,14 +87,14 @@ namespace instance {
 	}
 
 
-	spilloverity_device::spilloverity_device(const ptree& root, const innate::layer& layer) 
-		: spilloverity_gpu_type(layer) {
+	spilloverity_device::spilloverity_device(const ptree& root, const core::region& region)
+		: spilloverity_gpu_type(region) {
 	
 		m_uptr_innate = spilloverity::to_innate(root);
 
 		setup_const_memory();
 
-		m_spillovers_szb = calc_spillovers_bytes(layer, m_uptr_innate.get());
+		m_spillovers_szb = calc_spillovers_bytes(region, m_uptr_innate.get());
 		assert_err(cudaMalloc((void**)&m_spillovers, m_spillovers_szb));
 		assert_err(cudaMemset((void*)m_spillovers, 0, m_spillovers_szb));
 

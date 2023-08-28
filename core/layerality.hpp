@@ -7,19 +7,17 @@
 
 #include "../deflib.inc"
 
-namespace innate {
-	struct region;
+namespace core {
+	class LIBRARY_API region {
+	public:
+		region(const int width, const int height);
 
-	struct LIBRARY_API layer {
-		layer(const region& r);
+		int width;
+		int height;
 
-		const int& width;
-		const int& height;
-	};
-
-	struct LIBRARY_API region {
-		int width = -1;
-		int height = -1;
+	private:
+		static std::unique_ptr<region> to_innate(const ptree& root, int width, int height);
+		static ptree to_ptree(region* r);
 	};
 }
 
@@ -35,15 +33,10 @@ namespace instance {
 
 	class LIBRARY_API ilayerality {
 	public:
-		virtual const innate::region& region() const = 0;
+		virtual const core::region& region() const = 0;
 		virtual ptree to_ptree() const = 0;
 
 		virtual readable_layer_innate innate() const = 0;
 		virtual readable_layer_instance instance() const = 0;
-
-		static std::unique_ptr<innate::layer> to_innate(const ptree& root, const innate::region& r);
-		static ptree to_ptree(innate::layer* l);
 	};
 }
-
-BOOST_HANA_ADAPT_STRUCT(innate::layer);

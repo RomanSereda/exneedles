@@ -1,22 +1,30 @@
 #include "layerality.hpp"
 #include <memory>
 
-namespace innate {
-	layer::layer(const region& r):width(r.width), height(r.height) {
+namespace core {
+	region::region(const int width, const int height)
+		: width(width), height(height) {
 	}
-}
 
-namespace instance {
-	std::unique_ptr<innate::layer> ilayerality::to_innate(const ptree& root, const innate::region& r) {
-		std::unique_ptr<innate::layer> uptr{new innate::layer(r)};
-		boost::to(*uptr, root);
+	std::unique_ptr<region> region::to_innate(const ptree& root, int width, int height) {
+		std::unique_ptr<region> uptr{new region(width, height)};
+		
+
+		/*-----------------------*/
 
 		return std::move(uptr);
 	}
 
-	ptree ilayerality::to_ptree(innate::layer* l) {
-		return boost::to_ptree(*l);
+	ptree region::to_ptree(region* r) {
+		ptree root;
+
+		/*-----------------------*/
+
+		return root;
 	}
 }
+
+
+
 
 

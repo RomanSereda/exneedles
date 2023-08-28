@@ -87,8 +87,7 @@ using cluster_data_tuple = boost::spec_pair_tuple<std::tuple<innate::axon_simple
 #define UPTR_TEMPLATE_TR std::unique_ptr<innate::cluster>, std::unique_ptr<innate::terminal>
 
 
-namespace innate { struct layer; }
-
+namespace core { class region; }
 namespace instance {
 	struct readable_trmn_innate {
 		const innate::cluster* cl;
@@ -103,7 +102,7 @@ namespace instance {
 
 	class LIBRARY_API iterminality {
 	public:
-		virtual const innate::layer& layer() const = 0;
+		virtual const core::region& region() const = 0;
 		virtual ptree to_ptree() const = 0;
 
 		virtual readable_trmn_innate innate() const = 0;
@@ -119,8 +118,8 @@ namespace instance {
 		virtual size_t results_szb() const = 0;
 		virtual size_t terminals_szb() const = 0;
 
-		static size_t calc_results_bytes(const innate::layer& layer);
-		static size_t calc_terminals_bytes(const innate::layer& layer,
+		static size_t calc_results_bytes(const core::region& region);
+		static size_t calc_terminals_bytes(const core::region& region,
 			                               const innate::cluster* cl,
 			                               const innate::terminal* tr);
 	private:
