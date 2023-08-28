@@ -23,7 +23,7 @@ namespace instance {
 		ptree to_ptree() const override;
 
 	protected:
-		layerality(const ptree& root, const innate::size& r);
+		layerality(const innate::size& size);
 
 		std::vector<std::unique_ptr<CELL>> m_cellularitys;
 		std::vector<std::unique_ptr<SPLVR>> m_spilloveritys;
@@ -32,8 +32,18 @@ namespace instance {
 		const innate::size& m_size;
 	};
 
-	using layerality_gpu_type = layerality<cellularity_gpu_type, spilloverity_gpu_type>;
 	using layerality_cpu_type = layerality<cellularity_cpu_type, spilloverity_cpu_type>;
+	using layerality_gpu_type = layerality<cellularity_gpu_type, spilloverity_gpu_type>;
+
+	class layerality_host : public layerality_cpu_type {
+	public:
+		layerality_host(const ptree& root, const innate::size& size);
+	};
+
+	class layerality_device : public layerality_gpu_type {
+	public:
+		layerality_device(const ptree& root, const innate::size& size);
+	};
 }
 
 namespace instance {
@@ -49,9 +59,21 @@ namespace instance {
 
 		const std::unique_ptr<LR>& layerality(int index) const;
 
-	private:
+	protected:
 		const innate::size m_size;
 		std::vector<std::unique_ptr<LR>> m_layeralitys;
 	};
 
+	using region_cpu_type = region<layerality_cpu_type>;
+	using region_gpu_type = region<layerality_gpu_type>;
+
+	class region_host : public region_cpu_type {
+	public:
+		region_host(const ptree& root);
+	};
+
+	class region_device : public region_gpu_type {
+	public:
+		region_device(const ptree& root);
+	};
 }
