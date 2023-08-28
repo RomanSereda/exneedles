@@ -36,13 +36,13 @@ namespace instance {
 	};
 
 	struct readable_region_innate {
-		const std::vector<readable_layer_innate> spillovers;
+		const std::vector<readable_layer_innate> layer;
 	};
 	struct readable_region_instance {
-		const std::vector<readable_layer_instance> spillovers;
+		const std::vector<readable_layer_instance> layer;
 	};
 
-	class LIBRARY_API region {
+	class LIBRARY_API iregion {
 	public:
 		virtual const innate::size& size() const = 0;
 		virtual ptree to_ptree() const = 0;

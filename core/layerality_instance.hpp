@@ -35,3 +35,23 @@ namespace instance {
 	using layerality_gpu_type = layerality<cellularity_gpu_type, spilloverity_gpu_type>;
 	using layerality_cpu_type = layerality<cellularity_cpu_type, spilloverity_cpu_type>;
 }
+
+namespace instance {
+	template<typename LR> class region : public iregion {
+	public:
+		region(const ptree& root);
+		ptree to_ptree() const override;
+
+		const innate::size& size() const override;
+
+		readable_region_innate innate() const override;
+		readable_region_instance instance() const override;
+
+		const std::unique_ptr<LR>& layerality(int index) const;
+
+	private:
+		const innate::size m_size;
+		std::vector<std::unique_ptr<LR>> m_layeralitys;
+	};
+
+}
