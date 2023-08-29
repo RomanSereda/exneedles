@@ -3,6 +3,6 @@
 
 int main()
 {
-    core::device device;
-    
+    core::system system;
+
 }

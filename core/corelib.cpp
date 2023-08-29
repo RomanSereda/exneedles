@@ -13,7 +13,7 @@
 #include "layerality_instance.hpp"
 
 namespace core {
-	device::device()
+	system::system()
 	{
 		cudaDeviceProp prop;
 		assert_err(cudaGetDeviceProperties(&prop, 0));
@@ -24,8 +24,16 @@ namespace core {
 
 	}
 
-	device::~device() {
+	system::~system() {
 		cudaDeviceReset();
 		console("reset device");
+	}
+
+	const lib_instance_host_type* system::host_region() const {
+		return m_host_region.get();
+	}
+	
+	const lib_instance_device_type* system::device_region() const {
+		return m_device_region.get();
 	}
 }
