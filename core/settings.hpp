@@ -2,8 +2,10 @@
 #include <map>
 #include "boost.hpp"
 
+#include "../deflib.inc"
+
 namespace core {
-	class settings {
+	class LIBRARY_API settings {
 	public:
 		static const std::string setdir_name;
 		static const std::string setdir_path;
