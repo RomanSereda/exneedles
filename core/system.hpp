@@ -1,6 +1,7 @@
 #pragma once
+#include <map>
 #include "corelib.hpp"
-#include <memory>
+#include "boost.hpp"
 
 namespace instance {
 	class region_host;
@@ -14,7 +15,7 @@ namespace core {
 		~system();
 
 	private:
-		std::unique_ptr<instance::region_host>   host   {nullptr};
-		std::unique_ptr<instance::region_device> device {nullptr};
+		instance::region_host*   host   = nullptr;
+		instance::region_device* device = nullptr;
 	};
 }

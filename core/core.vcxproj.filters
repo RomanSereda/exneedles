@@ -60,6 +60,9 @@
     <ClInclude Include="system.hpp">
       <Filter>lib</Filter>
     </ClInclude>
+    <ClInclude Include="settings.hpp">
+      <Filter>lib</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="assert.cpp">
@@ -93,6 +96,9 @@
       <Filter>instance</Filter>
     </ClCompile>
     <ClCompile Include="system.cpp">
+      <Filter>lib</Filter>
+    </ClCompile>
+    <ClCompile Include="settings.cpp">
       <Filter>lib</Filter>
     </ClCompile>
   </ItemGroup>

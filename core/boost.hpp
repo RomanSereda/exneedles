@@ -150,6 +150,18 @@ namespace boost {
 		return s.str();
 	}
 
+	static void to_file(const ptree& tree, const std::string& path) {
+		std::ofstream o(path);
+		write_json(o, tree);
+	}
+
+	static ptree from_file(const std::string& path) {
+		ptree root;
+		std::ifstream i(path);
+		read_json(i, root);
+		return root;
+	}
+
 	template<typename T> auto to_ptree(T var) {
 		ptree root;
 		hana::for_each(var, hana::fuse([&](auto member, auto value) {
