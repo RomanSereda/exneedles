@@ -7,14 +7,14 @@
     <Filter Include="public">
       <UniqueIdentifier>{42979cba-6767-46c1-918c-383bff607071}</UniqueIdentifier>
     </Filter>
-    <Filter Include="instance">
-      <UniqueIdentifier>{22914fd4-359b-40d7-a35a-b4025b6a99c2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="struct">
-      <UniqueIdentifier>{3c712e63-268d-421c-9074-816229cd0862}</UniqueIdentifier>
-    </Filter>
     <Filter Include="lib">
       <UniqueIdentifier>{8f1911da-f7f4-4e60-8333-d9b83e8d332c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="public\struct">
+      <UniqueIdentifier>{3c712e63-268d-421c-9074-816229cd0862}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="private\instance">
+      <UniqueIdentifier>{22914fd4-359b-40d7-a35a-b4025b6a99c2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -31,31 +31,31 @@
       <Filter>public</Filter>
     </ClInclude>
     <ClInclude Include="cellularity_instance.hpp">
-      <Filter>instance</Filter>
+      <Filter>private\instance</Filter>
     </ClInclude>
     <ClInclude Include="terminality.hpp">
-      <Filter>struct</Filter>
+      <Filter>public\struct</Filter>
     </ClInclude>
     <ClInclude Include="cellularity.hpp">
-      <Filter>struct</Filter>
+      <Filter>public\struct</Filter>
     </ClInclude>
     <ClInclude Include="layerality.hpp">
-      <Filter>struct</Filter>
+      <Filter>public\struct</Filter>
     </ClInclude>
     <ClInclude Include="corelib.hpp">
       <Filter>lib</Filter>
     </ClInclude>
     <ClInclude Include="terminality_instance.hpp">
-      <Filter>instance</Filter>
+      <Filter>private\instance</Filter>
     </ClInclude>
     <ClInclude Include="layerality_instance.hpp">
-      <Filter>instance</Filter>
+      <Filter>private\instance</Filter>
     </ClInclude>
     <ClInclude Include="spilloverity.hpp">
-      <Filter>struct</Filter>
+      <Filter>public\struct</Filter>
     </ClInclude>
     <ClInclude Include="spilloverity_instance.hpp">
-      <Filter>instance</Filter>
+      <Filter>private\instance</Filter>
     </ClInclude>
     <ClInclude Include="system.hpp">
       <Filter>lib</Filter>
@@ -69,31 +69,31 @@
       <Filter>private</Filter>
     </ClCompile>
     <ClCompile Include="terminality.cpp">
-      <Filter>struct</Filter>
+      <Filter>public\struct</Filter>
     </ClCompile>
     <ClCompile Include="cellularity_instance.cpp">
-      <Filter>instance</Filter>
+      <Filter>private\instance</Filter>
     </ClCompile>
     <ClCompile Include="corelib.cpp">
       <Filter>lib</Filter>
     </ClCompile>
     <ClCompile Include="cellularity.cpp">
-      <Filter>struct</Filter>
+      <Filter>public\struct</Filter>
     </ClCompile>
     <ClCompile Include="terminality_instance.cpp">
-      <Filter>instance</Filter>
+      <Filter>private\instance</Filter>
     </ClCompile>
     <ClCompile Include="layerality_instance.cpp">
-      <Filter>instance</Filter>
+      <Filter>private\instance</Filter>
     </ClCompile>
     <ClCompile Include="layerality.cpp">
-      <Filter>struct</Filter>
+      <Filter>public\struct</Filter>
     </ClCompile>
     <ClCompile Include="spilloverity.cpp">
-      <Filter>struct</Filter>
+      <Filter>public\struct</Filter>
     </ClCompile>
     <ClCompile Include="spilloverity_instance.cpp">
-      <Filter>instance</Filter>
+      <Filter>private\instance</Filter>
     </ClCompile>
     <ClCompile Include="system.cpp">
       <Filter>lib</Filter>

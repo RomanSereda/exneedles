@@ -99,7 +99,7 @@ namespace instance {
 
 	template<typename LR>
 	ptree region<LR>::to_ptree() const {
-		ptree root;
+		ptree root = boost::to_ptree(m_size);
 		boost::add_array(root, "layeralitys", m_layeralitys);
 		return root;
 	}
