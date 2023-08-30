@@ -4,36 +4,29 @@
 #include "memory.cuh"
 #include "assert.hpp"
 
-#include "terminality.hpp"
-#include "cellularity.hpp"
-#include "layerality.hpp"
+#include "system.hpp"
 
-#include "terminality_instance.hpp"
-#include "cellularity_instance.hpp"
-#include "layerality_instance.hpp"
+corelib::corelib()
+{
+	cudaDeviceProp prop;
+	assert_err(cudaGetDeviceProperties(&prop, 0));
+	assert_err(cudaSetDevice(0));
+	console("init device: " + std::string(prop.name));
+	console("total const memory: " + std::to_string(prop.totalConstMem));
+	tables::init();
 
-namespace core {
-	system::system()
-	{
-		cudaDeviceProp prop;
-		assert_err(cudaGetDeviceProperties(&prop, 0));
-		assert_err(cudaSetDevice(0));
-		console("init device: " + std::string(prop.name));
-		console("total const memory: " + std::to_string(prop.totalConstMem));
-		tables::init();
+	m_system = new core::system();
+}
 
-	}
+corelib::~corelib() {
+	if (m_system)
+		delete m_system;
 
-	system::~system() {
-		cudaDeviceReset();
-		console("reset device");
-	}
+	cudaDeviceReset();
+	console("reset device");
+}
 
-	const lib_instance_host_type* system::host_region() const {
-		return m_host_region.get();
-	}
-	
-	const lib_instance_device_type* system::device_region() const {
-		return m_device_region.get();
-	}
+const core::isystem& corelib::system() const
+{
+	return *m_system;
 }

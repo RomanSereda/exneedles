@@ -20,6 +20,7 @@
     <ClInclude Include="layerality_instance.hpp" />
     <ClInclude Include="spilloverity.hpp" />
     <ClInclude Include="spilloverity_instance.hpp" />
+    <ClInclude Include="system.hpp" />
     <ClInclude Include="terminality.hpp" />
     <ClInclude Include="terminality_instance.hpp" />
     <ClInclude Include="types.hpp" />
@@ -34,6 +35,7 @@
     <ClCompile Include="layerality_instance.cpp" />
     <ClCompile Include="spilloverity.cpp" />
     <ClCompile Include="spilloverity_instance.cpp" />
+    <ClCompile Include="system.cpp" />
     <ClCompile Include="terminality.cpp" />
     <ClCompile Include="terminality_instance.cpp" />
   </ItemGroup>

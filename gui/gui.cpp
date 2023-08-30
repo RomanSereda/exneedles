@@ -3,6 +3,8 @@
 
 int main()
 {
-    core::system system;
+    corelib core;
+
+    auto system = core.system();
 
 }

@@ -57,6 +57,9 @@
     <ClInclude Include="spilloverity_instance.hpp">
       <Filter>instance</Filter>
     </ClInclude>
+    <ClInclude Include="system.hpp">
+      <Filter>lib</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="assert.cpp">
@@ -88,6 +91,9 @@
     </ClCompile>
     <ClCompile Include="spilloverity_instance.cpp">
       <Filter>instance</Filter>
+    </ClCompile>
+    <ClCompile Include="system.cpp">
+      <Filter>lib</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
