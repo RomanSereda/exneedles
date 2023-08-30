@@ -1,7 +1,6 @@
 #pragma once
 #include "types.hpp"
 #include "boost.hpp"
-#include "terminality.hpp"
 
 #include "../deflib.inc"
 
@@ -62,6 +61,9 @@ using cell_data_tuple = boost::spec_pair_tuple<std::tuple<innate::cell_simple, d
 
 namespace innate { struct size; }
 namespace instance {
+	struct readable_trmn_innate;
+	struct readable_trmn_instance;
+
 	struct readable_cell_innate { 
 		const innate::cell* cell; 
 		const std::vector<readable_trmn_innate> terminality;

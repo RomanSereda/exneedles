@@ -2,9 +2,6 @@
 #include "types.hpp"
 #include "boost.hpp"
 
-#include "cellularity.hpp"
-#include "spilloverity.hpp"
-
 #include "../deflib.inc"
 
 namespace innate {
@@ -17,6 +14,11 @@ namespace innate {
 BOOST_HANA_ADAPT_STRUCT(innate::size, width, height);
 
 namespace instance {
+	struct readable_splvr_innate;
+	struct readable_cell_innate;
+	struct readable_splvr_instance;
+	struct readable_cell_instance;
+
 	struct readable_layer_innate {
 		const std::vector<readable_splvr_innate> spillovers;
 		const std::vector<readable_cell_innate> cellularity;
