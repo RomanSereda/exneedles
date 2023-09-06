@@ -7,15 +7,18 @@
     <Filter Include="imgui">
       <UniqueIdentifier>{671edb9e-598b-48e6-a685-81d4001acfad}</UniqueIdentifier>
     </Filter>
+    <Filter Include="subwindows">
+      <UniqueIdentifier>{05be5a10-6ddc-40ad-bf96-23b5464a7de5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="subwindows\innate">
+      <UniqueIdentifier>{7912f801-bb5c-49fe-9c93-f49ed44b44c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="executable">
+      <UniqueIdentifier>{9691c3ae-5ac3-491c-b2e1-5ecd8f7e9d31}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="application.cpp">
-      <Filter>app</Filter>
-    </ClCompile>
-    <ClCompile Include="assert.cpp">
-      <Filter>app</Filter>
-    </ClCompile>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="Application.cpp">
       <Filter>app</Filter>
     </ClCompile>
     <ClCompile Include="..\include\imgui\imgui.cpp">
@@ -36,12 +39,30 @@
     <ClCompile Include="..\include\imgui\backends\imgui_impl_opengl3.cpp">
       <Filter>imgui</Filter>
     </ClCompile>
+    <ClCompile Include="TerminalityView.cpp">
+      <Filter>subwindows\innate</Filter>
+    </ClCompile>
+    <ClCompile Include="LayeralityView.cpp">
+      <Filter>subwindows\innate</Filter>
+    </ClCompile>
+    <ClCompile Include="CellularityView.cpp">
+      <Filter>subwindows\innate</Filter>
+    </ClCompile>
+    <ClCompile Include="InnateSubWindow.cpp">
+      <Filter>subwindows</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>executable</Filter>
+    </ClCompile>
+    <ClCompile Include="assert.cpp">
+      <Filter>executable</Filter>
+    </ClCompile>
+    <ClCompile Include="SpilloverityView.cpp">
+      <Filter>subwindows\innate</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="application.hpp">
-      <Filter>app</Filter>
-    </ClInclude>
-    <ClInclude Include="assert.hpp">
+    <ClInclude Include="Application.hpp">
       <Filter>app</Filter>
     </ClInclude>
     <ClInclude Include="..\include\imgui\imconfig.h">
@@ -61,6 +82,24 @@
     </ClInclude>
     <ClInclude Include="..\include\imgui\backends\imgui_impl_opengl3_loader.h">
       <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="TerminalityView.hpp">
+      <Filter>subwindows\innate</Filter>
+    </ClInclude>
+    <ClInclude Include="CellularityView.hpp">
+      <Filter>subwindows\innate</Filter>
+    </ClInclude>
+    <ClInclude Include="LayeralityView.hpp">
+      <Filter>subwindows\innate</Filter>
+    </ClInclude>
+    <ClInclude Include="InnateSubWindow.hpp">
+      <Filter>subwindows</Filter>
+    </ClInclude>
+    <ClInclude Include="assert.hpp">
+      <Filter>executable</Filter>
+    </ClInclude>
+    <ClInclude Include="SpilloverityView.hpp">
+      <Filter>subwindows\innate</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

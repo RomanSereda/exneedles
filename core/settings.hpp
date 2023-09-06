@@ -2,10 +2,10 @@
 #include <map>
 #include "boost.hpp"
 
-#include "../deflib.inc"
+#pragma warning(disable : 4251)
 
 namespace core {
-	class LIBRARY_API settings {
+	class settings {
 	public:
 		static const std::string setdir_name;
 		static const std::string setdir_path;
@@ -21,3 +21,5 @@ namespace core {
 		std::map<std::string, std::string> m_region_files;
 	};
 }
+
+#pragma warning(default : 4251)

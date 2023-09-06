@@ -2,6 +2,7 @@
 #include "types.hpp"
 #include "boost.hpp"
 
+#define LIBRARY "core"
 #include "../deflib.inc"
 
 namespace innate {

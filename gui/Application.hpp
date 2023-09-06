@@ -4,7 +4,7 @@
 struct GLFWwindow;
 
 namespace Ui {
-	class SubFrame
+	class SubWindow
 	{
 	public:
 		virtual void display() = 0;
@@ -19,10 +19,9 @@ namespace Ui {
 
 	private:
 		GLFWwindow* m_glfwWindow = nullptr;
-		std::vector<SubFrame*> m_subFrames;
+		std::vector<SubWindow*> m_subFrames;
 
 	};
-
 }
 
 

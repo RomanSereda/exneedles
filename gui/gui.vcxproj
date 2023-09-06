@@ -139,9 +139,14 @@
     <ClCompile Include="..\include\imgui\imgui_draw.cpp" />
     <ClCompile Include="..\include\imgui\imgui_tables.cpp" />
     <ClCompile Include="..\include\imgui\imgui_widgets.cpp" />
-    <ClCompile Include="application.cpp" />
+    <ClCompile Include="Application.cpp" />
     <ClCompile Include="assert.cpp" />
+    <ClCompile Include="CellularityView.cpp" />
+    <ClCompile Include="InnateSubWindow.cpp" />
+    <ClCompile Include="LayeralityView.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="SpilloverityView.cpp" />
+    <ClCompile Include="TerminalityView.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\imgui\backends\imgui_impl_glfw.h" />
@@ -150,8 +155,13 @@
     <ClInclude Include="..\include\imgui\imconfig.h" />
     <ClInclude Include="..\include\imgui\imgui.h" />
     <ClInclude Include="..\include\imgui\imgui_internal.h" />
-    <ClInclude Include="application.hpp" />
+    <ClInclude Include="Application.hpp" />
     <ClInclude Include="assert.hpp" />
+    <ClInclude Include="CellularityView.hpp" />
+    <ClInclude Include="InnateSubWindow.hpp" />
+    <ClInclude Include="LayeralityView.hpp" />
+    <ClInclude Include="SpilloverityView.hpp" />
+    <ClInclude Include="TerminalityView.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
