@@ -7,6 +7,7 @@ namespace Ui {
 
 	class LayeralityView {
 	public:
+		void view() const;
 
 	private:
 		std::vector<SpilloverityView> m_spilloveritys;
@@ -15,6 +16,7 @@ namespace Ui {
 
 	class RegionView {
 	public:
+		void view() const;
 
 	private:
 		std::vector<LayeralityView> m_layeralitys;
