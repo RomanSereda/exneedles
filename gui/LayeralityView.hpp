@@ -11,7 +11,7 @@ namespace Ui {
 
 	private:
 		std::vector<SpilloverityView> m_spilloveritys;
-		std::vector<CellularityView> m_cellularitys;
+		std::vector<CellularityView>  m_cellularitys;
 	};
 
 	class RegionView {
@@ -19,6 +19,7 @@ namespace Ui {
 		void view() const;
 
 	private:
+		innate::size m_size;
 		std::vector<LayeralityView> m_layeralitys;
 	};
 

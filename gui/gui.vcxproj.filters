@@ -1,55 +1,58 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="app">
-      <UniqueIdentifier>{e00ba497-5154-441e-88b7-51b5d1adb81e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="imgui">
-      <UniqueIdentifier>{671edb9e-598b-48e6-a685-81d4001acfad}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="subwindows">
-      <UniqueIdentifier>{05be5a10-6ddc-40ad-bf96-23b5464a7de5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="subwindows\innate">
-      <UniqueIdentifier>{7912f801-bb5c-49fe-9c93-f49ed44b44c2}</UniqueIdentifier>
-    </Filter>
     <Filter Include="executable">
       <UniqueIdentifier>{9691c3ae-5ac3-491c-b2e1-5ecd8f7e9d31}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="application">
+      <UniqueIdentifier>{e00ba497-5154-441e-88b7-51b5d1adb81e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="srcexternal">
+      <UniqueIdentifier>{671edb9e-598b-48e6-a685-81d4001acfad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="subwindow">
+      <UniqueIdentifier>{05be5a10-6ddc-40ad-bf96-23b5464a7de5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="subwindow\innate">
+      <UniqueIdentifier>{7912f801-bb5c-49fe-9c93-f49ed44b44c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="subwindow\controls">
+      <UniqueIdentifier>{1143f4ee-3c99-43db-b720-8d5b05553a6b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp">
-      <Filter>app</Filter>
+      <Filter>application</Filter>
     </ClCompile>
     <ClCompile Include="..\include\imgui\imgui.cpp">
-      <Filter>imgui</Filter>
+      <Filter>srcexternal</Filter>
     </ClCompile>
     <ClCompile Include="..\include\imgui\imgui_draw.cpp">
-      <Filter>imgui</Filter>
+      <Filter>srcexternal</Filter>
     </ClCompile>
     <ClCompile Include="..\include\imgui\imgui_tables.cpp">
-      <Filter>imgui</Filter>
+      <Filter>srcexternal</Filter>
     </ClCompile>
     <ClCompile Include="..\include\imgui\imgui_widgets.cpp">
-      <Filter>imgui</Filter>
+      <Filter>srcexternal</Filter>
     </ClCompile>
     <ClCompile Include="..\include\imgui\backends\imgui_impl_glfw.cpp">
-      <Filter>imgui</Filter>
+      <Filter>srcexternal</Filter>
     </ClCompile>
     <ClCompile Include="..\include\imgui\backends\imgui_impl_opengl3.cpp">
-      <Filter>imgui</Filter>
+      <Filter>srcexternal</Filter>
     </ClCompile>
     <ClCompile Include="TerminalityView.cpp">
-      <Filter>subwindows\innate</Filter>
+      <Filter>subwindow\innate</Filter>
     </ClCompile>
     <ClCompile Include="LayeralityView.cpp">
-      <Filter>subwindows\innate</Filter>
+      <Filter>subwindow\innate</Filter>
     </ClCompile>
     <ClCompile Include="CellularityView.cpp">
-      <Filter>subwindows\innate</Filter>
+      <Filter>subwindow\innate</Filter>
     </ClCompile>
     <ClCompile Include="InnateSubWindow.cpp">
-      <Filter>subwindows</Filter>
+      <Filter>subwindow</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>executable</Filter>
@@ -58,48 +61,54 @@
       <Filter>executable</Filter>
     </ClCompile>
     <ClCompile Include="SpilloverityView.cpp">
-      <Filter>subwindows\innate</Filter>
+      <Filter>subwindow\innate</Filter>
+    </ClCompile>
+    <ClCompile Include="controls.cpp">
+      <Filter>subwindow\controls</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.hpp">
-      <Filter>app</Filter>
+      <Filter>application</Filter>
     </ClInclude>
     <ClInclude Include="..\include\imgui\imconfig.h">
-      <Filter>imgui</Filter>
+      <Filter>srcexternal</Filter>
     </ClInclude>
     <ClInclude Include="..\include\imgui\imgui.h">
-      <Filter>imgui</Filter>
+      <Filter>srcexternal</Filter>
     </ClInclude>
     <ClInclude Include="..\include\imgui\imgui_internal.h">
-      <Filter>imgui</Filter>
+      <Filter>srcexternal</Filter>
     </ClInclude>
     <ClInclude Include="..\include\imgui\backends\imgui_impl_glfw.h">
-      <Filter>imgui</Filter>
+      <Filter>srcexternal</Filter>
     </ClInclude>
     <ClInclude Include="..\include\imgui\backends\imgui_impl_opengl3.h">
-      <Filter>imgui</Filter>
+      <Filter>srcexternal</Filter>
     </ClInclude>
     <ClInclude Include="..\include\imgui\backends\imgui_impl_opengl3_loader.h">
-      <Filter>imgui</Filter>
+      <Filter>srcexternal</Filter>
     </ClInclude>
     <ClInclude Include="TerminalityView.hpp">
-      <Filter>subwindows\innate</Filter>
+      <Filter>subwindow\innate</Filter>
     </ClInclude>
     <ClInclude Include="CellularityView.hpp">
-      <Filter>subwindows\innate</Filter>
+      <Filter>subwindow\innate</Filter>
     </ClInclude>
     <ClInclude Include="LayeralityView.hpp">
-      <Filter>subwindows\innate</Filter>
+      <Filter>subwindow\innate</Filter>
     </ClInclude>
     <ClInclude Include="InnateSubWindow.hpp">
-      <Filter>subwindows</Filter>
+      <Filter>subwindow</Filter>
     </ClInclude>
     <ClInclude Include="assert.hpp">
       <Filter>executable</Filter>
     </ClInclude>
     <ClInclude Include="SpilloverityView.hpp">
-      <Filter>subwindows\innate</Filter>
+      <Filter>subwindow\innate</Filter>
+    </ClInclude>
+    <ClInclude Include="controls.hpp">
+      <Filter>subwindow\controls</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
