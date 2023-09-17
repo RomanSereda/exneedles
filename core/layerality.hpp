@@ -39,10 +39,11 @@ namespace instance {
 	};
 
 	struct readable_region_innate {
-		const std::vector<readable_layer_innate> layer;
+		const innate::size size;
+		const std::vector<readable_layer_innate> layers;
 	};
 	struct readable_region_instance {
-		const std::vector<readable_layer_instance> layer;
+		const std::vector<readable_layer_instance> layers;
 	};
 
 	class LIBRARY_API iregion {

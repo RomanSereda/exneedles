@@ -115,7 +115,7 @@ namespace instance {
 		for (const auto& l : m_layeralitys)
 			rg.push_back(l->innate());
 
-		return { rg };
+		return { m_size, rg };
 	}
 	
 	template<typename LR>

@@ -67,7 +67,7 @@ namespace instance {
 
 	struct readable_cell_innate { 
 		const innate::cell* cell; 
-		const std::vector<readable_trmn_innate> terminality;
+		const std::vector<readable_trmn_innate> terminalitys;
 	};
 	struct readable_cell_instance {
 		__mem__ void*  cells   = nullptr;
@@ -75,7 +75,7 @@ namespace instance {
 		size_t cells_szb   = -1;
 		size_t results_szb = -1;
 
-		const std::vector<readable_trmn_instance> terminality;
+		const std::vector<readable_trmn_instance> terminalitys;
 	};
 
 	class LIBRARY_API icellularity {
