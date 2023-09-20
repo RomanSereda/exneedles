@@ -18,6 +18,8 @@ static void glfw_error_callback(int error, const char* description) {
 	fprintf(stderr, "GLFW Error %d: %s\n", error, description);
 }
 
+#include "InnateSubWindow.hpp"
+
 namespace Ui {
 	Application::Application() {
 		glfwSetErrorCallback(glfw_error_callback);
@@ -43,6 +45,8 @@ namespace Ui {
         ImGui::StyleColorsDark();
         ImGui_ImplGlfw_InitForOpenGL(m_glfwWindow, true);
         ImGui_ImplOpenGL3_Init(glsl_version);
+
+        m_subFrames.push_back(SubWindow::Ptr(new InnateSubWindow()));
 	}
 
 	Application::~Application() {
@@ -64,7 +68,7 @@ namespace Ui {
             ImGui::NewFrame();
 
             // Windows
-            for (auto subFrame : m_subFrames) {
+            for (auto& subFrame : m_subFrames) {
                 subFrame->display();
             }
 

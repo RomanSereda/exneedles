@@ -147,7 +147,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="SpilloverityView.cpp" />
     <ClCompile Include="TerminalityView.cpp" />
-    <ClCompile Include="controls.cpp" />
+    <ClCompile Include="Controls.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\imgui\backends\imgui_impl_glfw.h" />
@@ -159,7 +159,7 @@
     <ClInclude Include="Application.hpp" />
     <ClInclude Include="assert.hpp" />
     <ClInclude Include="CellularityView.hpp" />
-    <ClInclude Include="controls.hpp" />
+    <ClInclude Include="Controls.hpp" />
     <ClInclude Include="InnateSubWindow.hpp" />
     <ClInclude Include="LayeralityView.hpp" />
     <ClInclude Include="SpilloverityView.hpp" />

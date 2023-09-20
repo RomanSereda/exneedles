@@ -28,7 +28,13 @@ namespace Ui {
 }
 
 namespace Ui {
+	RegionView::RegionView(int id) {
+		mRegionHeader = id == -1 ? std::make_unique<CollapsingHeader>("Region") : 
+			                       std::make_unique<CollapsingHeader>("Region " + std::to_string(id));
+	}
+
 	void RegionView::view() const {
+		mRegionHeader->display();
 
 		for (const auto& layerality : m_layeralitys) {
 			layerality->view();

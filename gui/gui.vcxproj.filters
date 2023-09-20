@@ -63,7 +63,7 @@
     <ClCompile Include="SpilloverityView.cpp">
       <Filter>subwindow\innate</Filter>
     </ClCompile>
-    <ClCompile Include="controls.cpp">
+    <ClCompile Include="Controls.cpp">
       <Filter>subwindow\controls</Filter>
     </ClCompile>
   </ItemGroup>
@@ -107,7 +107,7 @@
     <ClInclude Include="SpilloverityView.hpp">
       <Filter>subwindow\innate</Filter>
     </ClInclude>
-    <ClInclude Include="controls.hpp">
+    <ClInclude Include="Controls.hpp">
       <Filter>subwindow\controls</Filter>
     </ClInclude>
   </ItemGroup>
