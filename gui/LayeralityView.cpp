@@ -32,7 +32,7 @@ namespace Ui {
 		mSizePopupBtn = PopupBtn::Ptr(new PopupBtn(getSizeAsText(), "Config", [&]() {
 			SetterData<int> data = { m_size.height, "m_size.height", ""};
 			
-			ValueSetter<int>(data);
+			ValueSetterDisplay<int>(data);
 		}));
 
 		auto treeNodeText = id == -1 ? "Region" : "Region " + std::to_string(id);

@@ -4,48 +4,29 @@
 namespace Ui {
     std::atomic_int Control::mIdCounter = 0;
 
-    Control::Control(): Control(""){}
-    Control::Control(const std::function<void()>& clicked) : Control("", clicked) {}
-
     Control::Control(const std::string& text)
         : mText(text), mId(mIdCounter++) {
         mStyle.active = ImColor(1.0f, 0.6f, 0.0f, 1.0f);
     }
 
-    Control::Control(const std::string& text, const std::function<void()>& clicked) : Control(text) {
-        mOnClicked = std::make_unique<std::function<void()>>(clicked);
-    }
-
-	void Control::display() {
-        ImGui::PushID(mId);
-        bool clicked = display(mText.c_str(), mStyle);
-        ImGui::PopID();
-
-        if (clicked && mOnClicked) (*mOnClicked)();
-	}
-
-    bool Control::display(const char* text, const ControlStyle& style)
-    {
-        ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Border, style.border);
-        ImGui::PushStyleColor(ImGuiCol_Button, style.color);
-        ImGui::PushStyleColor(ImGuiCol_ButtonHovered, style.hovered);
-        ImGui::PushStyleColor(ImGuiCol_ButtonActive, style.active);
-
-        ImGui::PushStyleVar(ImGuiStyleVar_::ImGuiStyleVar_FrameBorderSize, 1.0f);
-        ImGui::PushStyleVar(ImGuiStyleVar_::ImGuiStyleVar_FrameRounding, 1.0f);
-        ImGui::PushStyleVar(ImGuiStyleVar_::ImGuiStyleVar_FramePadding, style.framePadding);
-
-        bool result = ImGui::Button(text);
-
-        ImGui::PopStyleColor(4);
-        ImGui::PopStyleVar(3);
-
-        return result;
-    }
-
     void Control::setText(const std::string& text) {
         mText = text;
     }
+
+    Button::Button(const std::string& text) : Control(text){}
+
+    Button::Button(const std::string& text, const std::function<void()>& clicked): Button(text){
+        mOnClicked = std::make_unique<std::function<void()>>(clicked);
+    }
+
+    void Button::display() {
+        ImGui::PushID(mId);
+        bool clicked = ButtonDisplay(mText.c_str(), mStyle);
+        ImGui::PopID();
+
+        if (clicked && mOnClicked) (*mOnClicked)();
+    }
+
 
     CollapsingHeader::CollapsingHeader(const std::string& text): mText(text) {
     }
@@ -111,8 +92,8 @@ namespace Ui {
         ImGui::OpenPopup(mText.c_str());
     }
 
-    PopupBtn::PopupBtn(const std::string& text, const std::string& popupText, const std::function<void()>& popupContent)
-        : Control(text) {
+    PopupBtn::PopupBtn(const std::string& text, const std::string& popupText, 
+                       const std::function<void()>& popupContent) : Button(text) {
         mPopup = Popup::Ptr(new Popup(popupText, [popupContent]{
             popupContent();
         }));
@@ -123,7 +104,7 @@ namespace Ui {
     }
 
     void PopupBtn::display() {
-        Control::display();
+        Button::display();
         mPopup->display();
     }
 

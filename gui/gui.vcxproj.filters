@@ -66,6 +66,9 @@
     <ClCompile Include="Controls.cpp">
       <Filter>subwindow\controls</Filter>
     </ClCompile>
+    <ClCompile Include="SubControls.cpp">
+      <Filter>subwindow\controls</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.hpp">
@@ -108,6 +111,12 @@
       <Filter>subwindow\innate</Filter>
     </ClInclude>
     <ClInclude Include="Controls.hpp">
+      <Filter>subwindow\controls</Filter>
+    </ClInclude>
+    <ClInclude Include="Style.hpp">
+      <Filter>subwindow\controls</Filter>
+    </ClInclude>
+    <ClInclude Include="SubControls.hpp">
       <Filter>subwindow\controls</Filter>
     </ClInclude>
   </ItemGroup>

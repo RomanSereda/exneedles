@@ -146,6 +146,7 @@
     <ClCompile Include="LayeralityView.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="SpilloverityView.cpp" />
+    <ClCompile Include="SubControls.cpp" />
     <ClCompile Include="TerminalityView.cpp" />
     <ClCompile Include="Controls.cpp" />
   </ItemGroup>
@@ -163,6 +164,8 @@
     <ClInclude Include="InnateSubWindow.hpp" />
     <ClInclude Include="LayeralityView.hpp" />
     <ClInclude Include="SpilloverityView.hpp" />
+    <ClInclude Include="Style.hpp" />
+    <ClInclude Include="SubControls.hpp" />
     <ClInclude Include="TerminalityView.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
