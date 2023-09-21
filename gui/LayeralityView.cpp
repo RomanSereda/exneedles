@@ -29,12 +29,20 @@ namespace Ui {
 
 namespace Ui {
 	RegionView::RegionView(int id) {
-		mRegionHeader = id == -1 ? std::make_unique<CollapsingHeader>("Region") : 
-			                       std::make_unique<CollapsingHeader>("Region " + std::to_string(id));
+		mSizePopupBtn = PopupBtn::Ptr(new PopupBtn(getSizeAsText(), "Config", [&]() {
+			SetterData<int> data = { m_size.height, "m_size.height", ""};
+			
+			ValueSetter<int>(data);
+		}));
+
+		auto treeNodeText = id == -1 ? "Region" : "Region " + std::to_string(id);
+		mTreeNode = TreeNode::Ptr(new TreeNode(treeNodeText, [=]{
+			mSizePopupBtn->display();
+		}));
 	}
 
 	void RegionView::view() const {
-		mRegionHeader->display();
+		mTreeNode->display();
 
 		for (const auto& layerality : m_layeralitys) {
 			layerality->view();
@@ -49,6 +57,12 @@ namespace Ui {
 
 			m_layeralitys.push_back(std::move(lw));
 		}
+	}
+
+	std::string RegionView::getSizeAsText() const
+	{
+		return "width:" + std::to_string(m_size.width) + " " +
+			   "height:" + std::to_string(m_size.height);
 	}
 
 }

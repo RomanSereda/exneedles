@@ -31,7 +31,7 @@ namespace Ui {
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 		glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
-        m_glfwWindow = glfwCreateWindow(1280, 720, "ExNeedles Project", nullptr, nullptr);
+        m_glfwWindow = glfwCreateWindow(640, 480, "ExNeedles Project", nullptr, nullptr);
         if (m_glfwWindow == nullptr) logexit();
      
         glfwMakeContextCurrent(m_glfwWindow);

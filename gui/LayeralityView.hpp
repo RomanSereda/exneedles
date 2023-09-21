@@ -33,7 +33,10 @@ namespace Ui {
 		std::vector<LayeralityView::Ptr> m_layeralitys;
 
 	private:
-		CollapsingHeader::Ptr mRegionHeader;
+		TreeNode::Ptr mTreeNode;
+		PopupBtn::Ptr mSizePopupBtn;
+
+		std::string getSizeAsText() const;
 	};
 
 }
