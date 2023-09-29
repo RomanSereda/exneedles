@@ -86,4 +86,31 @@ namespace Ui {
 	private:
 		Popup::Ptr mPopup;
 	};
+
+	template<typename T> class InputedPopupBtn : public PopupBtn {
+	public:
+		using Ptr = std::unique_ptr<InputedPopupBtn>;
+
+		using SetterData = SetterData<T>;
+		using SetterDataPtr = std::shared_ptr<SetterData>;
+
+		InputedPopupBtn(const std::string& text, const std::string& popupText, const std::vector<SetterDataPtr>& settersData);
+		void display() override;
+
+	private:
+		std::vector<SetterDataPtr> mSettersData;
+	};
+
+	template<typename T>
+	InputedPopupBtn<T>::InputedPopupBtn(const std::string& text, const std::string& popupText, const std::vector<SetterDataPtr>& settersData)
+		: PopupBtn(text, popupText, [&]() { for (auto& sd : mSettersData) {ValueSetterDisplay(*sd);}}), mSettersData(settersData) {}
+
+	template<typename T>
+	void InputedPopupBtn<T>::display() {
+		PopupBtn::display();
+	}
+
+	typedef InputedPopupBtn<int> IntInPpBtn;
+#define IntInPpBtnBp(a,b,c) IntInPpBtn::SetterDataPtr(new IntInPpBtn::SetterData{ a,b,c })
+
 }

@@ -18,8 +18,12 @@ namespace Ui {
     }
 
     void IntValueSetter(int& value, const std::string& text) {
-        SetterData<int> data = { value, text, "" };
-        ValueSetterDisplay<int>(data);
+        SetterData<int> data = { "", text, value};
+
+        auto strValue = std::to_string(value);
+        memcpy(data.buffer, strValue.c_str(), strValue.length());
+
+        ValueSetterDisplay(data);
     }
 
     bool ButtonDisplay(const char* text, const ControlStyle& style) {

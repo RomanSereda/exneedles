@@ -29,11 +29,11 @@ namespace Ui {
 
 namespace Ui {
 	RegionView::RegionView(int id) {
-		mSizePopupBtn = PopupBtn::Ptr(new PopupBtn(getSizeAsText(), "Config", [&]() {
-			SetterData<int> data = { m_size.height, "m_size.height", ""};
-			
-			ValueSetterDisplay<int>(data);
-		}));
+		mSizePopupBtn = IntInPpBtn::Ptr(new InputedPopupBtn<int>(getSizeAsText(), "Config", {
+				IntInPpBtnBp("", "width", m_size.width),
+				IntInPpBtnBp("", "height", m_size.height)
+			})
+		);
 
 		auto treeNodeText = id == -1 ? "Region" : "Region " + std::to_string(id);
 		mTreeNode = TreeNode::Ptr(new TreeNode(treeNodeText, [=]{
