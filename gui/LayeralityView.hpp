@@ -34,7 +34,7 @@ namespace Ui {
 
 	private:
 		TreeNode::Ptr mTreeNode;
-		PopupBtn::Ptr mSizePopupBtn;
+		IntInPpBtn::Ptr mSizePopupBtn;
 
 		std::string getSizeAsText() const;
 	};

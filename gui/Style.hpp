@@ -5,6 +5,7 @@
 
 namespace Ui {
 	const ImVec4 ClearColor = ImColor(0.1f, 0.1f, 0.1f, 1.0f);
+	const ImVec4 EditedInputColor = ImColor(0.4f, 0.2f, 0.1f, 1.0f);
 
 	struct ControlStyle {
 		ImVec4 color = ImColor(0.2f, 0.2f, 0.2f, 1.0f);

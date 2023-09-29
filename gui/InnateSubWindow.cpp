@@ -9,7 +9,9 @@ namespace Ui {
 	}
 
 	void InnateSubWindow::display() {
+		ImGui::Begin("innate");
 		mRegion->view();
+		ImGui::End();
 	}
 
 }
