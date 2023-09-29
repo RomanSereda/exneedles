@@ -2,7 +2,6 @@
 #include "../core/boost.hpp"
 #include <string>
 
-
 void console(const std::string& str);
 void console(const ptree& root);
 
