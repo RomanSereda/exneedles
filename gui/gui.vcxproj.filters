@@ -16,6 +16,9 @@
     <Filter Include="subwindow\controls">
       <UniqueIdentifier>{1143f4ee-3c99-43db-b720-8d5b05553a6b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="addsource">
+      <UniqueIdentifier>{61b10e06-6c06-4c7e-bd0e-63dab445e3f0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp">
@@ -48,6 +51,24 @@
     <ClCompile Include="SubControls.cpp">
       <Filter>subwindow\controls</Filter>
     </ClCompile>
+    <ClCompile Include="..\imgui\imgui.cpp">
+      <Filter>addsource</Filter>
+    </ClCompile>
+    <ClCompile Include="..\imgui\imgui_draw.cpp">
+      <Filter>addsource</Filter>
+    </ClCompile>
+    <ClCompile Include="..\imgui\imgui_tables.cpp">
+      <Filter>addsource</Filter>
+    </ClCompile>
+    <ClCompile Include="..\imgui\imgui_widgets.cpp">
+      <Filter>addsource</Filter>
+    </ClCompile>
+    <ClCompile Include="..\imgui\backends\imgui_impl_glfw.cpp">
+      <Filter>addsource</Filter>
+    </ClCompile>
+    <ClCompile Include="..\imgui\backends\imgui_impl_opengl3.cpp">
+      <Filter>addsource</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.hpp">
@@ -79,6 +100,21 @@
     </ClInclude>
     <ClInclude Include="SubControls.hpp">
       <Filter>subwindow\controls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\imgui\imconfig.h">
+      <Filter>addsource</Filter>
+    </ClInclude>
+    <ClInclude Include="..\imgui\imgui.h">
+      <Filter>addsource</Filter>
+    </ClInclude>
+    <ClInclude Include="..\imgui\imgui_internal.h">
+      <Filter>addsource</Filter>
+    </ClInclude>
+    <ClInclude Include="..\imgui\backends\imgui_impl_glfw.h">
+      <Filter>addsource</Filter>
+    </ClInclude>
+    <ClInclude Include="..\imgui\backends\imgui_impl_opengl3.h">
+      <Filter>addsource</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
