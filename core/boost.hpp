@@ -7,6 +7,9 @@
 #pragma warning(disable : 6294)
 #pragma warning(disable : 6201)
 
+#define _CRT_SECURE_NO_WARNINGS
+#pragma warning(disable : 4996)
+
 #include <tuple>
 #include <utility> 
 #include <boost/property_tree/json_parser.hpp>
@@ -27,7 +30,7 @@
 
 #include "types.hpp"
 
-#pragma comment(lib, "libboost_json-vc143-mt-gd-x64-1_82.lib")
+#pragma comment(lib, "libboost_json-vc143-mt-gd-x64-1_84.lib")
 
 namespace hana = boost::hana;
 using ptree = boost::property_tree::ptree;

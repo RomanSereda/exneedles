@@ -7,9 +7,6 @@
     <Filter Include="application">
       <UniqueIdentifier>{e00ba497-5154-441e-88b7-51b5d1adb81e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="srcexternal">
-      <UniqueIdentifier>{671edb9e-598b-48e6-a685-81d4001acfad}</UniqueIdentifier>
-    </Filter>
     <Filter Include="subwindow">
       <UniqueIdentifier>{05be5a10-6ddc-40ad-bf96-23b5464a7de5}</UniqueIdentifier>
     </Filter>
@@ -23,24 +20,6 @@
   <ItemGroup>
     <ClCompile Include="Application.cpp">
       <Filter>application</Filter>
-    </ClCompile>
-    <ClCompile Include="..\include\imgui\imgui.cpp">
-      <Filter>srcexternal</Filter>
-    </ClCompile>
-    <ClCompile Include="..\include\imgui\imgui_draw.cpp">
-      <Filter>srcexternal</Filter>
-    </ClCompile>
-    <ClCompile Include="..\include\imgui\imgui_tables.cpp">
-      <Filter>srcexternal</Filter>
-    </ClCompile>
-    <ClCompile Include="..\include\imgui\imgui_widgets.cpp">
-      <Filter>srcexternal</Filter>
-    </ClCompile>
-    <ClCompile Include="..\include\imgui\backends\imgui_impl_glfw.cpp">
-      <Filter>srcexternal</Filter>
-    </ClCompile>
-    <ClCompile Include="..\include\imgui\backends\imgui_impl_opengl3.cpp">
-      <Filter>srcexternal</Filter>
     </ClCompile>
     <ClCompile Include="TerminalityView.cpp">
       <Filter>subwindow\innate</Filter>
@@ -73,24 +52,6 @@
   <ItemGroup>
     <ClInclude Include="Application.hpp">
       <Filter>application</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\imgui\imconfig.h">
-      <Filter>srcexternal</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\imgui\imgui.h">
-      <Filter>srcexternal</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\imgui\imgui_internal.h">
-      <Filter>srcexternal</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\imgui\backends\imgui_impl_glfw.h">
-      <Filter>srcexternal</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\imgui\backends\imgui_impl_opengl3.h">
-      <Filter>srcexternal</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\imgui\backends\imgui_impl_opengl3_loader.h">
-      <Filter>srcexternal</Filter>
     </ClInclude>
     <ClInclude Include="TerminalityView.hpp">
       <Filter>subwindow\innate</Filter>
