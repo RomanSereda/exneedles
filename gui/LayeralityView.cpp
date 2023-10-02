@@ -30,8 +30,8 @@ namespace Ui {
 namespace Ui {
 	RegionView::RegionView(int id) {
 		mSizePopupBtn = IntInPpBtn::Ptr(new InputedPopupBtn<int>(getSizeAsText(), "Config", {
-				IntInPpBtnBp("", "width", m_size.width),
-				IntInPpBtnBp("", "height", m_size.height)
+				IntInPpBtnBp("width", m_size.width),
+				IntInPpBtnBp("height", m_size.height)
 			})
 		);
 

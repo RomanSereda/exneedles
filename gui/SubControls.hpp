@@ -31,25 +31,26 @@ namespace Ui {
 	template<typename T> static typename std::enable_if<std::is_same<T, std::string>::value, std::string>::type
 		to_value(const char* text) { return std::string(text); }
 
+	enum StylePopperType {
+		Color,
+		Style
+	};
+	template<StylePopperType type, typename T1, typename T2> class StylePopper {
+	public:
+		StylePopper(const std::vector<std::pair<T1, T2>>& params, bool condition = true);
+		~StylePopper();
+
+	private:
+		int mParamsSize = -1;
+	};
+
+	typedef StylePopper<StylePopperType::Color, ImGuiCol_, ImVec4> StyleColorPopper;
+
 	static int InputTextCallback(ImGuiInputTextCallbackData* data) {
 		return 0;
 	}
-	template<typename T> bool ValueSetterDisplay(SetterData<T>& data) {
-		data.buffer != std::to_string(data.value) ? ImGui::PushStyleColor(ImGuiCol_FrameBg, EditedInputColor):
-			                                        ImGui::PushStyleColor(ImGuiCol_FrameBg, ClearColor);
+	template<typename T> bool ValueSetterDisplay(SetterData<T>& data);
 
-		bool retval = false;
-		if (ImGui::InputText(data.text.c_str(), data.buffer, SETTER_BUFFER_SIZE, ImGuiInputTextFlags_EnterReturnsTrue, &InputTextCallback, &data)) {
-			bool pressedEnter = ImGui::IsItemFocused() && ImGui::IsKeyPressed(ImGuiKey_Enter);
-			if(pressedEnter){
-				data.value = to_value<T>(data.buffer);
-				retval = true;
-			}
-		}
-
-		ImGui::PopStyleColor();
-		return retval;
-	}
 	void IntValueSetter(int& value, const std::string& text);
 
 	bool ButtonDisplay(const char* text, const ControlStyle& style);

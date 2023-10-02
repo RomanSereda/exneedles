@@ -111,6 +111,6 @@ namespace Ui {
 	}
 
 	typedef InputedPopupBtn<int> IntInPpBtn;
-#define IntInPpBtnBp(a,b,c) IntInPpBtn::SetterDataPtr(new IntInPpBtn::SetterData{ a,b,c })
+#define IntInPpBtnBp(b,c) IntInPpBtn::SetterDataPtr(new IntInPpBtn::SetterData{ "",b,c })
 
 }
