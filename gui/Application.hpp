@@ -2,6 +2,8 @@
 #include <vector>
 #include <memory>
 
+#include "../core/corelib.hpp"
+
 struct GLFWwindow;
 
 namespace Ui {
@@ -22,6 +24,8 @@ namespace Ui {
 	private:
 		GLFWwindow* m_glfwWindow = nullptr;
 		std::vector<SubWindow::Ptr> m_subFrames;
+
+		corelib* m_corelib = nullptr;
 
 	};
 }

@@ -23,6 +23,8 @@ static void glfw_error_callback(int error, const char* description) {
 
 namespace Ui {
 	Application::Application() {
+        m_corelib = new corelib();
+
 		glfwSetErrorCallback(glfw_error_callback);
 		if (!glfwInit()) logexit();
 
@@ -47,7 +49,9 @@ namespace Ui {
         ImGui_ImplGlfw_InitForOpenGL(m_glfwWindow, true);
         ImGui_ImplOpenGL3_Init(glsl_version);
 
-        m_subFrames.push_back(SubWindow::Ptr(new InnateSubWindow()));
+        auto innateSubWindow = new InnateSubWindow(m_corelib->system().region());
+
+        m_subFrames.push_back(SubWindow::Ptr(innateSubWindow));
 	}
 
 	Application::~Application() {
@@ -56,6 +60,8 @@ namespace Ui {
         ImGui::DestroyContext();
         glfwDestroyWindow(m_glfwWindow);
         glfwTerminate();
+
+        delete m_corelib;
 	}
 
 	void Application::run() {

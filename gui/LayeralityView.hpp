@@ -26,7 +26,7 @@ namespace Ui {
 		RegionView(int id = -1);
 
 		void view() const;
-		void load(const instance::readable_region_innate& region);
+		void load(instance::iregion& region);
 
 	private:
 		innate::size m_size;
@@ -35,6 +35,7 @@ namespace Ui {
 	private:
 		TreeNode::Ptr mTreeNode;
 		IntInPpBtn::Ptr mSizePopupBtn;
+		AddRmButton::Ptr mAddRmButton;
 
 		std::string getSizeAsText() const;
 	};

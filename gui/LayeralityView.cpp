@@ -35,28 +35,41 @@ namespace Ui {
 			})
 		);
 
+		mSizePopupBtn->valueSetterUpdated.connect([&]() {
+			mSizePopupBtn->setText(getSizeAsText());
+		});
+
 		auto treeNodeText = id == -1 ? "Region" : "Region " + std::to_string(id);
 		mTreeNode = TreeNode::Ptr(new TreeNode(treeNodeText, [=]{
 			mSizePopupBtn->display();
 		}));
+
+		mAddRmButton = AddRmButton::Ptr(new AddRmButton(true));
+		mAddRmButton->addClicked.connect([&]() {
+			LayeralityView::Ptr lw(new LayeralityView());
+			m_layeralitys.push_back(std::move(lw));
+		});
 	}
 
 	void RegionView::view() const {
 		mTreeNode->display();
+		mAddRmButton->display();
 
 		for (const auto& layerality : m_layeralitys) {
 			layerality->view();
 		}
 	}
 
-	void RegionView::load(const instance::readable_region_innate& region) {
-		m_size = region.size;
-		for (const auto& layer : region.layers) {
+	void RegionView::load(instance::iregion& region) {
+		m_size = region.innate().size;
+		for (const auto& layer : region.innate().layers) {
 			LayeralityView::Ptr lw(new LayeralityView());
 			lw->load(layer);
 
 			m_layeralitys.push_back(std::move(lw));
 		}
+
+		mSizePopupBtn->setText(getSizeAsText());
 	}
 
 	std::string RegionView::getSizeAsText() const

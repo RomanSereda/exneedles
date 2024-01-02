@@ -26,7 +26,6 @@ corelib::~corelib() {
 	console("reset device");
 }
 
-const core::isystem& corelib::system() const
-{
+core::isystem& corelib::system() {
 	return *m_system;
 }

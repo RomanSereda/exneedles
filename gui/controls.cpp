@@ -13,6 +13,10 @@ namespace Ui {
         mText = text;
     }
 
+    int Control::nextId() {
+        return ++mIdCounter;
+    }
+
     Button::Button(const std::string& text) : Control(text){}
 
     Button::Button(const std::string& text, const std::function<void()>& clicked): Button(text){
@@ -106,6 +110,41 @@ namespace Ui {
     void PopupBtn::display() {
         Button::display();
         mPopup->display();
+    }
+
+
+    AddRmButton::AddRmButton(bool onlyAdd)
+        : Control(std::string()), mOnlyAdd(onlyAdd) 
+    {
+        mAddId = nextId();
+        if(!mOnlyAdd) mRmId = nextId();
+    }
+
+    void AddRmButton::display() {
+
+        ImGui::SameLine();
+        mStyle.color = ImColor(0.2f, 0.25f, 0.2f, 1.0f);
+
+        ImGui::PushID(mAddId);
+        bool clickedAdd = ButtonDisplay("+add", mStyle);
+        ImGui::PopID();
+
+        if (clickedAdd) addClicked();
+        
+        if(!mOnlyAdd) {
+            ImGui::PushStyleVar(ImGuiStyleVar_::ImGuiStyleVar_ItemSpacing, { 1,1 });
+
+            ImGui::SameLine();
+            mStyle.color = ImColor(0.25f, 0.2f, 0.2f, 1.0f);
+
+            ImGui::PushID(mRmId);
+            bool clickedRm = ButtonDisplay("-rm", mStyle);
+            ImGui::PopID();
+
+            ImGui::PopStyleVar();
+
+            if (clickedRm) rmClicked();
+        }
     }
 
 }

@@ -10,20 +10,26 @@
 
 namespace core {
 	system::system() {
-		device = new instance::region_device(settings::instance().read());
-		host = new instance::region_host(device->to_ptree());
+		host = new instance::region_host(settings::instance().read());
+		//device = new instance::region_device(host->to_ptree());
 	}
 	
 	system::~system() {
-		if (device) {
-			settings::instance().save(device->to_ptree());
-			delete device;
-			device = nullptr;
-		}
 		if (host) {
+			settings::instance().save(host->to_ptree());
+
 			delete host;
 			host = nullptr;
 		}
+
+		/*if (device) {
+			delete device;
+			device = nullptr;
+		}*/
+	}
+
+	instance::iregion& system::region() {
+		return *host;
 	}
 
 

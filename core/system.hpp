@@ -4,6 +4,7 @@
 #include "boost.hpp"
 
 namespace instance {
+	class iregion;
 	class region_host;
 	class region_device;
 }
@@ -13,6 +14,8 @@ namespace core {
 	public:
 		system();
 		~system();
+
+		instance::iregion& region() override;
 
 	private:
 		instance::region_host*   host   = nullptr;

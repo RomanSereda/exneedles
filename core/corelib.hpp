@@ -2,20 +2,24 @@
 #define LIBRARY "core"
 #include "../deflib.inc"
 
-namespace core
-{
+namespace instance {
+	class iregion;
+};
+
+namespace core {
 	class LIBRARY_API isystem {
 	public:
+		virtual instance::iregion& region() = 0;
 
 	};
-}
+};
 
 class LIBRARY_API corelib {
 public:
 	corelib();
 	~corelib();
 
-	const core::isystem& system() const;
+	core::isystem& system();
 
 private:
 	core::isystem* m_system = nullptr;

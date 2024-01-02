@@ -2,6 +2,7 @@
 #include <memory>
 #include <atomic>
 #include <functional>
+#include <boost/signals2.hpp>
 
 #include "SubControls.hpp"
 
@@ -14,6 +15,7 @@ namespace Ui {
 
 		virtual void display() = 0;
 		void setText(const std::string& text);
+		int nextId();
 
 	protected:
 		int mId = -1;
@@ -90,6 +92,7 @@ namespace Ui {
 	template<typename T> class InputedPopupBtn : public PopupBtn {
 	public:
 		using Ptr = std::unique_ptr<InputedPopupBtn>;
+		using Signal = boost::signals2::signal<void()>;
 
 		using SetterData = SetterData<T>;
 		using SetterDataPtr = std::shared_ptr<SetterData>;
@@ -97,13 +100,15 @@ namespace Ui {
 		InputedPopupBtn(const std::string& text, const std::string& popupText, const std::vector<SetterDataPtr>& settersData);
 		void display() override;
 
+		Signal valueSetterUpdated;
+
 	private:
 		std::vector<SetterDataPtr> mSettersData;
 	};
 
 	template<typename T>
 	InputedPopupBtn<T>::InputedPopupBtn(const std::string& text, const std::string& popupText, const std::vector<SetterDataPtr>& settersData)
-		: PopupBtn(text, popupText, [&]() { for (auto& sd : mSettersData) {ValueSetterDisplay(*sd);}}), mSettersData(settersData) {}
+		: PopupBtn(text, popupText, [&]() { for (auto& sd : mSettersData) {if(ValueSetterDisplay(*sd))valueSetterUpdated();}}), mSettersData(settersData) {}
 
 	template<typename T>
 	void InputedPopupBtn<T>::display() {
@@ -112,5 +117,24 @@ namespace Ui {
 
 	typedef InputedPopupBtn<int> IntInPpBtn;
 #define IntInPpBtnBp(b,c) IntInPpBtn::SetterDataPtr(new IntInPpBtn::SetterData{ "",b,c })
+
+	class AddRmButton : public Control {
+	public:
+		using Ptr = std::unique_ptr<AddRmButton>;
+		using Signal = boost::signals2::signal<void()>;
+
+		AddRmButton(bool onlyAdd = false);
+		void display() override;
+
+		Signal addClicked;
+		Signal rmClicked;
+
+	protected:
+		bool mOnlyAdd;
+
+		int mAddId = -1;
+		int mRmId = -1;
+
+	};
 
 }

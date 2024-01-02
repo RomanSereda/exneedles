@@ -5,7 +5,10 @@
 #include "LayeralityView.hpp"
 
 namespace Ui {
-	InnateSubWindow::InnateSubWindow() : mRegion(std::make_unique<RegionView>()){
+	InnateSubWindow::InnateSubWindow(instance::iregion& region)
+		: mRegion(std::make_unique<RegionView>())
+	{
+		mRegion->load(region);
 	}
 
 	void InnateSubWindow::display() {
