@@ -11,12 +11,26 @@ namespace Ui {
 	public:
 		using Ptr = std::unique_ptr<LayeralityView>;
 
+		LayeralityView(int id);
+
 		void view() const;
 		void load(const instance::readable_layer_innate& layer);
+
+		bool isShouldBeRemoved() const;
 
 	private:
 		std::vector<SpilloverityView::Ptr> m_spilloveritys;
 		std::vector<CellularityView::Ptr>  m_cellularitys;
+
+	private:
+		TreeNode::Ptr mTreeNode;
+
+		AddButton::Ptr mAddSplv;
+		AddButton::Ptr mAddCell;
+		RmButton::Ptr  mRmLr;
+
+		bool m_isShouldBeRemoved = false;
+
 	};
 
 	class RegionView {
@@ -34,8 +48,9 @@ namespace Ui {
 
 	private:
 		TreeNode::Ptr mTreeNode;
+
 		IntInPpBtn::Ptr mSizePopupBtn;
-		AddRmButton::Ptr mAddRmButton;
+		AddButton::Ptr mAddLr;
 
 		std::string getSizeAsText() const;
 	};

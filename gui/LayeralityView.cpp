@@ -1,13 +1,36 @@
 #include "LayeralityView.hpp"
+#include <vector>
 
 namespace Ui {
+	LayeralityView::LayeralityView(int id) {
+		auto treeNodeText = "Layer " + std::to_string(id);
+		mTreeNode = TreeNode::Ptr(new TreeNode(treeNodeText, [=] {
+
+			ImGui::PushStyleVar(ImGuiStyleVar_::ImGuiStyleVar_ItemSpacing, { 2,1 });
+			mRmLr->display();
+			ImGui::SameLine();
+			mAddSplv->display();
+			ImGui::SameLine();
+			mAddCell->display();
+			ImGui::PopStyleVar();
+
+			for (const auto& cellularity : m_cellularitys) {
+				cellularity->view();
+			}
+			for (const auto& spilloverity : m_spilloveritys) {
+				spilloverity->view();
+			}
+		}));
+
+		mRmLr    = RmButton::Ptr(new RmButton("lr"));
+		mRmLr->clicked.connect([&](){ m_isShouldBeRemoved = true; });
+
+		mAddSplv = AddButton::Ptr(new AddButton("splv"));
+		mAddCell = AddButton::Ptr(new AddButton("cell"));
+	}
+
 	void LayeralityView::view() const {
-		for (const auto& cellularity : m_cellularitys) {
-			cellularity->view();
-		}
-		for (const auto& spilloverity : m_spilloveritys) {
-			spilloverity->view();
-		}
+		mTreeNode->display();
 	}
 
 	void LayeralityView::load(const instance::readable_layer_innate& layer) {
@@ -25,6 +48,9 @@ namespace Ui {
 			m_cellularitys.push_back(std::move(sw));
 		}
 	}
+	bool LayeralityView::isShouldBeRemoved() const {
+		return m_isShouldBeRemoved;
+	}
 }
 
 namespace Ui {
@@ -41,29 +67,39 @@ namespace Ui {
 
 		auto treeNodeText = id == -1 ? "Region" : "Region " + std::to_string(id);
 		mTreeNode = TreeNode::Ptr(new TreeNode(treeNodeText, [=]{
+			
+			ImGui::PushStyleVar(ImGuiStyleVar_::ImGuiStyleVar_ItemSpacing, { 2,1 });
+			mAddLr->display();
+			ImGui::SameLine();
 			mSizePopupBtn->display();
+			ImGui::PopStyleVar();
+
+			for (auto& it: m_layeralitys) {
+				it->view();
+			}
+
+			auto it = m_layeralitys.begin();
+			while (it != m_layeralitys.end()) {
+				it->get()->isShouldBeRemoved() ? it = m_layeralitys.erase(it) : ++it;
+			}
 		}));
 
-		mAddRmButton = AddRmButton::Ptr(new AddRmButton(true));
-		mAddRmButton->addClicked.connect([&]() {
-			LayeralityView::Ptr lw(new LayeralityView());
+		mAddLr = AddButton::Ptr(new AddButton("lr"));
+		mAddLr->clicked.connect([&]() {
+			LayeralityView::Ptr lw(new LayeralityView(m_layeralitys.size()));
 			m_layeralitys.push_back(std::move(lw));
 		});
 	}
 
 	void RegionView::view() const {
 		mTreeNode->display();
-		mAddRmButton->display();
-
-		for (const auto& layerality : m_layeralitys) {
-			layerality->view();
-		}
 	}
 
 	void RegionView::load(instance::iregion& region) {
 		m_size = region.innate().size;
+		int id = 0;
 		for (const auto& layer : region.innate().layers) {
-			LayeralityView::Ptr lw(new LayeralityView());
+			LayeralityView::Ptr lw(new LayeralityView(id++));
 			lw->load(layer);
 
 			m_layeralitys.push_back(std::move(lw));
@@ -72,8 +108,7 @@ namespace Ui {
 		mSizePopupBtn->setText(getSizeAsText());
 	}
 
-	std::string RegionView::getSizeAsText() const
-	{
+	std::string RegionView::getSizeAsText() const {
 		return "width:" + std::to_string(m_size.width) + " " +
 			   "height:" + std::to_string(m_size.height);
 	}

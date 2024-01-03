@@ -118,23 +118,29 @@ namespace Ui {
 	typedef InputedPopupBtn<int> IntInPpBtn;
 #define IntInPpBtnBp(b,c) IntInPpBtn::SetterDataPtr(new IntInPpBtn::SetterData{ "",b,c })
 
-	class AddRmButton : public Control {
+
+	class ButtonEx : public Control {
 	public:
-		using Ptr = std::unique_ptr<AddRmButton>;
+		using Ptr = std::unique_ptr<ButtonEx>;
 		using Signal = boost::signals2::signal<void()>;
 
-		AddRmButton(bool onlyAdd = false);
+		ButtonEx(const ImColor& color, const std::string& text);
 		void display() override;
 
-		Signal addClicked;
-		Signal rmClicked;
+		Signal clicked;
 
 	protected:
-		bool mOnlyAdd;
+		std::string mText;
+	};
 
-		int mAddId = -1;
-		int mRmId = -1;
+	class AddButton: public ButtonEx {
+	public:
+		AddButton(const std::string& text = "");
+	};
 
+	class RmButton : public ButtonEx {
+	public:
+		RmButton(const std::string& text = "");
 	};
 
 }

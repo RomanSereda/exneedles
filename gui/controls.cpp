@@ -113,38 +113,26 @@ namespace Ui {
     }
 
 
-    AddRmButton::AddRmButton(bool onlyAdd)
-        : Control(std::string()), mOnlyAdd(onlyAdd) 
+    ButtonEx::ButtonEx(const ImColor& color, const std::string& text)
+        : Control(std::string()), mText(text) 
     {
-        mAddId = nextId();
-        if(!mOnlyAdd) mRmId = nextId();
+        mStyle.color = color;
     }
 
-    void AddRmButton::display() {
-
-        ImGui::SameLine();
-        mStyle.color = ImColor(0.2f, 0.25f, 0.2f, 1.0f);
-
-        ImGui::PushID(mAddId);
-        bool clickedAdd = ButtonDisplay("+add", mStyle);
+    void ButtonEx::display() {
+        ImGui::PushID(mId);
+        bool clickedAdd = ButtonDisplay(mText.c_str(), mStyle);
         ImGui::PopID();
 
-        if (clickedAdd) addClicked();
-        
-        if(!mOnlyAdd) {
-            ImGui::PushStyleVar(ImGuiStyleVar_::ImGuiStyleVar_ItemSpacing, { 1,1 });
-
-            ImGui::SameLine();
-            mStyle.color = ImColor(0.25f, 0.2f, 0.2f, 1.0f);
-
-            ImGui::PushID(mRmId);
-            bool clickedRm = ButtonDisplay("-rm", mStyle);
-            ImGui::PopID();
-
-            ImGui::PopStyleVar();
-
-            if (clickedRm) rmClicked();
-        }
+        if (clickedAdd) clicked();
     }
+
+    AddButton::AddButton(const std::string& text)
+        : ButtonEx(ImColor(0.2f, 0.25f, 0.2f, 1.0f), text.empty() ? "+add" : "+add " + text)
+    {}
+
+    RmButton::RmButton(const std::string& text)
+        : ButtonEx(ImColor(0.25f, 0.2f, 0.2f, 1.0f), text.empty() ? "-rm" : "-rm " + text)
+    {}
 
 }

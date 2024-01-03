@@ -2,6 +2,10 @@
 
 namespace Ui {
 	void SpilloverityView::view() const {
+		hana::for_each(*m_innate.get(), hana::fuse([&](auto member, auto value) {
+			std::string name = hana::to<char const*>(member);
+
+		}));
 	}
 
 	void SpilloverityView::load(const instance::readable_splvr_innate& splvr) {

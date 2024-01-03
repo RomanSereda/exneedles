@@ -54,4 +54,5 @@ namespace Ui {
 	void IntValueSetter(int& value, const std::string& text);
 
 	bool ButtonDisplay(const char* text, const ControlStyle& style);
+
 }
