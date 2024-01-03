@@ -119,6 +119,54 @@ namespace Ui {
 #define IntInPpBtnBp(b,c) IntInPpBtn::SetterDataPtr(new IntInPpBtn::SetterData{ "",b,c })
 
 
+
+	template<typename SizeType> class SizeTypeInputedPopupBtn {
+	public:
+		using Ptr = std::shared_ptr<SizeTypeInputedPopupBtn>;
+
+		SizeTypeInputedPopupBtn(SizeType& size);
+		std::string getSizeAsText() const;
+
+		void view();
+		static Ptr create(SizeType& sizeType);
+
+	protected:
+		SizeType& m_size;
+		IntInPpBtn::Ptr mSizePopupBtn;
+	};
+
+	template<typename SizeType>
+	SizeTypeInputedPopupBtn<SizeType>::SizeTypeInputedPopupBtn(SizeType& size): m_size(size) {
+		mSizePopupBtn = IntInPpBtn::Ptr(new InputedPopupBtn<int>(getSizeAsText(), "Config", {
+				IntInPpBtnBp("width", m_size.width),
+				IntInPpBtnBp("height", m_size.height)
+			})
+		);
+
+		mSizePopupBtn->valueSetterUpdated.connect([&]() {
+			mSizePopupBtn->setText(getSizeAsText());
+		});
+
+		mSizePopupBtn->setText(getSizeAsText());
+	}
+
+	template<typename SizeType>
+	std::string SizeTypeInputedPopupBtn<SizeType>::getSizeAsText() const {
+		return "width:" + std::to_string(m_size.width) + " " +
+			   "height:" + std::to_string(m_size.height);
+	}
+
+	template<typename SizeType>
+	void SizeTypeInputedPopupBtn<SizeType>::view() {
+		mSizePopupBtn->display();
+	}
+
+	template<typename SizeType>
+	std::shared_ptr<SizeTypeInputedPopupBtn<SizeType>> SizeTypeInputedPopupBtn<SizeType>::create(SizeType& sizeType) {
+		return Ptr(new SizeTypeInputedPopupBtn<SizeType>(sizeType));
+	}
+
+
 	class ButtonEx : public Control {
 	public:
 		using Ptr = std::unique_ptr<ButtonEx>;
@@ -142,5 +190,6 @@ namespace Ui {
 	public:
 		RmButton(const std::string& text = "");
 	};
+
 
 }

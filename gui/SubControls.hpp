@@ -4,6 +4,9 @@
 #include <memory>
 #include <type_traits>
 
+#include <sstream>
+#define to_hex_str(hex_val) (static_cast<std::stringstream const&>(std::stringstream() << "0x" << std::hex << hex_val)).str()
+
 #include "Style.hpp"
 
 #define SETTER_BUFFER_SIZE 256

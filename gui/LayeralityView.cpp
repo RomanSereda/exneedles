@@ -2,16 +2,20 @@
 #include <vector>
 
 namespace Ui {
-	LayeralityView::LayeralityView(int id) {
-		auto treeNodeText = "Layer " + std::to_string(id);
+	LayeralityView::LayeralityView(const std::string& name)
+		: mName(name)
+	{
+		auto treeNodeText = "lr: " + name;
 		mTreeNode = TreeNode::Ptr(new TreeNode(treeNodeText, [=] {
 
 			ImGui::PushStyleVar(ImGuiStyleVar_::ImGuiStyleVar_ItemSpacing, { 2,1 });
-			mRmLr->display();
-			ImGui::SameLine();
-			mAddSplv->display();
-			ImGui::SameLine();
-			mAddCell->display();
+			{
+				mRmLr->display();
+				ImGui::SameLine();
+				mAddSplv->display();
+				ImGui::SameLine();
+				mAddCell->display();
+			}
 			ImGui::PopStyleVar();
 
 			for (const auto& cellularity : m_cellularitys) {
@@ -48,30 +52,29 @@ namespace Ui {
 			m_cellularitys.push_back(std::move(sw));
 		}
 	}
+	const std::string& LayeralityView::name() const {
+		return mName;
+	}
+
 	bool LayeralityView::isShouldBeRemoved() const {
 		return m_isShouldBeRemoved;
 	}
 }
 
 namespace Ui {
-	RegionView::RegionView(int id) {
-		mSizePopupBtn = IntInPpBtn::Ptr(new InputedPopupBtn<int>(getSizeAsText(), "Config", {
-				IntInPpBtnBp("width", m_size.width),
-				IntInPpBtnBp("height", m_size.height)
-			})
-		);
-
-		mSizePopupBtn->valueSetterUpdated.connect([&]() {
-			mSizePopupBtn->setText(getSizeAsText());
-		});
+	RegionView::RegionView(instance::iregion& region, int id) {
+		mSizeTypeInputedPopupBtn = SizeTypeInputedPopupBtn<innate::size>::create(const_cast<innate::size&>(region.size()));
 
 		auto treeNodeText = id == -1 ? "Region" : "Region " + std::to_string(id);
 		mTreeNode = TreeNode::Ptr(new TreeNode(treeNodeText, [=]{
 			
 			ImGui::PushStyleVar(ImGuiStyleVar_::ImGuiStyleVar_ItemSpacing, { 2,1 });
-			mAddLr->display();
-			ImGui::SameLine();
-			mSizePopupBtn->display();
+			{
+				mAddLr->display();
+
+				ImGui::SameLine();
+				mSizeTypeInputedPopupBtn->view();
+			}
 			ImGui::PopStyleVar();
 
 			for (auto& it: m_layeralitys) {
@@ -86,31 +89,19 @@ namespace Ui {
 
 		mAddLr = AddButton::Ptr(new AddButton("lr"));
 		mAddLr->clicked.connect([&]() {
-			LayeralityView::Ptr lw(new LayeralityView(m_layeralitys.size()));
+			LayeralityView::Ptr lw(new LayeralityView(to_hex_str(m_lrid++)));
 			m_layeralitys.push_back(std::move(lw));
 		});
+
+		for (const auto& layer : region.innate().layers) {
+			LayeralityView::Ptr lw(new LayeralityView(to_hex_str(m_lrid++)));
+			lw->load(layer);
+
+			m_layeralitys.push_back(std::move(lw));
+		}
 	}
 
 	void RegionView::view() const {
 		mTreeNode->display();
 	}
-
-	void RegionView::load(instance::iregion& region) {
-		m_size = region.innate().size;
-		int id = 0;
-		for (const auto& layer : region.innate().layers) {
-			LayeralityView::Ptr lw(new LayeralityView(id++));
-			lw->load(layer);
-
-			m_layeralitys.push_back(std::move(lw));
-		}
-
-		mSizePopupBtn->setText(getSizeAsText());
-	}
-
-	std::string RegionView::getSizeAsText() const {
-		return "width:" + std::to_string(m_size.width) + " " +
-			   "height:" + std::to_string(m_size.height);
-	}
-
 }

@@ -11,11 +11,12 @@ namespace Ui {
 	public:
 		using Ptr = std::unique_ptr<LayeralityView>;
 
-		LayeralityView(int id);
+		LayeralityView(const std::string& name);
 
 		void view() const;
 		void load(const instance::readable_layer_innate& layer);
 
+		const std::string& name() const;
 		bool isShouldBeRemoved() const;
 
 	private:
@@ -25,10 +26,11 @@ namespace Ui {
 	private:
 		TreeNode::Ptr mTreeNode;
 
+		RmButton::Ptr  mRmLr;
 		AddButton::Ptr mAddSplv;
 		AddButton::Ptr mAddCell;
-		RmButton::Ptr  mRmLr;
 
+		std::string mName;
 		bool m_isShouldBeRemoved = false;
 
 	};
@@ -37,22 +39,18 @@ namespace Ui {
 	public:
 		using Ptr = std::unique_ptr<RegionView>;
 
-		RegionView(int id = -1);
-
+		RegionView(instance::iregion& region, int id = -1);
 		void view() const;
-		void load(instance::iregion& region);
 
 	private:
-		innate::size m_size;
+		int m_lrid = 0;
 		std::vector<LayeralityView::Ptr> m_layeralitys;
 
 	private:
 		TreeNode::Ptr mTreeNode;
-
-		IntInPpBtn::Ptr mSizePopupBtn;
 		AddButton::Ptr mAddLr;
 
-		std::string getSizeAsText() const;
+		SizeTypeInputedPopupBtn<innate::size>::Ptr mSizeTypeInputedPopupBtn;
 	};
 
 }
