@@ -28,7 +28,7 @@ namespace core {
 		}*/
 	}
 
-	instance::iregion& system::region() {
+	instance::iregion_host_accessor& system::accessor() {
 		return *host;
 	}
 

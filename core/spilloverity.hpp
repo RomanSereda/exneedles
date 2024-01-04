@@ -60,4 +60,10 @@ namespace instance {
 		static size_t calc_spillovers_bytes(const innate::size& size,
 			                                const innate::spillover* splvr);
 	};
+
+	class LIBRARY_API ispilloverity_host_accessor {
+	public:
+
+	};
+
 }

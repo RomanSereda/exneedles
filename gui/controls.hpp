@@ -124,19 +124,23 @@ namespace Ui {
 	public:
 		using Ptr = std::shared_ptr<SizeTypeInputedPopupBtn>;
 
-		SizeTypeInputedPopupBtn(SizeType& size);
+		SizeTypeInputedPopupBtn(SizeType& size, bool disabled = false);
 		std::string getSizeAsText() const;
 
 		void view();
-		static Ptr create(SizeType& sizeType);
+		static Ptr create(SizeType& sizeType, bool disabled = false);
 
 	protected:
+		bool m_disabled;
 		SizeType& m_size;
+
 		IntInPpBtn::Ptr mSizePopupBtn;
 	};
 
 	template<typename SizeType>
-	SizeTypeInputedPopupBtn<SizeType>::SizeTypeInputedPopupBtn(SizeType& size): m_size(size) {
+	SizeTypeInputedPopupBtn<SizeType>::SizeTypeInputedPopupBtn(SizeType& size, bool disabled)
+		: m_size(size), m_disabled(disabled)
+	{
 		mSizePopupBtn = IntInPpBtn::Ptr(new InputedPopupBtn<int>(getSizeAsText(), "Config", {
 				IntInPpBtnBp("width", m_size.width),
 				IntInPpBtnBp("height", m_size.height)
@@ -158,12 +162,16 @@ namespace Ui {
 
 	template<typename SizeType>
 	void SizeTypeInputedPopupBtn<SizeType>::view() {
+		if (m_disabled) ImGui::BeginDisabled();
+
 		mSizePopupBtn->display();
+
+		if (m_disabled) ImGui::EndDisabled();
 	}
 
 	template<typename SizeType>
-	std::shared_ptr<SizeTypeInputedPopupBtn<SizeType>> SizeTypeInputedPopupBtn<SizeType>::create(SizeType& sizeType) {
-		return Ptr(new SizeTypeInputedPopupBtn<SizeType>(sizeType));
+	std::shared_ptr<SizeTypeInputedPopupBtn<SizeType>> SizeTypeInputedPopupBtn<SizeType>::create(SizeType& sizeType, bool disabled) {
+		return Ptr(new SizeTypeInputedPopupBtn<SizeType>(sizeType, disabled));
 	}
 
 

@@ -5,6 +5,8 @@
 
 namespace instance {
 	class iregion;
+	class iregion_host_accessor;
+
 	class region_host;
 	class region_device;
 }
@@ -15,7 +17,7 @@ namespace core {
 		system();
 		~system();
 
-		instance::iregion& region() override;
+		instance::iregion_host_accessor& accessor() override;
 
 	private:
 		instance::region_host*   host   = nullptr;

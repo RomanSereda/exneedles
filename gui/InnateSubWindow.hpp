@@ -6,7 +6,7 @@
 namespace Ui {
 	class InnateSubWindow: public SubWindow {
 	public:
-		InnateSubWindow(instance::iregion& region);
+		InnateSubWindow(instance::iregion_host_accessor& accessor);
 		void display() override;
 
 	private:

@@ -49,7 +49,7 @@ namespace Ui {
         ImGui_ImplGlfw_InitForOpenGL(m_glfwWindow, true);
         ImGui_ImplOpenGL3_Init(glsl_version);
 
-        auto innateSubWindow = new InnateSubWindow(m_corelib->system().region());
+        auto innateSubWindow = new InnateSubWindow(m_corelib->system().accessor());
 
         m_subFrames.push_back(SubWindow::Ptr(innateSubWindow));
 	}

@@ -99,4 +99,10 @@ namespace instance {
 		static size_t calc_results_bytes(const innate::size& size);
 		static size_t calc_cells_bytes(const innate::size& size, const innate::cell* c);
 	};
+
+	class LIBRARY_API icellularity_host_accessor {
+	public:
+
+	};
+
 }

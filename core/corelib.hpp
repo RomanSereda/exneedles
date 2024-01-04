@@ -4,12 +4,13 @@
 
 namespace instance {
 	class iregion;
+	class iregion_host_accessor;
 };
 
 namespace core {
 	class LIBRARY_API isystem {
 	public:
-		virtual instance::iregion& region() = 0;
+		virtual instance::iregion_host_accessor& accessor() = 0;
 
 	};
 };

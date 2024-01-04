@@ -47,7 +47,7 @@ namespace instance {
 
 
 namespace instance {
-	class cellularity_host : public cellularity_cpu_type {
+	class cellularity_host : public cellularity_cpu_type, public icellularity_host_accessor {
 	public:
 		cellularity_host(const ptree& root, const innate::size& size);
 		ptree to_ptree() const override;

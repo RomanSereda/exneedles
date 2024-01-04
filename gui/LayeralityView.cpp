@@ -2,22 +2,14 @@
 #include <vector>
 
 namespace Ui {
-	LayeralityView::LayeralityView(const std::string& name)
-		: mName(name)
+	LayeralityView::LayeralityView(instance::ilayerality_host_accessor& accessor, const std::string& name)
+		: m_name(name)
 	{
+		mSizeTypeInputedPopupBtn = SizeTypeInputedPopupBtn<innate::size>
+			::create(const_cast<innate::size&>(accessor.layerality().size()), true);
+
 		auto treeNodeText = "lr: " + name;
 		mTreeNode = TreeNode::Ptr(new TreeNode(treeNodeText, [=] {
-
-			ImGui::PushStyleVar(ImGuiStyleVar_::ImGuiStyleVar_ItemSpacing, { 2,1 });
-			{
-				mRmLr->display();
-				ImGui::SameLine();
-				mAddSplv->display();
-				ImGui::SameLine();
-				mAddCell->display();
-			}
-			ImGui::PopStyleVar();
-
 			for (const auto& cellularity : m_cellularitys) {
 				cellularity->view();
 			}
@@ -31,14 +23,8 @@ namespace Ui {
 
 		mAddSplv = AddButton::Ptr(new AddButton("splv"));
 		mAddCell = AddButton::Ptr(new AddButton("cell"));
-	}
 
-	void LayeralityView::view() const {
-		mTreeNode->display();
-	}
-
-	void LayeralityView::load(const instance::readable_layer_innate& layer) {
-		for (const auto& splvr : layer.spillovers) {
+		/*for (const auto& splvr : layer.spillovers) {
 			SpilloverityView::Ptr splw(new SpilloverityView());
 			splw->load(splvr);
 
@@ -50,10 +36,28 @@ namespace Ui {
 			sw->load(cell);
 
 			m_cellularitys.push_back(std::move(sw));
-		}
+		}*/
 	}
+
+	void LayeralityView::view() const {
+		ImGui::PushStyleVar(ImGuiStyleVar_::ImGuiStyleVar_ItemSpacing, { 2,1 });
+		{
+			mRmLr->display();
+			ImGui::SameLine();
+			mAddSplv->display();
+			ImGui::SameLine();
+			mAddCell->display();
+			ImGui::SameLine();
+			mSizeTypeInputedPopupBtn->view();
+			ImGui::SameLine();
+		}
+		ImGui::PopStyleVar();
+
+		mTreeNode->display();
+	}
+
 	const std::string& LayeralityView::name() const {
-		return mName;
+		return m_name;
 	}
 
 	bool LayeralityView::isShouldBeRemoved() const {
@@ -62,46 +66,56 @@ namespace Ui {
 }
 
 namespace Ui {
-	RegionView::RegionView(instance::iregion& region, int id) {
-		mSizeTypeInputedPopupBtn = SizeTypeInputedPopupBtn<innate::size>::create(const_cast<innate::size&>(region.size()));
+	RegionView::RegionView(instance::iregion_host_accessor& accessor, int id) {
+		mSizeTypeInputedPopupBtn = SizeTypeInputedPopupBtn<innate::size>
+			::create(const_cast<innate::size&>(accessor.region().size()));
 
-		auto treeNodeText = id == -1 ? "Region" : "Region " + std::to_string(id);
-		mTreeNode = TreeNode::Ptr(new TreeNode(treeNodeText, [=]{
-			
-			ImGui::PushStyleVar(ImGuiStyleVar_::ImGuiStyleVar_ItemSpacing, { 2,1 });
-			{
-				mAddLr->display();
+		mAddLr = AddButton::Ptr(new AddButton("lr"));
 
-				ImGui::SameLine();
-				mSizeTypeInputedPopupBtn->view();
-			}
-			ImGui::PopStyleVar();
-
+		auto treeNodeText = id == -1 ? "rg" : "rg " + std::to_string(id);
+		mTreeNode = TreeNode::Ptr(new TreeNode(treeNodeText, [&]{
 			for (auto& it: m_layeralitys) {
 				it->view();
 			}
 
 			auto it = m_layeralitys.begin();
 			while (it != m_layeralitys.end()) {
-				it->get()->isShouldBeRemoved() ? it = m_layeralitys.erase(it) : ++it;
+				if (it->get()->isShouldBeRemoved()) 
+				{
+					accessor.rm_layer(it->get()->name());
+					it = m_layeralitys.erase(it);
+				} 
+				else ++it;
 			}
 		}));
-
-		mAddLr = AddButton::Ptr(new AddButton("lr"));
+	
 		mAddLr->clicked.connect([&]() {
-			LayeralityView::Ptr lw(new LayeralityView(to_hex_str(m_lrid++)));
+			auto name = to_hex_str(m_lrid++);
+			auto& acc = accessor.add_layer(name);
+
+			LayeralityView::Ptr lw(new LayeralityView(acc, name));
 			m_layeralitys.push_back(std::move(lw));
 		});
 
-		for (const auto& layer : region.innate().layers) {
-			LayeralityView::Ptr lw(new LayeralityView(to_hex_str(m_lrid++)));
-			lw->load(layer);
+		std::unordered_map<std::string, instance::ilayerality_host_accessor&> layers;
+		accessor.get_layers(layers);
 
+		for (const auto& layer : layers) {
+			LayeralityView::Ptr lw(new LayeralityView(layer.second, layer.first));
 			m_layeralitys.push_back(std::move(lw));
 		}
 	}
 
 	void RegionView::view() const {
+		ImGui::PushStyleVar(ImGuiStyleVar_::ImGuiStyleVar_ItemSpacing, { 2,1 });
+		{
+			mAddLr->display();
+			ImGui::SameLine();
+			mSizeTypeInputedPopupBtn->view();
+			ImGui::SameLine();
+		}
+		ImGui::PopStyleVar();
+
 		mTreeNode->display();
 	}
 }
