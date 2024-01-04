@@ -4,7 +4,15 @@ namespace Ui {
 	CellularityView::CellularityView(instance::icellularity_host_accessor& accessor, const std::string& name)
 		: m_accessor(accessor), m_name(name)
 	{
+		std::unordered_map<std::string, instance::iterminality_host_accessor&> trmns;
+		accessor.get_trmns(trmns);
+
+		for (const auto& trmn : trmns) {
+			TerminalityView::Ptr trw(new TerminalityView(trmn.second, trmn.first));
+			m_terminalitys.push_back(std::move(trw));
+		}
 	}
+
 	void CellularityView::view() const {
 
 		for (const auto& terminality : m_terminalitys) {

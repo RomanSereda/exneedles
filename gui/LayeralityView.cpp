@@ -21,8 +21,15 @@ namespace Ui {
 		mRmLr    = RmButton::Ptr(new RmButton("lr"));
 		mRmLr->clicked.connect([&](){ m_isShouldBeRemoved = true; });
 
-		mAddSplv = AddButton::Ptr(new AddButton("splv"));
+
 		mAddCell = AddButton::Ptr(new AddButton("cell"));
+		mAddCell->clicked.connect([&]() {
+			/*auto name = to_hex_str(m_cellId++);
+			auto& acc = accessor.add_cell(name);
+
+			CellularityView::Ptr lw(new CellularityView(acc, name));
+			m_cellularitys.push_back(std::move(lw));*/
+		});
 
 		std::unordered_map<std::string, instance::icellularity_host_accessor&> cells;
 		accessor.get_cells(cells);
@@ -31,6 +38,15 @@ namespace Ui {
 			CellularityView::Ptr sw(new CellularityView(cell.second, cell.first));
 			m_cellularitys.push_back(std::move(sw));
 		}
+
+		mAddSplv = AddButton::Ptr(new AddButton("splv"));
+		mAddSplv->clicked.connect([&]() {
+			/*auto name = to_hex_str(m_splvrId++);
+			auto& acc = accessor.add_splvr(name);
+
+			SpilloverityView::Ptr lw(new SpilloverityView(acc, name));
+			m_spilloveritys.push_back(std::move(lw));*/
+		});
 
 		std::unordered_map<std::string, instance::ispilloverity_host_accessor&> splvrs;
 		accessor.get_splvrs(splvrs);

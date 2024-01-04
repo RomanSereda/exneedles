@@ -1,10 +1,15 @@
 #include "TerminalityView.hpp"
 
 namespace Ui {
+	TerminalityView::TerminalityView(instance::iterminality_host_accessor& accessor, const std::string& name)
+		: m_accessor(accessor), m_name(name)
+	{}
+
 	void TerminalityView::view() const {
+
 	}
 
-	void TerminalityView::load(const instance::readable_trmn_innate& trmn) {
+	/*void TerminalityView::load(const instance::readable_trmn_innate& trmn) {
 		std::unique_ptr<innate::cluster> cl;
 		cluster_tuple::create(trmn.cl->type, [&](auto ptr) {
 			cl = std::move(ptr);
@@ -16,6 +21,6 @@ namespace Ui {
 			tr = std::move(ptr);
 			memcpy(tr.get(), trmn.tr, sizeof(*ptr));
 		});
-	}
+	}*/
 
 }

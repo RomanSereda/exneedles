@@ -1,4 +1,5 @@
 #pragma once
+#include <unordered_map>
 #include "types.hpp"
 #include "boost.hpp"
 
@@ -65,6 +66,8 @@ namespace instance {
 	struct readable_trmn_innate;
 	struct readable_trmn_instance;
 
+	class iterminality_host_accessor;
+
 	struct readable_cell_innate { 
 		const innate::cell* cell; 
 		const std::vector<readable_trmn_innate> terminalitys;
@@ -86,7 +89,9 @@ namespace instance {
 		virtual readable_cell_innate innate() const = 0;
 		virtual readable_cell_instance instance() const = 0;
 
-		static std::unique_ptr<innate::cell> to_innate(const ptree& root);
+		static std::unique_ptr<innate::cell> to_innate(const ptree& root, 
+			innate::cell::cell_type deftype = innate::cell::cell_simple);
+
 		static ptree to_ptree(innate::cell* c);
 
 	protected:
@@ -103,6 +108,11 @@ namespace instance {
 	class LIBRARY_API icellularity_host_accessor {
 	public:
 		virtual icellularity& cellularity() = 0;
+
+		virtual void rm_trmn(const std::string& id) = 0;
+		virtual iterminality_host_accessor& add_trmn(const std::string& id) = 0;
+
+		virtual void get_trmns(std::unordered_map<std::string, iterminality_host_accessor&>& trmns) const = 0;
 	};
 
 }

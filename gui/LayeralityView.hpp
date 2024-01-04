@@ -18,6 +18,9 @@ namespace Ui {
 		bool isShouldBeRemoved() const;
 
 	private:
+		int m_cellId = 0x80;
+		int m_splvrId = 0x80;
+
 		std::vector<SpilloverityView::Ptr> m_spilloveritys;
 		std::vector<CellularityView::Ptr>  m_cellularitys;
 

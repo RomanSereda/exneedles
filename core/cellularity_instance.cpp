@@ -6,6 +6,24 @@
 
 #pragma warning(disable:6011)
 
+template<typename T1, typename T2> void rm(const std::string& id, T1& t1, T2& t2) {
+	auto it = t1.find(id);
+	if (it != t1.end()) {
+
+		auto i = t2.begin();
+		while (i != t2.end()) {
+			if (it->second == i->get())
+			{
+				t1.erase(id);
+				i = t2.erase(i);
+				return;
+			}
+			else ++i;
+		}
+	}
+	logexit();
+}
+
 namespace instance {
 	template<typename T, typename TR>
 	const T& cellularity<T, TR>::inncell() const {
@@ -61,13 +79,13 @@ namespace instance {
 }
 
 namespace instance {
-	cellularity_host::cellularity_host(const ptree& root, const innate::size& size)
+	cellularity_host::cellularity_host(const ptree& root, const innate::size& size, innate::cell::cell_type deftype)
 		: cellularity_cpu_type(size){
 
 		if (size.height < 1 || size.width < 1)
 			logexit();
 
-		m_innate = to_innate(root);
+		m_innate = to_innate(root, deftype);
 		if(!m_innate)
 			logexit();
 
@@ -105,6 +123,33 @@ namespace instance {
 
 	icellularity& cellularity_host::cellularity() {
 		return *this;
+	}
+
+	void cellularity_host::rm_trmn(const std::string& id) {
+		rm(id, m_iterminalitys, m_terminalitys);
+	}
+
+	iterminality_host_accessor& cellularity_host::add_trmn(const std::string& id) {
+		return add_trmn(id, ptree(), size());
+	}
+
+	void cellularity_host::get_trmns(
+		std::unordered_map<std::string, iterminality_host_accessor&>& trmns) const
+	{
+		for (const auto& it : m_iterminalitys)
+			trmns.emplace(it.first, *((iterminality_host_accessor*)it.second));
+	}
+
+	iterminality_host_accessor& cellularity_host::add_trmn(
+		const std::string& id, const ptree& root, const innate::size& size)
+	{
+		auto terminality = std::make_unique<terminality_host>(root, size);
+		auto ptr = terminality.get();
+
+		m_iterminalitys.emplace(id, ptr);
+		m_terminalitys.push_back(std::move(terminality));
+
+		return *ptr;
 	}
 
 	readable_cell_innate cellularity_host::innate() const {

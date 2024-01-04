@@ -129,4 +129,9 @@ namespace instance {
 		static ptree to_ptree(innate::cluster* cl);
 		static ptree to_ptree(innate::terminal* tr);
 	};
+
+	class LIBRARY_API iterminality_host_accessor {
+	public:
+		virtual iterminality& terminality() = 0;
+	};
 }

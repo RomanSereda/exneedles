@@ -11,7 +11,19 @@ namespace innate {
 #pragma warning(disable:6011)
 
 namespace instance {
-	std::unique_ptr<innate::cell> icellularity::to_innate(const ptree& root) {
+	std::unique_ptr<innate::cell> icellularity::to_innate(const ptree& root, 
+		                                                  innate::cell::cell_type deftype) 
+	{
+		if (root.empty() || root.find("type") == root.not_found()) {
+			std::unique_ptr<innate::cell> ptr(nullptr);
+			cell_data_tuple::create_first(deftype, [&](auto p) {
+				ptr = std::move(p);
+			});
+
+			console("warning: created cellularity innate from default type");
+			return std::move(ptr);
+		}
+			
 		auto innate_cell_type
 			= static_cast<innate::cell::cell_type>(root.get<int>("type"));
 
@@ -27,7 +39,7 @@ namespace instance {
 
 		boost::to(*ptr, root);
 
-		return ptr;
+		return std::move(ptr);
 	}
 
 	ptree icellularity::to_ptree(innate::cell* c) {

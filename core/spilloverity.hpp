@@ -50,7 +50,9 @@ namespace instance {
 		virtual readable_splvr_innate innate() const = 0;
 		virtual readable_splvr_instance instance() const = 0;
 
-		static std::unique_ptr<innate::spillover> to_innate(const ptree& root);
+		static std::unique_ptr<innate::spillover> to_innate(const ptree& root, 
+			innate::spillover::spillover_type deftype = innate::spillover::simple_spillover);
+
 		static ptree to_ptree(innate::spillover* c);
 
 	protected:

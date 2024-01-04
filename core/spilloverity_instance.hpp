@@ -38,7 +38,9 @@ namespace instance {
 namespace instance {
 	class spilloverity_host : public spilloverity_cpu_type, public ispilloverity_host_accessor {
 	public:
-		spilloverity_host(const ptree& root, const innate::size& size);
+		spilloverity_host(const ptree& root, const innate::size& size, 
+			              innate::spillover::spillover_type deftype = innate::spillover::simple_spillover);
+
 		ptree to_ptree() const override;
 
 		ispilloverity& spilloverity() override;

@@ -106,12 +106,16 @@ namespace instance {
 		rm(id, m_ispilloveritys, m_spilloveritys);
 	}
 
-	icellularity_host_accessor& layerality_host::add_cell(const std::string& id) {
-		return add_cell(id, ptree(), size());
+	icellularity_host_accessor& layerality_host::add_cell(
+		const std::string& id, innate::cell::cell_type deftype) 
+	{
+		return add_cell(id, ptree(), size(), deftype);
 	}
 
-	ispilloverity_host_accessor& layerality_host::add_splvr(const std::string& id) {
-		return add_splvr(id, ptree(), size());
+	ispilloverity_host_accessor& layerality_host::add_splvr(
+		const std::string& id, innate::spillover::spillover_type deftype) 
+	{
+		return add_splvr(id, ptree(), size(), deftype);
 	}
 
 	void layerality_host::get_cells(
@@ -129,9 +133,9 @@ namespace instance {
 	}
 
 	icellularity_host_accessor& layerality_host::add_cell(
-		const std::string& id, const ptree& root, const innate::size& size)
+		const std::string& id, const ptree& root, const innate::size& size, innate::cell::cell_type deftype)
 	{
-		auto cellularit = std::make_unique<cellularity_host>(root, size);
+		auto cellularit = std::make_unique<cellularity_host>(root, size, deftype);
 		auto ptr = cellularit.get();
 
 		m_icellularitys.emplace(id, ptr);
@@ -141,9 +145,9 @@ namespace instance {
 	}
 
 	ispilloverity_host_accessor& layerality_host::add_splvr(
-		const std::string& id, const ptree& root, const innate::size& size)
+		const std::string& id, const ptree& root, const innate::size& size, innate::spillover::spillover_type deftype)
 	{
-		auto spilloverity = std::make_unique<spilloverity_host>(root, size);
+		auto spilloverity = std::make_unique<spilloverity_host>(root, size, deftype);
 		auto ptr = spilloverity.get();
 
 		m_ispilloveritys.emplace(id, ptr);

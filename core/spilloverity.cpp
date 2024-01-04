@@ -11,7 +11,19 @@ namespace innate {
 }
 
 namespace instance {
-	std::unique_ptr<innate::spillover> ispilloverity::to_innate(const ptree& root) {
+	std::unique_ptr<innate::spillover> ispilloverity::to_innate(const ptree& root, 
+		                                                        innate::spillover::spillover_type deftype) 
+	{
+		if (root.empty() || root.find("innate_spillover") == root.not_found()) {
+			std::unique_ptr<innate::spillover> ptr(nullptr);
+			spillover_data_tuple::create_first(deftype, [&](auto p) {
+				ptr = std::move(p);
+			});
+
+			console("warning: created spilloverity innate from default type");
+			return std::move(ptr);
+		}
+
 		auto innate_spillover_tree = root.get_child("innate_spillover");
 		auto innate_spillover_type
 			= static_cast<innate::spillover::spillover_type>(innate_spillover_tree.get<int>("type"));

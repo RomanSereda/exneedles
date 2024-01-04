@@ -43,12 +43,12 @@ namespace instance {
 }
 
 namespace instance {
-	spilloverity_host::spilloverity_host(const ptree& root, const innate::size& size)
+	spilloverity_host::spilloverity_host(const ptree& root, const innate::size& size, innate::spillover::spillover_type deftype)
 		: spilloverity_cpu_type(size) {
 		if (size.height < 1 || size.width < 1)
 			logexit();
 
-		m_innate = to_innate(root);
+		m_innate = to_innate(root, deftype);
 
 		if (!innsplvr().get())
 			logexit();

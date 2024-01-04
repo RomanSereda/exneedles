@@ -49,11 +49,22 @@ namespace instance {
 namespace instance {
 	class cellularity_host : public cellularity_cpu_type, public icellularity_host_accessor {
 	public:
-		cellularity_host(const ptree& root, const innate::size& size);
+		cellularity_host(const ptree& root, const innate::size& size, 
+			             innate::cell::cell_type deftype = innate::cell::cell_simple);
+
 		ptree to_ptree() const override;
 
-		icellularity& cellularity() override;
 		readable_cell_innate innate() const override;
+
+		icellularity& cellularity() override;
+		void rm_trmn(const std::string& id) override;
+		iterminality_host_accessor& add_trmn(const std::string& id) override;
+
+		void get_trmns(std::unordered_map<std::string, iterminality_host_accessor&>& trmns) const override;
+
+	private:
+		std::unordered_map<std::string, terminality_cpu_type*> m_iterminalitys;
+		iterminality_host_accessor& add_trmn(const std::string& id, const ptree& root, const innate::size& size);
 	};
 
 	class cellularity_device : public cellularity_gpu_type {

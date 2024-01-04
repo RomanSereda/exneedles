@@ -45,8 +45,8 @@ namespace instance {
 		void rm_cell(const std::string& id) override;
 		void rm_splvr(const std::string& id) override;
 
-		icellularity_host_accessor& add_cell(const std::string& id) override;
-		ispilloverity_host_accessor& add_splvr(const std::string& id) override;
+		icellularity_host_accessor& add_cell(const std::string& id, innate::cell::cell_type deftype) override;
+		ispilloverity_host_accessor& add_splvr(const std::string& id, innate::spillover::spillover_type deftype) override;
 
 		void get_cells(std::unordered_map<std::string, icellularity_host_accessor&>& cells) const override;
 		void get_splvrs(std::unordered_map<std::string, ispilloverity_host_accessor&>& splvrs) const override;
@@ -55,8 +55,11 @@ namespace instance {
 		std::unordered_map<std::string, cellularity_cpu_type*> m_icellularitys;
 		std::unordered_map<std::string, spilloverity_cpu_type*> m_ispilloveritys;
 
-		icellularity_host_accessor& add_cell(const std::string& id, const ptree& root, const innate::size& size);
-		ispilloverity_host_accessor& add_splvr(const std::string& id, const ptree& root, const innate::size& size);
+		icellularity_host_accessor& add_cell(const std::string& id, const ptree& root, const innate::size& size, 
+			                                 innate::cell::cell_type deftype = innate::cell::cell_simple);
+
+		ispilloverity_host_accessor& add_splvr(const std::string& id, const ptree& root, const innate::size& size, 
+			                                   innate::spillover::spillover_type deftype = innate::spillover::simple_spillover);
 	};
 
 	class layerality_device : public layerality_gpu_type {

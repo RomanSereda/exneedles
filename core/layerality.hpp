@@ -5,6 +5,9 @@
 #define LIBRARY "core"
 #include "../deflib.inc"
 
+#include "spilloverity.hpp"
+#include "cellularity.hpp"
+
 namespace innate {
 	struct size {
 		int width;
@@ -19,9 +22,6 @@ namespace instance {
 	struct readable_cell_innate;
 	struct readable_splvr_instance;
 	struct readable_cell_instance;
-
-	class icellularity_host_accessor;
-	class ispilloverity_host_accessor;
 
 	struct readable_layer_innate {
 		const std::vector<readable_splvr_innate> spillovers;
@@ -48,8 +48,8 @@ namespace instance {
 		virtual void rm_cell(const std::string& id) = 0;
 		virtual void rm_splvr(const std::string& id) = 0;
 
-		virtual icellularity_host_accessor& add_cell(const std::string& id) = 0;
-		virtual ispilloverity_host_accessor& add_splvr(const std::string& id) = 0;
+		virtual icellularity_host_accessor& add_cell(const std::string& id, innate::cell::cell_type deftype) = 0;
+		virtual ispilloverity_host_accessor& add_splvr(const std::string& id, innate::spillover::spillover_type deftype) = 0;
 
 		virtual void get_cells(std::unordered_map<std::string, icellularity_host_accessor&>& cells) const = 0;
 		virtual void get_splvrs(std::unordered_map<std::string, ispilloverity_host_accessor&>& splvrs) const = 0;

@@ -99,6 +99,10 @@ namespace instance {
 		return terminality::to_ptree((innate::cluster*)cl, (innate::terminal*)tr);
 	}
 
+	iterminality& terminality_host::terminality() {
+		return *this;
+	}
+
 	readable_trmn_innate terminality_host::innate() const {
 		auto cl = inncl().get();
 		auto tr = inntr().get();
