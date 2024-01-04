@@ -102,7 +102,7 @@ namespace instance {
 
 	class LIBRARY_API icellularity_host_accessor {
 	public:
-
+		virtual icellularity& cellularity() = 0;
 	};
 
 }

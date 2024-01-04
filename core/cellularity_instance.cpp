@@ -103,6 +103,10 @@ namespace instance {
 		return root;
 	}
 
+	icellularity& cellularity_host::cellularity() {
+		return *this;
+	}
+
 	readable_cell_innate cellularity_host::innate() const {
 		std::vector<readable_trmn_innate> terminality;
 		for (const auto& trmn : m_terminalitys)

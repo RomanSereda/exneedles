@@ -41,6 +41,7 @@ namespace instance {
 		spilloverity_host(const ptree& root, const innate::size& size);
 		ptree to_ptree() const override;
 
+		ispilloverity& spilloverity() override;
 		readable_splvr_innate innate() const override;
 	};
 

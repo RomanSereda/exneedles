@@ -24,19 +24,21 @@ namespace Ui {
 		mAddSplv = AddButton::Ptr(new AddButton("splv"));
 		mAddCell = AddButton::Ptr(new AddButton("cell"));
 
-		/*for (const auto& splvr : layer.spillovers) {
-			SpilloverityView::Ptr splw(new SpilloverityView());
-			splw->load(splvr);
+		std::unordered_map<std::string, instance::icellularity_host_accessor&> cells;
+		accessor.get_cells(cells);
 
-			m_spilloveritys.push_back(std::move(splw));
+		for (const auto& cell : cells) {
+			CellularityView::Ptr sw(new CellularityView(cell.second, cell.first));
+			m_cellularitys.push_back(std::move(sw));
 		}
 
-		for (const auto& cell : layer.cellularity) {
-			CellularityView::Ptr sw(new CellularityView());
-			sw->load(cell);
+		std::unordered_map<std::string, instance::ispilloverity_host_accessor&> splvrs;
+		accessor.get_splvrs(splvrs);
 
-			m_cellularitys.push_back(std::move(sw));
-		}*/
+		for (const auto& splvr: splvrs) {
+			SpilloverityView::Ptr splw(new SpilloverityView(splvr.second, splvr.first));
+			m_spilloveritys.push_back(std::move(splw));
+		}
 	}
 
 	void LayeralityView::view() const {
@@ -44,10 +46,13 @@ namespace Ui {
 		{
 			mRmLr->display();
 			ImGui::SameLine();
+
 			mAddSplv->display();
 			ImGui::SameLine();
+
 			mAddCell->display();
 			ImGui::SameLine();
+
 			mSizeTypeInputedPopupBtn->view();
 			ImGui::SameLine();
 		}
@@ -111,6 +116,7 @@ namespace Ui {
 		{
 			mAddLr->display();
 			ImGui::SameLine();
+
 			mSizeTypeInputedPopupBtn->view();
 			ImGui::SameLine();
 		}

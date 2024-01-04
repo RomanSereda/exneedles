@@ -77,6 +77,10 @@ namespace instance {
 		return spilloverity::to_ptree((innate::spillover*)splvr);
 	}
 
+	ispilloverity& spilloverity_host::spilloverity() {
+		return *this;
+	}
+
 	readable_splvr_innate spilloverity_host::innate() const {
 		auto splvr = innsplvr().get();
 

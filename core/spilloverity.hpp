@@ -63,7 +63,7 @@ namespace instance {
 
 	class LIBRARY_API ispilloverity_host_accessor {
 	public:
-
+		virtual ispilloverity& spilloverity() = 0;
 	};
 
 }

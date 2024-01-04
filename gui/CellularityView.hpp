@@ -10,11 +10,15 @@ namespace Ui {
 	public:
 		using Ptr = std::unique_ptr<CellularityView>;
 		
+		CellularityView(instance::icellularity_host_accessor& accessor, const std::string& name);
 		void view() const;
-		void load(const instance::readable_cell_innate& cell);
+
 
 	private:
-		std::unique_ptr<innate::cell> m_innate { nullptr };
+	private:
+		instance::icellularity_host_accessor& m_accessor;
+		std::string m_name;
+
 		std::vector<TerminalityView::Ptr> m_terminalitys;
 	};
 

@@ -52,6 +52,7 @@ namespace instance {
 		cellularity_host(const ptree& root, const innate::size& size);
 		ptree to_ptree() const override;
 
+		icellularity& cellularity() override;
 		readable_cell_innate innate() const override;
 	};
 
