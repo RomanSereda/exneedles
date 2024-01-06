@@ -16,8 +16,8 @@ namespace innate {
 		cell(cell_type t = cell_simple);
 	};
 
-	static cell::cell_type cell_types[] = { cell::cell_simple, cell::cell_exre };
-	static std::string to_string(cell::cell_type type);
+	LIBRARY_API void get_items(std::vector<cell::cell_type>& items);
+	LIBRARY_API std::string to_string(cell::cell_type type);
 ;
 	struct LIBRARY_API cell_simple : public cell {
 		cell_simple();

@@ -8,53 +8,48 @@ namespace Ui {
 		mSizeTypeInputedPopupBtn = SizeTypeInputedPopupBtn<innate::size>
 			::create(const_cast<innate::size&>(accessor.layerality().size()), true);
 
+		mCellTypeSelectPopup = TypeSelectPopup<innate::cell::cell_type>::create();
+		mSplvrTypeSelectPopup = TypeSelectPopup<innate::spillover::spillover_type>::create();
+
 		auto treeNodeText = "lr: " + name;
-		mTreeNode = TreeNode::Ptr(new TreeNode(treeNodeText, [=] {
-			for (const auto& cellularity : m_cellularitys) {
-				cellularity->view();
+		mTreeNode = TreeNode::Ptr(new TreeNode(treeNodeText, [&] {
+			{
+				for (const auto& cellularity : m_cellularitys) {
+					cellularity->view();
+				}
+				auto it = m_cellularitys.begin();
+				while (it != m_cellularitys.end()) {
+					if (it->get()->isShouldBeRemoved())
+					{
+						accessor.rm_cell(it->get()->name());
+						it = m_cellularitys.erase(it);
+					}
+					else ++it;
+				}
 			}
-			for (const auto& spilloverity : m_spilloveritys) {
-				spilloverity->view();
+			
+			{
+				for (const auto& spilloverity : m_spilloveritys) {
+					spilloverity->view();
+				}
+				auto it = m_spilloveritys.begin();
+				while (it != m_spilloveritys.end()) {
+					if (it->get()->isShouldBeRemoved())
+					{
+						accessor.rm_splvr(it->get()->name());
+						it = m_spilloveritys.erase(it);
+					}
+					else ++it;
+				}
 			}
+
 		}));
 
 		mRmLr    = RmButton::Ptr(new RmButton("lr"));
 		mRmLr->clicked.connect([&](){ m_isShouldBeRemoved = true; });
 
-
-		mAddCell = AddButton::Ptr(new AddButton("cell"));
-		mAddCell->clicked.connect([&]() {
-			/*auto name = to_hex_str(m_cellId++);
-			auto& acc = accessor.add_cell(name);
-
-			CellularityView::Ptr lw(new CellularityView(acc, name));
-			m_cellularitys.push_back(std::move(lw));*/
-		});
-
-		std::unordered_map<std::string, instance::icellularity_host_accessor&> cells;
-		accessor.get_cells(cells);
-
-		for (const auto& cell : cells) {
-			CellularityView::Ptr sw(new CellularityView(cell.second, cell.first));
-			m_cellularitys.push_back(std::move(sw));
-		}
-
-		mAddSplv = AddButton::Ptr(new AddButton("splv"));
-		mAddSplv->clicked.connect([&]() {
-			/*auto name = to_hex_str(m_splvrId++);
-			auto& acc = accessor.add_splvr(name);
-
-			SpilloverityView::Ptr lw(new SpilloverityView(acc, name));
-			m_spilloveritys.push_back(std::move(lw));*/
-		});
-
-		std::unordered_map<std::string, instance::ispilloverity_host_accessor&> splvrs;
-		accessor.get_splvrs(splvrs);
-
-		for (const auto& splvr: splvrs) {
-			SpilloverityView::Ptr splw(new SpilloverityView(splvr.second, splvr.first));
-			m_spilloveritys.push_back(std::move(splw));
-		}
+		addCellInit(accessor);
+		addSplvInit(accessor);
 	}
 
 	void LayeralityView::view() const {
@@ -75,6 +70,9 @@ namespace Ui {
 		ImGui::PopStyleVar();
 
 		mTreeNode->display();
+
+		mCellTypeSelectPopup->display();
+		mSplvrTypeSelectPopup->display();
 	}
 
 	const std::string& LayeralityView::name() const {
@@ -83,6 +81,61 @@ namespace Ui {
 
 	bool LayeralityView::isShouldBeRemoved() const {
 		return m_isShouldBeRemoved;
+	}
+
+	void LayeralityView::addCellInit(instance::ilayerality_host_accessor& accessor) {
+		mAddCell = AddButton::Ptr(new AddButton("cell"));
+		mAddCell->clicked.connect([&]() {
+			if (mCellTypeSelectPopup->running()) return;
+
+			auto name = to_hex_str(m_cellId++);
+
+			mCellTypeSelectPopup->open("cell: " + name);
+			mCellTypeSelectPopup->selected.connect([&, name](auto type) {
+				mCellTypeSelectPopup->selected.disconnect_all_slots();
+
+				auto& acc = accessor.add_cell(name, type);
+
+				CellularityView::Ptr lw(new CellularityView(acc, name));
+				m_cellularitys.push_back(std::move(lw));;
+				});
+			});
+
+		std::unordered_map<std::string, instance::icellularity_host_accessor&> cells;
+		accessor.get_cells(cells);
+
+		for (const auto& cell : cells) {
+			CellularityView::Ptr sw(new CellularityView(cell.second, cell.first));
+			m_cellularitys.push_back(std::move(sw));
+		}
+	}
+
+	void LayeralityView::addSplvInit(instance::ilayerality_host_accessor& accessor) {
+
+		mAddSplv = AddButton::Ptr(new AddButton("splv"));
+		mAddSplv->clicked.connect([&]() {
+			if (mSplvrTypeSelectPopup->running()) return;
+
+			auto name = to_hex_str(m_splvrId++);
+
+			mSplvrTypeSelectPopup->open("splvr: " + name);
+			mSplvrTypeSelectPopup->selected.connect([&, name](auto type) {
+				mSplvrTypeSelectPopup->selected.disconnect_all_slots();
+
+				auto& acc = accessor.add_splvr(name, type);
+
+				SpilloverityView::Ptr lw(new SpilloverityView(acc, name));
+				m_spilloveritys.push_back(std::move(lw));
+				});
+			});
+
+		std::unordered_map<std::string, instance::ispilloverity_host_accessor&> splvrs;
+		accessor.get_splvrs(splvrs);
+
+		for (const auto& splvr : splvrs) {
+			SpilloverityView::Ptr splw(new SpilloverityView(splvr.second, splvr.first));
+			m_spilloveritys.push_back(std::move(splw));
+		}
 	}
 }
 

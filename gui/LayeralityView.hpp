@@ -35,6 +35,11 @@ namespace Ui {
 		bool m_isShouldBeRemoved = false;
 
 		SizeTypeInputedPopupBtn<innate::size>::Ptr mSizeTypeInputedPopupBtn;
+		TypeSelectPopup<innate::spillover::spillover_type>::Ptr mSplvrTypeSelectPopup;
+		TypeSelectPopup<innate::cell::cell_type>::Ptr mCellTypeSelectPopup;
+
+		void addCellInit(instance::ilayerality_host_accessor& accessor);
+		void addSplvInit(instance::ilayerality_host_accessor& accessor);
 
 	};
 

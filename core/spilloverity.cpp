@@ -9,6 +9,12 @@ namespace innate {
 	simple_spillover::simple_spillover() : spillover() {
 	}
 
+	void get_items(std::vector<spillover::spillover_type>& items) {
+		std::vector spillover_types{ spillover::simple_spillover };
+
+		items = spillover_types;
+	}
+
 	std::string to_string(spillover::spillover_type type) {
 		switch (type)
 		{

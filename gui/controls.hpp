@@ -6,6 +6,10 @@
 
 #include "SubControls.hpp"
 
+#include "../core/spilloverity.hpp"
+#include "../core/cellularity.hpp"
+#include "../core/terminality.hpp"
+
 namespace Ui {
 	class Control {
 	public:
@@ -42,12 +46,13 @@ namespace Ui {
 	public:
 		using Ptr = std::unique_ptr<CollapsingHeader>;
 
-		CollapsingHeader(const std::string& text);
+		CollapsingHeader(const std::string& text, const std::function<void()>& contentDisplay);
 		bool display(bool collapsible = true);
 
 	private:
 		std::string mText;
 		ControlStyle mStyle;
+		std::function<void()> mContentDisplay;
 	};
 
 	class TreeNode {
@@ -69,9 +74,11 @@ namespace Ui {
 		Popup(const std::string& text, const std::function<void()>& contentDisplay);
 		void display();
 
-		void open() const;
+		void open();
+		bool running() const;
 
 	private:
+		bool mRunning = false;
 		std::string mText;
 		std::function<void()> mContentDisplay;
 
@@ -199,5 +206,81 @@ namespace Ui {
 		RmButton(const std::string& text = "");
 	};
 
+
+	template<typename T> class TypeSelectPopup: Control {
+	public:
+		using Ptr = std::shared_ptr<TypeSelectPopup>;
+		using Signal = boost::signals2::signal<void(T)>;
+
+		TypeSelectPopup();
+
+		void open(const std::string& text);
+		void display() override;
+
+		static Ptr create();
+		bool running() const;
+
+		Signal selected;
+
+	protected:
+		std::string mText;
+		Popup::Ptr mPopup;
+		int mSelectedIndex = 0;
+	};
+
+	template<typename T>
+	TypeSelectPopup<T>::TypeSelectPopup(): Control(std::string()) {
+		mPopup = Popup::Ptr(new Popup("Select" + std::to_string(mId), [&]() {
+			std::vector<T> items;
+			innate::get_items(items);
+
+			int selectedIndex = 0;
+			bool isSelected = false;
+
+			if (ImGui::BeginCombo(mText.c_str(), ""/*innate::to_string(items[mSelectedIndex]).c_str() */ )) {
+				for (int i = 0; i < items.size(); ++i) {
+					if (ImGui::Selectable(innate::to_string(items[i]).c_str(), isSelected)) {
+						selectedIndex = i;
+						isSelected = true;
+					}
+
+					if (isSelected) {
+						ImGui::SetItemDefaultFocus();
+						mSelectedIndex = selectedIndex;
+
+						break;
+					}
+				}
+				ImGui::EndCombo();
+			}
+
+			if (isSelected) {
+				selected(static_cast<T>(selectedIndex));
+				ImGui::CloseCurrentPopup();
+			}
+
+		}));
+	}
+
+	template<typename T>
+	void TypeSelectPopup<T>::open(const std::string& text) {
+		mText = text;
+		mPopup->open();
+	}
+
+	template<typename T>
+	void TypeSelectPopup<T>::display(){
+		mPopup->display();
+	}
+
+	template<typename T>
+	std::shared_ptr<TypeSelectPopup<T>> TypeSelectPopup<T>::create() {
+		return TypeSelectPopup<T>::Ptr(new TypeSelectPopup<T>());
+	}
+
+	template<typename T>
+	bool TypeSelectPopup<T>::running() const {
+		return mPopup->running();
+	}
 
 }

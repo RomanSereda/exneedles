@@ -32,8 +32,8 @@ namespace Ui {
     }
 
 
-    CollapsingHeader::CollapsingHeader(const std::string& text): mText(text) {
-    }
+    CollapsingHeader::CollapsingHeader(const std::string& text, const std::function<void()>& contentDisplay)
+        : mText(text), mContentDisplay(contentDisplay) {}
 
     bool CollapsingHeader::display(bool collapsible)
     {
@@ -54,6 +54,8 @@ namespace Ui {
 
         bool collapsed = ImGui::CollapsingHeader(mText.c_str(), flag);
 
+        mContentDisplay();
+
         ImGui::PopStyleColor(4);
         ImGui::PopStyleVar(4);
 
@@ -66,6 +68,7 @@ namespace Ui {
     }
     
     void TreeNode::display() {
+        ImGui::SetNextItemOpen(true);
         if (ImGui::TreeNode(mText.c_str())) {
             mContentDisplay();
             ImGui::TreePop();
@@ -83,17 +86,23 @@ namespace Ui {
         ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_PopupBg, ClearColor);
         ImGui::PushStyleVar(ImGuiStyleVar_::ImGuiStyleVar_PopupRounding, 1.0);
 
-        if(ImGui::BeginPopup(mText.c_str())) {
+        if (ImGui::BeginPopup(mText.c_str())) {
             mContentDisplay();
             ImGui::EndPopup();
         }
+        else mRunning = false;
 
         ImGui::PopStyleColor(2);
         ImGui::PopStyleVar(1);
     }
 
-    void Popup::open() const {
+    void Popup::open() {
+        mRunning = true;
         ImGui::OpenPopup(mText.c_str());
+    }
+
+    bool Popup::running() const {
+        return mRunning;
     }
 
     PopupBtn::PopupBtn(const std::string& text, const std::string& popupText, 

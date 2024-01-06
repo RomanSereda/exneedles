@@ -7,6 +7,12 @@ namespace innate {
 	cell_simple::cell_simple() : cell(cell_type::cell_simple) {};
 	cell_exre::cell_exre() : cell(cell_type::cell_exre) {};
 
+	void get_items(std::vector<cell::cell_type>& items) {
+		std::vector cell_types { cell::cell_simple, cell::cell_exre };
+
+		items = cell_types;
+	}
+
 	std::string to_string(cell::cell_type type) {
 		switch (type)
 		{

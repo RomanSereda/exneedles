@@ -34,8 +34,13 @@ namespace Ui {
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 		glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
-        m_glfwWindow = glfwCreateWindow(640, 480, "ExNeedles Project", nullptr, nullptr);
+        int width = 1280, height = 920;
+        m_glfwWindow = glfwCreateWindow(width, height, "ExNeedles Project", nullptr, nullptr);
         if (m_glfwWindow == nullptr) logexit();
+
+        GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+        const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+        glfwSetWindowPos(m_glfwWindow, mode->width / 3, mode->height / 3);
      
         glfwMakeContextCurrent(m_glfwWindow);
         glfwSwapInterval(1);
