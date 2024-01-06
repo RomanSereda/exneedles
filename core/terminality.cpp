@@ -3,12 +3,49 @@
 #include "layerality.hpp"
 
 namespace innate {
-	terminal::terminal(terminal_type t) : type{ t } {};
+	terminal::terminal(terminal_type t) : type{ t }, sign{ positive } {};
 	axon_simple::axon_simple() : terminal(terminal_type::axon_simple) {};
-	synapse_simple::synapse_simple() : terminal(terminal_type::synapse_simple), sign{ positive } {};
+	synapse_simple::synapse_simple() : terminal(terminal_type::synapse_simple) {};
 	
 	cluster::cluster(cluster_type t) : type{ t } {};
 	cluster_targeted::cluster_targeted() : cluster(cluster_type::cluster_targeted) {};
+
+	std::string to_string(terminal::terminal_type type) {
+		switch (type)
+		{
+		case innate::terminal::axon_simple:
+			return "axon_simple";
+		case innate::terminal::synapse_simple:
+			return "synapse_simple";
+		default:
+			break;
+		}
+		return "unknown type";
+	}
+	
+	std::string to_string(terminal::terminal_sign type) {
+		switch (type)
+		{
+		case innate::terminal::positive:
+			return "positive";
+		case innate::terminal::negative:
+			return "negative";
+		default:
+			break;
+		}
+		return "unknown type";
+	}
+
+	std::string to_string(cluster::cluster_type type) {
+		switch (type)
+		{
+		case innate::cluster::cluster_targeted:
+			return "cluster_targeted";
+		default:
+			break;
+		}
+		return "unknown type";
+	}
 }
 
 namespace instance {

@@ -7,12 +7,24 @@
 
 namespace innate {
 	struct LIBRARY_API terminal {
+		enum terminal_sign {
+			positive = 0,
+			negative
+		} sign;
+
 		enum terminal_type {
 			axon_simple = 0,
 			synapse_simple
 		} type;
+
 		terminal(terminal_type t = axon_simple);
 	};
+
+	static terminal::terminal_type terminal_types[] = { terminal::axon_simple, terminal::synapse_simple };
+	static std::string to_string(terminal::terminal_type type);
+
+	static terminal::terminal_sign terminal_signs[] = { terminal::positive, terminal::negative };
+	static std::string to_string(terminal::terminal_sign type);
 
 	struct LIBRARY_API axon_simple: public terminal {
 		axon_simple();
@@ -20,12 +32,9 @@ namespace innate {
 	};
 
 	struct LIBRARY_API synapse_simple: public terminal {
-		enum terminal_sign {
-			positive = 0,
-			negative
-		} sign;
 		synapse_simple();
 	};
+
 
 	struct LIBRARY_API cluster {
 		enum cluster_type {
@@ -37,6 +46,9 @@ namespace innate {
 		int width = -1;
 		int height = -1;
 	};
+
+	static cluster::cluster_type cluster_types[] = { cluster::cluster_targeted };
+	static std::string to_string(cluster::cluster_type type);
 
 	struct LIBRARY_API cluster_targeted: public cluster {
 		cluster_targeted();
@@ -71,9 +83,9 @@ namespace data {
 	};
 }
 
-BOOST_HANA_ADAPT_STRUCT(innate::terminal, type);
+BOOST_HANA_ADAPT_STRUCT(innate::terminal, sign, type);
 BOOST_HANA_ADAPT_STRUCT(innate::axon_simple, basic_value);
-BOOST_HANA_ADAPT_STRUCT(innate::synapse_simple, sign);
+BOOST_HANA_ADAPT_STRUCT(innate::synapse_simple);
 
 BOOST_HANA_ADAPT_STRUCT(innate::cluster, type, width, height);
 BOOST_HANA_ADAPT_STRUCT(innate::cluster_targeted, target_layer_index, target_spillover_index);

@@ -8,6 +8,17 @@ namespace innate {
 
 	simple_spillover::simple_spillover() : spillover() {
 	}
+
+	std::string to_string(spillover::spillover_type type) {
+		switch (type)
+		{
+		case innate::spillover::simple_spillover:
+			return "simple_spillover";
+		default:
+			break;
+		}
+		return "unknown type";
+	}
 }
 
 namespace instance {

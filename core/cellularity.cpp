@@ -6,6 +6,19 @@ namespace innate {
 	cell::cell(cell_type t): type(t){}
 	cell_simple::cell_simple() : cell(cell_type::cell_simple) {};
 	cell_exre::cell_exre() : cell(cell_type::cell_exre) {};
+
+	std::string to_string(cell::cell_type type) {
+		switch (type)
+		{
+		case innate::cell::cell_simple:
+			return "cell_simple";
+		case innate::cell::cell_exre:
+			return "cell_exre";
+		default:
+			break;
+		}
+		return "unknown type";
+	}
 }
 
 #pragma warning(disable:6011)

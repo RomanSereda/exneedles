@@ -14,6 +14,9 @@ namespace innate {
 		spillover(spillover_type t = simple_spillover);
 	};
 
+	static spillover::spillover_type spillover_types[] = { spillover::simple_spillover };
+	static std::string to_string(spillover::spillover_type type);
+
 	struct LIBRARY_API simple_spillover : public spillover {
 		simple_spillover();
 	};

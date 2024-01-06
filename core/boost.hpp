@@ -1,4 +1,14 @@
 #pragma once
+#pragma warning(disable : 4068)
+#pragma nv_diag_suppress  68
+#pragma nv_diag_suppress  186
+#pragma nv_diag_suppress  1301
+#pragma nv_diag_suppress  20014
+#pragma warning(default : 4068)
+
+#define BOOST_ALLOW_DEPRECATED_HEADERS
+#define BOOST_BIND_GLOBAL_PLACEHOLDERS
+
 #pragma warning(disable : 26812)
 #pragma warning(disable : 26495)
 #pragma warning(disable : 26451)

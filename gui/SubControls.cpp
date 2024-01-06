@@ -39,7 +39,7 @@ namespace Ui {
 		if (!condition)
 			return;
 
-		mParamsSize = params.size();
+		mParamsSize = (int)params.size();
 		for (const auto& param : params) {
 			switch (type) {
 			case Ui::Color:
