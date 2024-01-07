@@ -129,8 +129,10 @@ namespace instance {
 		rm(id, m_iterminalitys, m_terminalitys);
 	}
 
-	iterminality_host_accessor& cellularity_host::add_trmn(const std::string& id) {
-		return add_trmn(id, ptree(), size());
+	iterminality_host_accessor& cellularity_host::add_trmn(
+		const std::string& id, const iterminality::InnateTerminalityParam& def) 
+	{
+		return add_trmn(id, ptree(), size(), def);
 	}
 
 	void cellularity_host::get_trmns(
@@ -141,9 +143,10 @@ namespace instance {
 	}
 
 	iterminality_host_accessor& cellularity_host::add_trmn(
-		const std::string& id, const ptree& root, const innate::size& size)
+		const std::string& id, const ptree& root, const innate::size& size, 
+		const iterminality::InnateTerminalityParam& def)
 	{
-		auto terminality = std::make_unique<terminality_host>(root, size);
+		auto terminality = std::make_unique<terminality_host>(root, size, def);
 		auto ptr = terminality.get();
 
 		m_iterminalitys.emplace(id, ptr);

@@ -36,10 +36,18 @@ namespace Ui {
 		Button(const std::string& text);
 		Button(const std::string& text, const std::function<void()>& clicked);
 
-		void display() override;
+		virtual void display() override;
 
 	protected:
 		std::unique_ptr<std::function<void()>> mOnClicked{ nullptr };
+	};
+
+	class Static : public Control {
+	public:
+		using Ptr = std::shared_ptr<Static>;
+
+		Static();
+		void display() override;
 	};
 
 	class CollapsingHeader {
@@ -91,9 +99,11 @@ namespace Ui {
 
 		PopupBtn(const std::string& text, const std::string& popupText, const std::function<void()>& popupContent);
 		void display() override;
+		void setAdditionalContent(const std::function<void()>& additionalContent);
 
 	private:
 		Popup::Ptr mPopup;
+		std::function<void()> mAdditionalContent;
 	};
 
 	template<typename T> class InputedPopupBtn : public PopupBtn {
@@ -127,14 +137,14 @@ namespace Ui {
 
 
 
-	template<typename SizeType> class SizeTypeInputedPopupBtn {
+	template<typename SizeType> class SizeTypeInputedPopupBtn: Control {
 	public:
 		using Ptr = std::shared_ptr<SizeTypeInputedPopupBtn>;
 
 		SizeTypeInputedPopupBtn(SizeType& size, bool disabled = false);
 		std::string getSizeAsText() const;
 
-		void view();
+		void display() override;
 		static Ptr create(SizeType& sizeType, bool disabled = false);
 
 	protected:
@@ -146,9 +156,9 @@ namespace Ui {
 
 	template<typename SizeType>
 	SizeTypeInputedPopupBtn<SizeType>::SizeTypeInputedPopupBtn(SizeType& size, bool disabled)
-		: m_size(size), m_disabled(disabled)
+		: Control(""), m_size(size), m_disabled(disabled)
 	{
-		mSizePopupBtn = IntInPpBtn::Ptr(new InputedPopupBtn<int>(getSizeAsText(), "Config", {
+		mSizePopupBtn = IntInPpBtn::Ptr(new InputedPopupBtn<int>(getSizeAsText(), "config_" + std::to_string(mId), {
 				IntInPpBtnBp("width", m_size.width),
 				IntInPpBtnBp("height", m_size.height)
 			})
@@ -168,7 +178,7 @@ namespace Ui {
 	}
 
 	template<typename SizeType>
-	void SizeTypeInputedPopupBtn<SizeType>::view() {
+	void SizeTypeInputedPopupBtn<SizeType>::display() {
 		if (m_disabled) ImGui::BeginDisabled();
 
 		mSizePopupBtn->display();
@@ -188,12 +198,9 @@ namespace Ui {
 		using Signal = boost::signals2::signal<void()>;
 
 		ButtonEx(const ImColor& color, const std::string& text);
-		void display() override;
+		virtual void display() override;
 
 		Signal clicked;
-
-	protected:
-		std::string mText;
 	};
 
 	class AddButton: public ButtonEx {
@@ -206,8 +213,20 @@ namespace Ui {
 		RmButton(const std::string& text = "");
 	};
 
+	class TextButton : public ButtonEx {
+	public:
+		using Ptr = std::unique_ptr<TextButton>;
 
-	template<typename T> class TypeSelectPopup: Control {
+		TextButton(const std::string& text, bool disabled);
+
+		void display() override;
+
+	private:
+		bool m_disabled = false;
+	};
+
+
+	template<typename T> class TypeSelectPopup: public Control {
 	public:
 		using Ptr = std::shared_ptr<TypeSelectPopup>;
 		using Signal = boost::signals2::signal<void(T)>;
@@ -282,5 +301,25 @@ namespace Ui {
 	bool TypeSelectPopup<T>::running() const {
 		return mPopup->running();
 	}
+
+
+	class TrParamsInputedPopupBtn: Control
+	{
+	public:
+		using Ptr = std::shared_ptr<TrParamsInputedPopupBtn>;
+		using Signal = boost::signals2::signal<void(instance::iterminality::InnateTerminalityParam params)>;
+
+		TrParamsInputedPopupBtn();
+		void display() override;
+
+		Signal apply;
+
+	private:
+		instance::iterminality::InnateTerminalityParam mParams;
+		IntInPpBtn::Ptr mPopupBtn;
+
+		int mTrSelectedIndex = 0;
+		int mClSelectedIndex = 0;
+	};
 
 }

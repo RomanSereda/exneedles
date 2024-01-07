@@ -20,11 +20,12 @@ namespace innate {
 		terminal(terminal_type t = axon_simple);
 	};
 
-	static terminal::terminal_type terminal_types[] = { terminal::axon_simple, terminal::synapse_simple };
-	static std::string to_string(terminal::terminal_type type);
 
-	static terminal::terminal_sign terminal_signs[] = { terminal::positive, terminal::negative };
-	static std::string to_string(terminal::terminal_sign type);
+	LIBRARY_API void get_items(std::vector<terminal::terminal_type>& items);
+	LIBRARY_API std::string to_string(terminal::terminal_type type);
+
+	LIBRARY_API void get_items(std::vector<terminal::terminal_sign>& items);
+	LIBRARY_API std::string to_string(terminal::terminal_sign type);
 
 	struct LIBRARY_API axon_simple: public terminal {
 		axon_simple();
@@ -47,8 +48,8 @@ namespace innate {
 		int height = -1;
 	};
 
-	static cluster::cluster_type cluster_types[] = { cluster::cluster_targeted };
-	static std::string to_string(cluster::cluster_type type);
+	LIBRARY_API void get_items(std::vector<cluster::cluster_type>& items);
+	LIBRARY_API std::string to_string(cluster::cluster_type type);
 
 	struct LIBRARY_API cluster_targeted: public cluster {
 		cluster_targeted();
@@ -120,7 +121,20 @@ namespace instance {
 		virtual readable_trmn_innate innate() const = 0;
 		virtual readable_trmn_instance instance() const = 0;
 
-		static std::tuple<UPTR_TEMPLATE_TR> to_innate(const ptree& root);
+		struct InnateTerminalityParam {
+			innate::terminal::terminal_type tr_type 
+				= innate::terminal::synapse_simple;
+
+			innate::cluster::cluster_type cl_type 
+				= innate::cluster::cluster_targeted;
+
+			int width = -1;
+			int height = -1;
+		};
+		
+		static std::tuple<UPTR_TEMPLATE_TR> to_innate(
+			const ptree& root, const InnateTerminalityParam& def = InnateTerminalityParam());
+
 		static ptree to_ptree(innate::cluster* cl, innate::terminal* tr);
 
 	protected:
@@ -135,8 +149,11 @@ namespace instance {
 			                               const innate::cluster* cl,
 			                               const innate::terminal* tr);
 	private:
-		static std::unique_ptr<innate::cluster> to_inncl(const ptree& root);
-		static std::unique_ptr<innate::terminal> to_inntr(const ptree& root);
+		static std::unique_ptr<innate::cluster> to_inncl(const ptree& root, 
+			innate::cluster::cluster_type deftype = innate::cluster::cluster_targeted, int width = -1, int height = -1);
+
+		static std::unique_ptr<innate::terminal> to_inntr(const ptree& root, 
+			innate::terminal::terminal_type deftype = innate::terminal::synapse_simple);
 
 		static ptree to_ptree(innate::cluster* cl);
 		static ptree to_ptree(innate::terminal* tr);

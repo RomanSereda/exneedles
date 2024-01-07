@@ -13,21 +13,29 @@ namespace Ui {
 		using Ptr = std::unique_ptr<CellularityView>;
 		
 		CellularityView(instance::icellularity_host_accessor& accessor, const std::string& name);
-		void view() const;
+		void view();
 
 		std::string name() const;
 		bool isShouldBeRemoved() const;
 
 	private:
+		int m_tr = 0;
 		instance::icellularity_host_accessor& m_accessor;
-		std::string m_name;
 
-		RmButton::Ptr  mRmCell;
+		std::string m_name;
 		bool m_isShouldBeRemoved = false;
 
+		TreeNode::Ptr mTreeNode;
+		RmButton::Ptr mRmCell;
+
+		TextButton::Ptr mStaticTextButton;
+		TextButton::Ptr mDynamicTextButton;
+
+		TrParamsInputedPopupBtn::Ptr mTrParamsInputedPopupBtn;
 		SizeTypeInputedPopupBtn<innate::size>::Ptr mSizeTypeInputedPopupBtn;
 
 		std::vector<TerminalityView::Ptr> m_terminalitys;
+
 	};
 
 }

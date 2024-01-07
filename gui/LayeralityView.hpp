@@ -41,6 +41,11 @@ namespace Ui {
 		void addCellInit(instance::ilayerality_host_accessor& accessor);
 		void addSplvInit(instance::ilayerality_host_accessor& accessor);
 
+		void cellularityView(instance::ilayerality_host_accessor& accessor);
+		void spilloverityView(instance::ilayerality_host_accessor& accessor);
+
+		void cellularityLoad(instance::ilayerality_host_accessor& accessor);
+		void spilloverityLoad(instance::ilayerality_host_accessor& accessor);
 	};
 
 	class RegionView {

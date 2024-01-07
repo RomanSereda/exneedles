@@ -9,6 +9,14 @@ namespace Ui {
 
 	}
 
+	std::string TerminalityView::name() const {
+		return m_name;
+	}
+
+	bool TerminalityView::isShouldBeRemoved() const {
+		return m_isShouldBeRemoved;
+	}
+
 	/*void TerminalityView::load(const instance::readable_trmn_innate& trmn) {
 		std::unique_ptr<innate::cluster> cl;
 		cluster_tuple::create(trmn.cl->type, [&](auto ptr) {

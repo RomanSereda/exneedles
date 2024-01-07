@@ -21,7 +21,8 @@ namespace Ui {
 	private:
 		RmButton::Ptr  mRmSplvr;
 		bool m_isShouldBeRemoved = false;
-
+		
+		TextButton::Ptr mTextButton;
 		SizeTypeInputedPopupBtn<innate::size>::Ptr mSizeTypeInputedPopupBtn;
 	};
 }

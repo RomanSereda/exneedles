@@ -43,7 +43,9 @@ namespace instance {
 namespace instance {
 	class terminality_host : public terminality_cpu_type, public iterminality_host_accessor {
 	public:
-		terminality_host(const ptree& root, const innate::size& size);
+		terminality_host(const ptree& root, const innate::size& size, 
+			const InnateTerminalityParam& def = InnateTerminalityParam());
+
 		ptree to_ptree() const override;
 
 		iterminality& terminality() override;

@@ -3,6 +3,7 @@
 #include "boost.hpp"
 #include "memory.cuh"
 
+#include "terminality.hpp"
 #include "cellularity.hpp"
 #include "terminality_instance.hpp"
 
@@ -58,13 +59,16 @@ namespace instance {
 
 		icellularity& cellularity() override;
 		void rm_trmn(const std::string& id) override;
-		iterminality_host_accessor& add_trmn(const std::string& id) override;
+		iterminality_host_accessor& add_trmn(const std::string& id, 
+			const iterminality::InnateTerminalityParam& def) override;
 
 		void get_trmns(std::unordered_map<std::string, iterminality_host_accessor&>& trmns) const override;
 
 	private:
 		std::unordered_map<std::string, terminality_cpu_type*> m_iterminalitys;
-		iterminality_host_accessor& add_trmn(const std::string& id, const ptree& root, const innate::size& size);
+		iterminality_host_accessor& add_trmn(
+			const std::string& id, const ptree& root, const innate::size& size, 
+			const iterminality::InnateTerminalityParam& def = iterminality::InnateTerminalityParam());
 	};
 
 	class cellularity_device : public cellularity_gpu_type {

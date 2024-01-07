@@ -3,7 +3,7 @@
 
 namespace Ui {
 	LayeralityView::LayeralityView(instance::ilayerality_host_accessor& accessor, const std::string& name)
-		: m_name(name)
+		: m_name("lr_" + name)
 	{
 		mSizeTypeInputedPopupBtn = SizeTypeInputedPopupBtn<innate::size>
 			::create(const_cast<innate::size&>(accessor.layerality().size()), true);
@@ -11,38 +11,9 @@ namespace Ui {
 		mCellTypeSelectPopup = TypeSelectPopup<innate::cell::cell_type>::create();
 		mSplvrTypeSelectPopup = TypeSelectPopup<innate::spillover::spillover_type>::create();
 
-		auto treeNodeText = "lr: " + name;
-		mTreeNode = TreeNode::Ptr(new TreeNode(treeNodeText, [&] {
-			{
-				for (const auto& cellularity : m_cellularitys) {
-					cellularity->view();
-				}
-				auto it = m_cellularitys.begin();
-				while (it != m_cellularitys.end()) {
-					if (it->get()->isShouldBeRemoved())
-					{
-						accessor.rm_cell(it->get()->name());
-						it = m_cellularitys.erase(it);
-					}
-					else ++it;
-				}
-			}
-			
-			{
-				for (const auto& spilloverity : m_spilloveritys) {
-					spilloverity->view();
-				}
-				auto it = m_spilloveritys.begin();
-				while (it != m_spilloveritys.end()) {
-					if (it->get()->isShouldBeRemoved())
-					{
-						accessor.rm_splvr(it->get()->name());
-						it = m_spilloveritys.erase(it);
-					}
-					else ++it;
-				}
-			}
-
+		mTreeNode = TreeNode::Ptr(new TreeNode(m_name, [&] {
+			cellularityView(accessor);
+			spilloverityView(accessor);
 		}));
 
 		mRmLr    = RmButton::Ptr(new RmButton("lr"));
@@ -50,6 +21,17 @@ namespace Ui {
 
 		addCellInit(accessor);
 		addSplvInit(accessor);
+
+		std::unordered_map<std::string, instance::icellularity_host_accessor&> cells;
+		accessor.get_cells(cells);
+
+		for (const auto& cell : cells) {
+			CellularityView::Ptr lw(new CellularityView(cell.second, cell.first));
+			m_cellularitys.push_back(std::move(lw));
+		}
+
+		cellularityLoad(accessor);
+		spilloverityLoad(accessor);
 	}
 
 	void LayeralityView::view() const {
@@ -64,7 +46,7 @@ namespace Ui {
 			mAddCell->display();
 			ImGui::SameLine();
 
-			mSizeTypeInputedPopupBtn->view();
+			mSizeTypeInputedPopupBtn->display();
 			ImGui::SameLine();
 		}
 		ImGui::PopStyleVar();
@@ -98,16 +80,8 @@ namespace Ui {
 
 				CellularityView::Ptr lw(new CellularityView(acc, name));
 				m_cellularitys.push_back(std::move(lw));;
-				});
 			});
-
-		std::unordered_map<std::string, instance::icellularity_host_accessor&> cells;
-		accessor.get_cells(cells);
-
-		for (const auto& cell : cells) {
-			CellularityView::Ptr sw(new CellularityView(cell.second, cell.first));
-			m_cellularitys.push_back(std::move(sw));
-		}
+		});
 	}
 
 	void LayeralityView::addSplvInit(instance::ilayerality_host_accessor& accessor) {
@@ -135,6 +109,64 @@ namespace Ui {
 		for (const auto& splvr : splvrs) {
 			SpilloverityView::Ptr splw(new SpilloverityView(splvr.second, splvr.first));
 			m_spilloveritys.push_back(std::move(splw));
+		}
+	}
+
+	void LayeralityView::cellularityView(instance::ilayerality_host_accessor& accessor) {
+		ImGui::SetNextItemOpen(true);
+		if (!m_cellularitys.empty() && ImGui::TreeNode(("cellularity " + m_name).c_str())) {
+			for (const auto& cellularity : m_cellularitys) {
+				cellularity->view();
+			}
+			auto it = m_cellularitys.begin();
+			while (it != m_cellularitys.end()) {
+				if (it->get()->isShouldBeRemoved())
+				{
+					accessor.rm_cell(it->get()->name());
+					it = m_cellularitys.erase(it);
+				}
+				else ++it;
+			}
+			ImGui::TreePop();
+		}
+	}
+
+	void LayeralityView::spilloverityView(instance::ilayerality_host_accessor& accessor) {
+		ImGui::SetNextItemOpen(true);
+		if (!m_spilloveritys.empty() && ImGui::TreeNode(("spilloverity " + m_name).c_str())) {
+			for (const auto& spilloverity : m_spilloveritys) {
+				spilloverity->view();
+			}
+			auto it = m_spilloveritys.begin();
+			while (it != m_spilloveritys.end()) {
+				if (it->get()->isShouldBeRemoved())
+				{
+					accessor.rm_splvr(it->get()->name());
+					it = m_spilloveritys.erase(it);
+				}
+				else ++it;
+			}
+			ImGui::TreePop();
+		}
+	}
+	
+	void LayeralityView::cellularityLoad(instance::ilayerality_host_accessor& accessor) {
+		std::unordered_map<std::string, instance::icellularity_host_accessor&> cells;
+		accessor.get_cells(cells);
+
+		for (const auto& cell : cells) {
+			CellularityView::Ptr sw(new CellularityView(cell.second, cell.first));
+			m_cellularitys.push_back(std::move(sw));
+		}
+	}
+	
+	void LayeralityView::spilloverityLoad(instance::ilayerality_host_accessor& accessor) {
+		std::unordered_map<std::string, instance::ispilloverity_host_accessor&> splvrs;
+		accessor.get_splvrs(splvrs);
+
+		for (const auto& splvr : splvrs) {
+			SpilloverityView::Ptr sw(new SpilloverityView(splvr.second, splvr.first));
+			m_spilloveritys.push_back(std::move(sw));
 		}
 	}
 }
@@ -186,7 +218,7 @@ namespace Ui {
 			mAddLr->display();
 			ImGui::SameLine();
 
-			mSizeTypeInputedPopupBtn->view();
+			mSizeTypeInputedPopupBtn->display();
 			ImGui::SameLine();
 		}
 		ImGui::PopStyleVar();

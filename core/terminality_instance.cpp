@@ -60,13 +60,15 @@ namespace instance {
 
 
 namespace instance {
-	terminality_host::terminality_host(const ptree& root, const innate::size& size)
+	terminality_host::terminality_host(const ptree& root, 
+		                               const innate::size& size, 
+		                               const InnateTerminalityParam& def)
 		: terminality_cpu_type(size)
 	{
 		if (size.height < 1 || size.width < 1)
 			logexit();
 
-		m_innate = to_innate(root);
+		m_innate = to_innate(root, def);
 
 		if (!inncl().get() || !inntr().get())
 			logexit();

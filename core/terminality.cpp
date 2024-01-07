@@ -10,6 +10,21 @@ namespace innate {
 	cluster::cluster(cluster_type t) : type{ t } {};
 	cluster_targeted::cluster_targeted() : cluster(cluster_type::cluster_targeted) {};
 
+	void get_items(std::vector<terminal::terminal_type>& items) {
+		std::vector terminal_types{ terminal::axon_simple, terminal::synapse_simple };
+		items = terminal_types;
+	}
+
+	void get_items(std::vector<terminal::terminal_sign>& items) {
+		std::vector terminal_signs{ terminal::positive, terminal::negative };
+		items = terminal_signs;
+	}
+
+	void get_items(std::vector<cluster::cluster_type>& items) {
+		std::vector cluster_types { cluster::cluster_targeted };
+		items = cluster_types;
+	}
+
 	std::string to_string(terminal::terminal_type type) {
 		switch (type)
 		{
@@ -49,9 +64,11 @@ namespace innate {
 }
 
 namespace instance {
-	std::tuple<UPTR_TEMPLATE_TR> iterminality::to_innate(const ptree& root) {
-		auto cl = to_inncl(root);
-		auto tr = to_inntr(root);
+	std::tuple<UPTR_TEMPLATE_TR> iterminality::to_innate(
+		const ptree& root, const InnateTerminalityParam& def) 
+	{
+		auto cl = to_inncl(root, def.cl_type, def.width, def.height);
+		auto tr = to_inntr(root, def.tr_type);
 
 		return std::make_tuple<UPTR_TEMPLATE_TR>(std::move(cl), std::move(tr));
 	}
@@ -109,7 +126,22 @@ namespace instance {
 		return innate_tr;
 	}
 
-	std::unique_ptr<innate::cluster> iterminality::to_inncl(const ptree& root) {
+	std::unique_ptr<innate::cluster> iterminality::to_inncl(const ptree& root, 
+		innate::cluster::cluster_type deftype, int width, int height)
+	{
+		if (root.empty() || root.find("innate_cluster") == root.not_found()) {
+			std::unique_ptr<innate::cluster> ptr(nullptr);
+			cluster_tuple::create(deftype, [&](auto p) {
+				p->width = width;
+				p->height = width;
+
+				ptr = std::move(p);
+			});
+
+			console("warning: created cluster innate from default type");
+			return std::move(ptr);
+		}
+
 		auto innate_cluster_tree = root.get_child("innate_cluster");
 		auto innate_cluster_type
 			= static_cast<innate::cluster::cluster_type>(innate_cluster_tree.get<int>("type"));
@@ -129,7 +161,19 @@ namespace instance {
 		return std::move(ptr);
 	}
 
-	std::unique_ptr<innate::terminal> iterminality::to_inntr(const ptree& root) {
+	std::unique_ptr<innate::terminal> iterminality::to_inntr(
+		const ptree& root, innate::terminal::terminal_type deftype) 
+	{
+		if (root.empty() || root.find("innate_terminal") == root.not_found()) {
+			std::unique_ptr<innate::terminal> ptr(nullptr);
+			cluster_data_tuple::create_first(deftype, [&](auto p) {
+				ptr = std::move(p);
+			});
+
+			console("warning: created terminal innate from default type");
+			return std::move(ptr);
+		}
+
 		auto innate_terminal_tree = root.get_child("innate_terminal");
 		auto innate_terminal_type
 			= static_cast<innate::terminal::terminal_type>(innate_terminal_tree.get<int>("type"));

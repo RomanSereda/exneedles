@@ -6,6 +6,8 @@
 #define LIBRARY "core"
 #include "../deflib.inc"
 
+#include "terminality.hpp"
+
 namespace innate {
 	struct LIBRARY_API cell {
 		enum cell_type {
@@ -113,7 +115,7 @@ namespace instance {
 		virtual icellularity& cellularity() = 0;
 
 		virtual void rm_trmn(const std::string& id) = 0;
-		virtual iterminality_host_accessor& add_trmn(const std::string& id) = 0;
+		virtual iterminality_host_accessor& add_trmn(const std::string& id, const iterminality::InnateTerminalityParam& def) = 0;
 
 		virtual void get_trmns(std::unordered_map<std::string, iterminality_host_accessor&>& trmns) const = 0;
 	};
